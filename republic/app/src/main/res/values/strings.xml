@@ -2,4 +2,8 @@
     <string name="app_name">republic</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="game_name">KING OF REPUBLIC</string>
+    <string name="home_play">PLAY</string>
+    <string name="home_quit">QUIT</string>
 </resources>
