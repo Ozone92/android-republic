@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.epita.republic.HomeFragment"
+        android:name="com.epita.republic.views.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/endingFragment"
-        android:name="com.epita.republic.EndingFragment"
+        android:name="com.epita.republic.views.ending.EndingFragment"
         android:label="fragment_ending"
         tools:layout="@layout/fragment_ending" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.epita.republic.GameFragment"
+        android:name="com.epita.republic.views.game.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/caracterFragment"
-        android:name="com.epita.republic.CaracterFragment"
+        android:name="com.epita.republic.views.caracter.CaracterFragment"
         android:label="fragment_caracter"
         tools:layout="@layout/fragment_caracter" >
         <action
