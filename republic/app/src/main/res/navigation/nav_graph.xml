@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.epita.republic.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_caracterFragment"
+            app:destination="@id/caracterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/endingFragment"
+        android:name="com.epita.republic.EndingFragment"
+        android:label="fragment_ending"
+        tools:layout="@layout/fragment_ending" >
+        <action
+            android:id="@+id/action_endingFragment_to_caracterFragment"
+            app:destination="@id/caracterFragment" />
+        <action
+            android:id="@+id/action_endingFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.epita.republic.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_endingFragment"
+            app:destination="@id/endingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/caracterFragment"
+        android:name="com.epita.republic.CaracterFragment"
+        android:label="fragment_caracter"
+        tools:layout="@layout/fragment_caracter" >
+        <action
+            android:id="@+id/action_caracterFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+</navigation>
