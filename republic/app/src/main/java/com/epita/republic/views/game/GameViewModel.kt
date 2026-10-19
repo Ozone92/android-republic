@@ -9,8 +9,8 @@ import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.Player
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Collections.emptySet
 import kotlin.math.max
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 enum class GamePhase {
@@ -29,7 +29,7 @@ const val BOT_SLEEP_ACTION = 1L
 
 class GameViewModel : ViewModel() {
     private val gameLogic = GameLogic()
-    private val signalController = SignalController()
+    val signalController = SignalController()
     val players: Array<Player> = Array(4) { i -> return@Array Player(isBot = i > 0) }
     val currentPlayerTurnIndex: MutableLiveData<Int> = MutableLiveData(0)
     val currentPlayer: MutableLiveData<Player> = MutableLiveData(players[0])
@@ -37,8 +37,20 @@ class GameViewModel : ViewModel() {
     val currentPhase: MutableLiveData<GamePhase> = MutableLiveData(GamePhase.DICE)
     val dices: MutableLiveData<Array<DiceFace>> =
         MutableLiveData(Array(6) { return@Array DiceFace.ONE })
+    val lockedDiceIndexes: MutableSet<Int> = emptySet()
     val rerollLeft: MutableLiveData<Int> = MutableLiveData(3)
 
+    fun diceButtonClick(index: Int): Boolean {
+        return if (lockedDiceIndexes.contains(index)) {
+            // Dice Unlock
+            lockedDiceIndexes.remove(index)
+            true
+        } else {
+            // Dice Lock
+            lockedDiceIndexes.add(index)
+            false
+        }
+    }
     private fun gameFinish(): Boolean {
         if (currentPlayer.value!!.vote >= POINT_FOR_VICTORY) {
             return true
@@ -54,12 +66,14 @@ class GameViewModel : ViewModel() {
         return playerAlive <= 1
     }
 
-    fun rollDice(indexToReroll: Array<Int>) {
-        if (rerollLeft.value!! > 0 && indexToReroll.isNotEmpty()) {
+    fun rollDice() {
+        val numberOfReroll = 6 - lockedDiceIndexes.size
+        if (rerollLeft.value!! > 0 && numberOfReroll > 0) {
             val currentRoll = dices.value!!
-            val newDices = gameLogic.rollDice(indexToReroll.size)
+            val newDices = gameLogic.rollDice(numberOfReroll)
 
-            for ((i, index) in indexToReroll.withIndex()) {
+            for ((i, index) in (0.. 5).withIndex()) {
+                if (!lockedDiceIndexes.contains(index))
                 currentRoll[index] = newDices[i]
             }
 
@@ -145,6 +159,10 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun playerExitCityClick() {
+        inCity.postValue(null)
+    }
+
     fun enterCity() {
         inCity.postValue(currentPlayer.value!!)
         currentPlayer.value!!.popularity += POINT_CITY_ENTER
@@ -176,7 +194,8 @@ class GameViewModel : ViewModel() {
                     }
 
                     rerollLeft.postValue(3)
-                    rollDice(arrayOf(0, 1, 2, 3, 4, 5))
+                    lockedDiceIndexes.clear()
+                    rollDice()
                     currentPhase.postValue(GamePhase.DICE)
                     waitForInput()
                     handleDiceResult()
