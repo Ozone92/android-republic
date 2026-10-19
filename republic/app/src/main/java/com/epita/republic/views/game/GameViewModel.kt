@@ -73,8 +73,9 @@ class GameViewModel : ViewModel() {
             val newDices = gameLogic.rollDice(numberOfReroll)
 
             for ((i, index) in (0.. 5).withIndex()) {
-                if (!lockedDiceIndexes.contains(index))
-                currentRoll[index] = newDices[i]
+                if (!lockedDiceIndexes.contains(index)) {
+                    currentRoll[index] = newDices[i]
+                }
             }
 
             dices.postValue(currentRoll)
@@ -161,6 +162,7 @@ class GameViewModel : ViewModel() {
 
     fun playerExitCityClick() {
         inCity.postValue(null)
+        signalController.notify()
     }
 
     fun enterCity() {

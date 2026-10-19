@@ -99,6 +99,7 @@ class GameFragment : Fragment() {
         renderTurnPhase()
 
         val diceView: CardView = view.findViewById(R.id.game_dice_card)
+        val stayLeaveView: CardView = view.findViewById(R.id.game_stay_leave_card)
         val diceButtons: Array<Button> = arrayOf(
             view.findViewById(R.id.game_dice1_btn),
             view.findViewById(R.id.game_dice2_btn),
@@ -132,12 +133,23 @@ class GameFragment : Fragment() {
             renderDice(diceButtons, newDices)
         }
 
+        val stayBtn: Button = view.findViewById(R.id.game_stay_btn)
+        stayBtn.setOnClickListener {
+            gameViewModel.signalController.notify()
+        }
+
+        val leaveBtn: Button = view.findViewById(R.id.game_leave_btn)
+        leaveBtn.setOnClickListener {
+            gameViewModel.playerExitCityClick()
+        }
+
         gameViewModel.currentPhase.observe(this.viewLifecycleOwner) { newPhase ->
             renderTurnPhase()
             renderPlayers()
             val isPlayerTurn = !gameViewModel.currentPlayer.value!!.isBot
 
             diceView.visibility = View.INVISIBLE
+            stayLeaveView.visibility = View.INVISIBLE
             if (newPhase == GamePhase.DICE) {
                 diceRerollBtn.isActivated = isPlayerTurn
                 diceConfirmBtn.isActivated = isPlayerTurn
@@ -151,6 +163,10 @@ class GameFragment : Fragment() {
                     )
                 }
                 diceView.visibility = View.VISIBLE
+            } else if (newPhase == GamePhase.ASK_LEAVE) {
+                stayBtn.isActivated = isPlayerTurn
+                leaveBtn.isActivated = isPlayerTurn
+                stayLeaveView.visibility = View.VISIBLE
             }
         }
     }

@@ -15,4 +15,7 @@
     <string name="game_player_card_popularity">POPULARITY: %d/%d</string>
     <string name="game_reroll_text">REROLL (%d left)</string>
     <string name="game_validate_dice">CONFIRM</string>
+    <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>
+    <string name="game_stay_btn_text">STAY</string>
+    <string name="game_leave_btn_text">LEAVE</string>
 </resources>
