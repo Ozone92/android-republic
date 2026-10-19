@@ -14,8 +14,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 enum class GamePhase {
-    BOT_TURN,
-
     DICE,
     EVILNESS,
     SHOP,
@@ -37,7 +35,8 @@ class GameViewModel : ViewModel() {
     val currentPlayer: MutableLiveData<Player> = MutableLiveData(players[0])
     val inCity: MutableLiveData<Player?> = MutableLiveData(null)
     val currentPhase: MutableLiveData<GamePhase> = MutableLiveData(GamePhase.DICE)
-    val dices: MutableLiveData<Array<DiceFace>> = MutableLiveData(Array(6) { return@Array DiceFace.ONE})
+    val dices: MutableLiveData<Array<DiceFace>> =
+        MutableLiveData(Array(6) { return@Array DiceFace.ONE })
     val rerollLeft: MutableLiveData<Int> = MutableLiveData(3)
 
     private fun gameFinish(): Boolean {
@@ -55,10 +54,16 @@ class GameViewModel : ViewModel() {
         return playerAlive <= 1
     }
 
-    fun rollDice() {
-        if (rerollLeft.value!! > 0) {
-            rerollLeft.postValue(rerollLeft.value!! - 1)
-            dices.postValue(gameLogic.rollDice(6))
+    fun rollDice(indexToReroll: Array<Int>) {
+        if (rerollLeft.value!! > 0 && indexToReroll.isNotEmpty()) {
+            val currentRoll = dices.value!!
+            val newDices = gameLogic.rollDice(indexToReroll.size)
+
+            for ((i, index) in indexToReroll.withIndex()) {
+                currentRoll[index] = newDices[i]
+            }
+
+            dices.postValue(currentRoll)
         }
     }
 
@@ -87,7 +92,10 @@ class GameViewModel : ViewModel() {
 
         if (currentPlayer != inCity.value) {
             currentPlayer.value!!.popularity =
-                max(currentPlayer.value!!.popularity + healthCount, currentPlayer.value!!.maxPopularity)
+                max(
+                    currentPlayer.value!!.popularity + healthCount,
+                    currentPlayer.value!!.maxPopularity
+                )
         }
 
         // TODO Check if gain card
@@ -168,7 +176,7 @@ class GameViewModel : ViewModel() {
                     }
 
                     rerollLeft.postValue(3)
-                    rollDice()
+                    rollDice(arrayOf(0, 1, 2, 3, 4, 5))
                     currentPhase.postValue(GamePhase.DICE)
                     waitForInput()
                     handleDiceResult()
@@ -179,6 +187,8 @@ class GameViewModel : ViewModel() {
                     endTurn()
                 }
             }
+
+            currentPhase.postValue(GamePhase.GAME_FINISH)
         }
     }
 }
