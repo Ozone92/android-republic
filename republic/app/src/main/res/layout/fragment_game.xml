@@ -33,6 +33,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_name_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PLAYER1"
@@ -44,6 +45,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_popularity_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -56,6 +58,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_vote_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -68,6 +71,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_influence_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -80,6 +84,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_money_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -113,6 +118,7 @@
 
             <TextView
                 android:id="@+id/game_player1_name_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PLAYER1"
@@ -124,6 +130,7 @@
 
             <TextView
                 android:id="@+id/game_player1_popularity_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -136,6 +143,7 @@
 
             <TextView
                 android:id="@+id/game_player1_vote_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -148,6 +156,7 @@
 
             <TextView
                 android:id="@+id/game_player1_influence_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -160,6 +169,7 @@
 
             <TextView
                 android:id="@+id/game_player1_money_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -193,6 +203,7 @@
 
             <TextView
                 android:id="@+id/game_player2_name_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PLAYER1"
@@ -204,6 +215,7 @@
 
             <TextView
                 android:id="@+id/game_player2_popularity_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -216,6 +228,7 @@
 
             <TextView
                 android:id="@+id/game_player2_vote_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -228,6 +241,7 @@
 
             <TextView
                 android:id="@+id/game_player2_influence_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -240,6 +254,7 @@
 
             <TextView
                 android:id="@+id/game_player2_money_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -273,6 +288,7 @@
 
             <TextView
                 android:id="@+id/game_player3_name_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PLAYER1"
@@ -284,6 +300,7 @@
 
             <TextView
                 android:id="@+id/game_player3_popularity_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -296,6 +313,7 @@
 
             <TextView
                 android:id="@+id/game_player3_vote_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -308,6 +326,7 @@
 
             <TextView
                 android:id="@+id/game_player3_influence_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -320,6 +339,7 @@
 
             <TextView
                 android:id="@+id/game_player3_money_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -353,6 +373,7 @@
 
             <TextView
                 android:id="@+id/game_player4_name_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PLAYER1"
@@ -364,6 +385,7 @@
 
             <TextView
                 android:id="@+id/game_player4_popularity_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -376,6 +398,7 @@
 
             <TextView
                 android:id="@+id/game_player4_vote_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -388,6 +411,7 @@
 
             <TextView
                 android:id="@+id/game_player4_influence_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -400,6 +424,7 @@
 
             <TextView
                 android:id="@+id/game_player4_money_text"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -582,6 +607,7 @@
 
     <TextView
         android:id="@+id/game_phase_text"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

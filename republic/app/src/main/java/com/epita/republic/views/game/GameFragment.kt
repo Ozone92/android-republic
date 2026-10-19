@@ -2,6 +2,7 @@ package com.epita.republic.views.game
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -125,7 +126,7 @@ class GameFragment : Fragment() {
         }
 
         val diceConfirmBtn: Button = view.findViewById(R.id.game_dice_confirm)
-        diceConfirmBtn.setOnClickListener { gameViewModel.signalController.notify() }
+        diceConfirmBtn.setOnClickListener { gameViewModel.signalController.sendNotify() }
 
         gameViewModel.currentPlayerTurnIndex.observe(this.viewLifecycleOwner) { renderTurnPhase() }
         gameViewModel.inCity.observe(this.viewLifecycleOwner) { renderPlayers() }
@@ -135,7 +136,7 @@ class GameFragment : Fragment() {
 
         val stayBtn: Button = view.findViewById(R.id.game_stay_btn)
         stayBtn.setOnClickListener {
-            gameViewModel.signalController.notify()
+            gameViewModel.signalController.sendNotify()
         }
 
         val leaveBtn: Button = view.findViewById(R.id.game_leave_btn)
@@ -144,6 +145,7 @@ class GameFragment : Fragment() {
         }
 
         gameViewModel.currentPhase.observe(this.viewLifecycleOwner) { newPhase ->
+            Log.d("GAME", newPhase.name)
             renderTurnPhase()
             renderPlayers()
             val isPlayerTurn = !gameViewModel.currentPlayer.value!!.isBot

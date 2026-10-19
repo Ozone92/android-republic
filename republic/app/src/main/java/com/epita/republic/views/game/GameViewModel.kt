@@ -1,5 +1,6 @@
 package com.epita.republic.views.game
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +10,6 @@ import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.Player
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Collections.emptySet
 import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
 
@@ -37,7 +37,7 @@ class GameViewModel : ViewModel() {
     val currentPhase: MutableLiveData<GamePhase> = MutableLiveData(GamePhase.DICE)
     val dices: MutableLiveData<Array<DiceFace>> =
         MutableLiveData(Array(6) { return@Array DiceFace.ONE })
-    val lockedDiceIndexes: MutableSet<Int> = emptySet()
+    val lockedDiceIndexes: MutableSet<Int> = mutableSetOf()
     val rerollLeft: MutableLiveData<Int> = MutableLiveData(3)
 
     fun diceButtonClick(index: Int): Boolean {
@@ -72,17 +72,21 @@ class GameViewModel : ViewModel() {
             val currentRoll = dices.value!!
             val newDices = gameLogic.rollDice(numberOfReroll)
 
-            for ((i, index) in (0.. 5).withIndex()) {
-                if (!lockedDiceIndexes.contains(index)) {
-                    currentRoll[index] = newDices[i]
+            var i = 0;
+            for (diceIndex in (0.. 5)) {
+                if (!lockedDiceIndexes.contains(diceIndex)) {
+                    currentRoll[diceIndex] = newDices[i]
+                    i++;
                 }
             }
 
             dices.postValue(currentRoll)
+            rerollLeft.postValue(rerollLeft.value!! - 1)
         }
     }
 
     private suspend fun handleDiceResult() {
+        Log.d("GAME", "Start handleDiceResult")
         val rolledDices = dices.value!!
         val oneCount = rolledDices.count { face -> face == DiceFace.ONE }
         val twoCount = rolledDices.count { face -> face == DiceFace.TWO }
@@ -121,6 +125,8 @@ class GameViewModel : ViewModel() {
         if (damageCount > 0) {
             onDamage(damageCount)
         }
+
+        Log.d("GAME", "End handleDiceResult")
     }
 
     suspend fun onDamage(damageCount: Int) {
@@ -162,7 +168,7 @@ class GameViewModel : ViewModel() {
 
     fun playerExitCityClick() {
         inCity.postValue(null)
-        signalController.notify()
+        signalController.sendNotify()
     }
 
     fun enterCity() {
@@ -174,10 +180,16 @@ class GameViewModel : ViewModel() {
         if (inCity.value == null) {
             enterCity()
         }
+
+        val nextPlayerIndex = (currentPlayerTurnIndex.value!! + 1) % players.size
+        Log.d("GAME", "NEXT PLAYER (${currentPlayerTurnIndex.value} + 1 % ${players.size}) = $nextPlayerIndex")
+        currentPlayerTurnIndex.postValue(nextPlayerIndex)
     }
 
     suspend fun waitForInput() {
+        Log.d("GAME", "Wait for BOT? ${currentPlayer.value!!.isBot}")
         if (currentPlayer.value!!.isBot) {
+            Log.d("GAME", "BOT Waiting...")
             delay(BOT_SLEEP_ACTION.seconds)
         } else {
             signalController.await()
@@ -188,6 +200,7 @@ class GameViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             while (!gameFinish()) {
+                Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")
                 currentPlayer.value = players[currentPlayerTurnIndex.value!!]
                 if (currentPlayer.value!!.isAlive()) {
                     // Check de debut de tour (si au centre => ajouter points ; passif ; ...)
@@ -203,7 +216,7 @@ class GameViewModel : ViewModel() {
                     handleDiceResult()
 
                     currentPhase.postValue(GamePhase.SHOP)
-                    waitForInput()
+                    // waitForInput() TODO Add shop view
 
                     endTurn()
                 }
