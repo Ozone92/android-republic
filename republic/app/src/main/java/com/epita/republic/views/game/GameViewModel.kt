@@ -1,0 +1,234 @@
+package com.epita.republic.views.game
+
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.epita.republic.domain.DiceFace
+import com.epita.republic.domain.GameLogic
+import com.epita.republic.domain.SignalController
+import com.epita.republic.repository.Player
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.max
+import kotlin.time.Duration.Companion.seconds
+
+enum class GamePhase {
+    DICE,
+    EVILNESS,
+    SHOP,
+    ASK_LEAVE,
+
+    GAME_FINISH
+}
+
+const val POINT_FOR_VICTORY = 20
+const val POINT_CITY_TURN = 2
+const val POINT_CITY_ENTER = 1
+const val BOT_SLEEP_ACTION = 3L
+
+class GameViewModel : ViewModel() {
+    private val gameLogic = GameLogic()
+    val signalController = SignalController()
+    val players: Array<Player> = Array(4) { i -> return@Array Player(isBot = i > 0) }
+    val currentPlayerTurnIndex: MutableLiveData<Int> = MutableLiveData(0)
+    val currentPlayer: MutableLiveData<Player> = MutableLiveData(players[0])
+    val inCity: MutableLiveData<Player?> = MutableLiveData(null)
+    val currentPhase: MutableLiveData<GamePhase> = MutableLiveData(GamePhase.DICE)
+    val dices: MutableLiveData<Array<DiceFace>> =
+        MutableLiveData(Array(6) { return@Array DiceFace.ONE })
+    val lockedDiceIndexes: MutableSet<Int> = mutableSetOf()
+    val rerollLeft: MutableLiveData<Int> = MutableLiveData(3)
+
+    fun diceButtonClick(index: Int): Boolean {
+        return if (lockedDiceIndexes.contains(index)) {
+            // Dice Unlock
+            lockedDiceIndexes.remove(index)
+            true
+        } else {
+            // Dice Lock
+            lockedDiceIndexes.add(index)
+            false
+        }
+    }
+
+    private fun gameFinish(): Boolean {
+        if (currentPlayer.value!!.vote >= POINT_FOR_VICTORY) {
+            return true
+        }
+
+        var playerAlive = 0
+        for (player in players) {
+            if (player.isAlive()) {
+                playerAlive++
+            }
+        }
+
+        return playerAlive <= 1
+    }
+
+    fun rollDice() {
+        val numberOfReroll = 6 - lockedDiceIndexes.size
+        if (rerollLeft.value!! > 0 && numberOfReroll > 0) {
+            val currentRoll = dices.value!!
+            val newDices = gameLogic.rollDice(numberOfReroll)
+
+            var i = 0;
+            for (diceIndex in (0..5)) {
+                if (!lockedDiceIndexes.contains(diceIndex)) {
+                    currentRoll[diceIndex] = newDices[i]
+                    i++;
+                }
+            }
+
+            dices.value = (currentRoll)
+            rerollLeft.value = (rerollLeft.value!! - 1)
+        }
+    }
+
+    private suspend fun handleDiceResult() {
+        Log.d("GAME", "Start handleDiceResult")
+        val rolledDices = dices.value!!
+        val oneCount = rolledDices.count { face -> face == DiceFace.ONE }
+        val twoCount = rolledDices.count { face -> face == DiceFace.TWO }
+        val threeCount = rolledDices.count { face -> face == DiceFace.THREE }
+        val healthCount = rolledDices.count { face -> face == DiceFace.HEAL }
+        val damageCount = rolledDices.count { face -> face == DiceFace.DAMAGE }
+        val moneyCount = rolledDices.count { face -> face == DiceFace.MONEY }
+
+        var scoreGain = 0
+        var influenceGain = 0
+        Log.d(
+            "GAME",
+            "Dice Result ${oneCount} ONE | $twoCount TWO | ${threeCount} THREE | ${healthCount} HEAL | ${damageCount} DAMAGE | ${moneyCount} MONEY"
+        )
+        if (oneCount >= 3) {
+            scoreGain = 1 + oneCount - 3
+            influenceGain = 2
+        }
+        if (twoCount >= 3) {
+            scoreGain = 2 + twoCount - 3
+            influenceGain = 1
+        }
+        if (threeCount >= 3) {
+            scoreGain = 3 + threeCount - 3
+        }
+
+        Log.d("GAME", "Score Gain: ${scoreGain} | Influence Gain: ${influenceGain}")
+
+        if (currentPlayer.value != inCity.value) {
+            Log.d("GAME", "Healing player by ${healthCount}")
+            currentPlayer.value!!.popularity =
+                minOf(
+                    currentPlayer.value!!.popularity + healthCount,
+                    currentPlayer.value!!.maxPopularity
+                )
+        }
+
+        // TODO Check if gain card
+        currentPlayer.value!!.influence += influenceGain
+
+        currentPlayer.value!!.vote += scoreGain
+        currentPlayer.value!!.money += moneyCount
+        if (damageCount > 0) {
+            onDamage(damageCount)
+        }
+
+        Log.d("GAME", "End handleDiceResult")
+    }
+
+    suspend fun onDamage(damageCount: Int) {
+        if (currentPlayer.value == inCity.value) {
+            damageFromInside(damageCount)
+        } else {
+            damageFromOutside(damageCount)
+        }
+    }
+
+    fun damageFromInside(damageCount: Int) {
+        // Damage to everyone outside == all player except myself
+        for (player in players) {
+            if (player != currentPlayer) {
+                player.popularity -= max(0, player.popularity - damageCount)
+            }
+        }
+    }
+
+    suspend fun damageFromOutside(damageCount: Int) {
+        val playerInCity = inCity.value
+        if (playerInCity != null) {
+            playerInCity.popularity -= max(0, playerInCity.popularity - damageCount)
+
+            if (playerInCity.popularity <= 0) {
+                inCity.value = null
+            } else {
+                if (playerInCity.isBot) {
+                    if (playerInCity.isBotGoOut()) {
+                        inCity.value = null
+                    }
+                } else {
+                    currentPhase.value = (GamePhase.ASK_LEAVE)
+                    signalController.await()
+                }
+            }
+        }
+    }
+
+    fun playerExitCityClick() {
+        inCity.value = null
+        signalController.sendNotify()
+    }
+
+    fun enterCity() {
+        inCity.value = currentPlayer.value
+        currentPlayer.value!!.vote += POINT_CITY_ENTER
+    }
+
+    fun endTurn() {
+        if (inCity.value == null) {
+            enterCity()
+        }
+    }
+
+    suspend fun waitForInput() {
+        Log.d("GAME", "Wait for BOT? ${currentPlayer.value!!.isBot}")
+        if (currentPlayer.value!!.isBot) {
+            Log.d("GAME", "BOT Waiting...")
+            delay(BOT_SLEEP_ACTION.seconds)
+        } else {
+            signalController.await()
+        }
+    }
+
+    // GAME LOOP
+    init {
+        viewModelScope.launch {
+            while (!gameFinish()) {
+                Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")
+                currentPlayer.value = players[currentPlayerTurnIndex.value!!]
+                if (currentPlayer.value!!.isAlive()) {
+                    // Check de debut de tour (si au centre => ajouter points ; passif ; ...)
+                    if (currentPlayer.value!! == inCity.value) {
+                        currentPlayer.value!!.vote += POINT_CITY_TURN
+                    }
+
+                    rerollLeft.value = 3
+                    lockedDiceIndexes.clear()
+                    rollDice()
+                    currentPhase.value = GamePhase.DICE
+                    waitForInput()
+                    handleDiceResult()
+
+                    currentPhase.value = GamePhase.SHOP
+                    // waitForInput() TODO Add shop view
+
+                    endTurn()
+                }
+
+                currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
+            }
+
+            currentPhase.value = (GamePhase.GAME_FINISH)
+        }
+    }
+}
