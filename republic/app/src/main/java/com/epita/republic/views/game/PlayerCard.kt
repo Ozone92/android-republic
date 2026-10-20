@@ -8,7 +8,7 @@ import com.epita.republic.repository.Player
 
 class PlayerCard(
     private val context: Context,
-    private val playerIndex: Int,
+    private var playerIndex: Int,
     private var player: Player?,
 
     private val cardView: CardView,
@@ -24,7 +24,7 @@ class PlayerCard(
 
     fun render() {
         if (player != null) {
-            nameTextView.text = context.getString(R.string.game_player_card_name, playerIndex)
+            nameTextView.text = context.getString(R.string.game_player_card_name, playerIndex + 1)
             influenceTextView.text = context.getString(R.string.game_player_card_influence, player!!.influence)
             popularityTextView.text = context.getString(R.string.game_player_card_popularity, player!!.popularity, player!!.maxPopularity)
             moneyTextView.text = context.getString(R.string.game_player_card_money, player!!.money)
@@ -36,8 +36,13 @@ class PlayerCard(
         return player
     }
 
-    fun setPlayer(newPlayer: Player) {
+    fun getIndex(): Int {
+        return playerIndex
+    }
+
+    fun changePlayer(newPlayer: Player, newIndex: Int) {
         player = newPlayer
+        playerIndex = newIndex
         render()
     }
 }

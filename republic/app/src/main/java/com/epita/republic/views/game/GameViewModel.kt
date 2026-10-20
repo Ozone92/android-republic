@@ -25,7 +25,7 @@ enum class GamePhase {
 const val POINT_FOR_VICTORY = 20
 const val POINT_CITY_TURN = 2
 const val POINT_CITY_ENTER = 1
-const val BOT_SLEEP_ACTION = 1L
+const val BOT_SLEEP_ACTION = 3L
 
 class GameViewModel : ViewModel() {
     private val gameLogic = GameLogic()
@@ -51,6 +51,7 @@ class GameViewModel : ViewModel() {
             false
         }
     }
+
     private fun gameFinish(): Boolean {
         if (currentPlayer.value!!.vote >= POINT_FOR_VICTORY) {
             return true
@@ -73,15 +74,15 @@ class GameViewModel : ViewModel() {
             val newDices = gameLogic.rollDice(numberOfReroll)
 
             var i = 0;
-            for (diceIndex in (0.. 5)) {
+            for (diceIndex in (0..5)) {
                 if (!lockedDiceIndexes.contains(diceIndex)) {
                     currentRoll[diceIndex] = newDices[i]
                     i++;
                 }
             }
 
-            dices.postValue(currentRoll)
-            rerollLeft.postValue(rerollLeft.value!! - 1)
+            dices.value = (currentRoll)
+            rerollLeft.value = (rerollLeft.value!! - 1)
         }
     }
 
@@ -97,21 +98,28 @@ class GameViewModel : ViewModel() {
 
         var scoreGain = 0
         var influenceGain = 0
-        if (oneCount > 3) {
+        Log.d(
+            "GAME",
+            "Dice Result ${oneCount} ONE | $twoCount TWO | ${threeCount} THREE | ${healthCount} HEAL | ${damageCount} DAMAGE | ${moneyCount} MONEY"
+        )
+        if (oneCount >= 3) {
             scoreGain = 1 + oneCount - 3
             influenceGain = 2
         }
-        if (twoCount > 3) {
+        if (twoCount >= 3) {
             scoreGain = 2 + twoCount - 3
             influenceGain = 1
         }
-        if (threeCount > 3) {
+        if (threeCount >= 3) {
             scoreGain = 3 + threeCount - 3
         }
 
-        if (currentPlayer != inCity.value) {
+        Log.d("GAME", "Score Gain: ${scoreGain} | Influence Gain: ${influenceGain}")
+
+        if (currentPlayer.value != inCity.value) {
+            Log.d("GAME", "Healing player by ${healthCount}")
             currentPlayer.value!!.popularity =
-                max(
+                minOf(
                     currentPlayer.value!!.popularity + healthCount,
                     currentPlayer.value!!.maxPopularity
                 )
@@ -130,7 +138,7 @@ class GameViewModel : ViewModel() {
     }
 
     suspend fun onDamage(damageCount: Int) {
-        if (currentPlayer == inCity.value) {
+        if (currentPlayer.value == inCity.value) {
             damageFromInside(damageCount)
         } else {
             damageFromOutside(damageCount)
@@ -141,7 +149,7 @@ class GameViewModel : ViewModel() {
         // Damage to everyone outside == all player except myself
         for (player in players) {
             if (player != currentPlayer) {
-                player.popularity -= damageCount
+                player.popularity -= max(0, player.popularity - damageCount)
             }
         }
     }
@@ -149,41 +157,37 @@ class GameViewModel : ViewModel() {
     suspend fun damageFromOutside(damageCount: Int) {
         val playerInCity = inCity.value
         if (playerInCity != null) {
-            playerInCity.popularity -= damageCount
+            playerInCity.popularity -= max(0, playerInCity.popularity - damageCount)
 
             if (playerInCity.popularity <= 0) {
-                inCity.postValue(null)
+                inCity.value = null
             } else {
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
-                        inCity.postValue(null)
+                        inCity.value = null
                     }
                 } else {
-                    currentPhase.postValue(GamePhase.ASK_LEAVE)
-                    waitForInput()
+                    currentPhase.value = (GamePhase.ASK_LEAVE)
+                    signalController.await()
                 }
             }
         }
     }
 
     fun playerExitCityClick() {
-        inCity.postValue(null)
+        inCity.value = null
         signalController.sendNotify()
     }
 
     fun enterCity() {
-        inCity.postValue(currentPlayer.value!!)
-        currentPlayer.value!!.popularity += POINT_CITY_ENTER
+        inCity.value = currentPlayer.value
+        currentPlayer.value!!.vote += POINT_CITY_ENTER
     }
 
     fun endTurn() {
         if (inCity.value == null) {
             enterCity()
         }
-
-        val nextPlayerIndex = (currentPlayerTurnIndex.value!! + 1) % players.size
-        Log.d("GAME", "NEXT PLAYER (${currentPlayerTurnIndex.value} + 1 % ${players.size}) = $nextPlayerIndex")
-        currentPlayerTurnIndex.postValue(nextPlayerIndex)
     }
 
     suspend fun waitForInput() {
@@ -205,24 +209,26 @@ class GameViewModel : ViewModel() {
                 if (currentPlayer.value!!.isAlive()) {
                     // Check de debut de tour (si au centre => ajouter points ; passif ; ...)
                     if (currentPlayer.value!! == inCity.value) {
-                        currentPlayer.value!!.popularity += POINT_CITY_TURN
+                        currentPlayer.value!!.vote += POINT_CITY_TURN
                     }
 
-                    rerollLeft.postValue(3)
+                    rerollLeft.value = 3
                     lockedDiceIndexes.clear()
                     rollDice()
-                    currentPhase.postValue(GamePhase.DICE)
+                    currentPhase.value = GamePhase.DICE
                     waitForInput()
                     handleDiceResult()
 
-                    currentPhase.postValue(GamePhase.SHOP)
+                    currentPhase.value = GamePhase.SHOP
                     // waitForInput() TODO Add shop view
 
                     endTurn()
                 }
+
+                currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
             }
 
-            currentPhase.postValue(GamePhase.GAME_FINISH)
+            currentPhase.value = (GamePhase.GAME_FINISH)
         }
     }
 }

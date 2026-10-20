@@ -112,9 +112,9 @@ class GameFragment : Fragment() {
         for ((index, diceButton) in diceButtons.withIndex()) {
             diceButton.setOnClickListener {
                 if (gameViewModel.diceButtonClick(index)) {
-                    diceButton.setBackgroundColor(resources.getColor(R.color.dice_unlock, null))
+                    diceButton.setTextColor(resources.getColor(R.color.dice_unlock, null))
                 } else {
-                    diceButton.setBackgroundColor(resources.getColor(R.color.dice_lock, null))
+                    diceButton.setTextColor(resources.getColor(R.color.dice_lock, null))
                 }
             }
         }
@@ -153,11 +153,11 @@ class GameFragment : Fragment() {
             diceView.visibility = View.INVISIBLE
             stayLeaveView.visibility = View.INVISIBLE
             if (newPhase == GamePhase.DICE) {
-                diceRerollBtn.isActivated = isPlayerTurn
-                diceConfirmBtn.isActivated = isPlayerTurn
+                diceRerollBtn.isEnabled = isPlayerTurn
+                diceConfirmBtn.isEnabled = isPlayerTurn
 
                 diceButtons.forEach { btn ->
-                    btn.setBackgroundColor(
+                    btn.setTextColor(
                         resources.getColor(
                             R.color.dice_unlock,
                             null
@@ -166,8 +166,6 @@ class GameFragment : Fragment() {
                 }
                 diceView.visibility = View.VISIBLE
             } else if (newPhase == GamePhase.ASK_LEAVE) {
-                stayBtn.isActivated = isPlayerTurn
-                leaveBtn.isActivated = isPlayerTurn
                 stayLeaveView.visibility = View.VISIBLE
             }
         }
@@ -178,7 +176,7 @@ class GameFragment : Fragment() {
         for (playerCard in playerCards) {
             val player = playerCard.getPlayer()!!
             if (player == gameViewModel.inCity.value) {
-                middleCard.setPlayer(player)
+                middleCard.changePlayer(player, playerCard.getIndex())
                 middleCard.setVisibility(View.VISIBLE)
                 playerCard.setVisibility(View.INVISIBLE)
             } else {
@@ -191,7 +189,7 @@ class GameFragment : Fragment() {
     fun renderTurnPhase() {
         turnPhaseTextView.text = getString(
             R.string.game_phase_text,
-            gameViewModel.currentPlayerTurnIndex.value,
+            gameViewModel.currentPlayerTurnIndex.value!! + 1,
             gameViewModel.currentPhase.value.toString()
         )
     }
