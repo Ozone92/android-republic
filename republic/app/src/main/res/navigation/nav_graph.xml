@@ -11,8 +11,8 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_caracterFragment"
-            app:destination="@id/caracterFragment" />
+            android:id="@+id/action_homeFragment_to_characterFragment"
+            app:destination="@id/characterFragment" />
     </fragment>
     <fragment
         android:id="@+id/endingFragment"
@@ -20,8 +20,8 @@
         android:label="fragment_ending"
         tools:layout="@layout/fragment_ending" >
         <action
-            android:id="@+id/action_endingFragment_to_caracterFragment"
-            app:destination="@id/caracterFragment" />
+            android:id="@+id/action_endingFragment_to_characterFragment"
+            app:destination="@id/characterFragment" />
         <action
             android:id="@+id/action_endingFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -31,17 +31,22 @@
         android:name="com.epita.republic.views.game.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
+
+        <argument
+            android:name="characterId"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_gameFragment_to_endingFragment"
             app:destination="@id/endingFragment" />
     </fragment>
     <fragment
-        android:id="@+id/caracterFragment"
-        android:name="com.epita.republic.views.caracter.CaracterFragment"
-        android:label="fragment_caracter"
-        tools:layout="@layout/fragment_caracter" >
+        android:id="@+id/characterFragment"
+        android:name="com.epita.republic.views.character.CharacterFragment"
+        android:label="fragment_character"
+        tools:layout="@layout/fragment_character" >
         <action
-            android:id="@+id/action_caracterFragment_to_gameFragment"
+            android:id="@+id/action_characterFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
 </navigation>
