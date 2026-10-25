@@ -13,8 +13,10 @@ navigationUiKtx = "2.10.2"
 fragment = "1.9.1"
 lifecycleKtx = "2.11.0"
 cardview = "1.0.0"
+recyclerview = "1.4.0"
 
 [libraries]
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
