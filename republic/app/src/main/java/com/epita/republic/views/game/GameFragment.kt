@@ -11,14 +11,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.epita.republic.R
 import com.epita.republic.domain.DiceFace
-import com.epita.republic.repository.Player
-
+import androidx.navigation.fragment.navArgs
 
 class GameFragment : Fragment() {
     val gameViewModel: GameViewModel by viewModels()
+    private val args: GameFragmentArgs by navArgs()
 
     lateinit var playerCards: Array<PlayerCard>
     lateinit var middleCard: PlayerCard
@@ -34,6 +33,8 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val characterId = args.characterId
+        Log.d("CharacterSelection", "Personnage reçu : $characterId")
         activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
 
         turnPhaseTextView = view.findViewById(R.id.game_phase_text)

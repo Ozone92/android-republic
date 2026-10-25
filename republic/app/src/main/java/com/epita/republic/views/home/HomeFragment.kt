@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.home_play_btn).setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_caracterFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_characterFragment)
         }
     }
 }

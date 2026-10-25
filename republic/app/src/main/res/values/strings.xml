@@ -7,12 +7,12 @@
     <string name="home_play">PLAY</string>
     <string name="home_quit">QUIT</string>
 
-    <string name="game_phase_text">PLAYER %d: %s</string>
+    <string name="game_phase_text">PLAYER %1$d: %2$s</string>
     <string name="game_player_card_name">PLAYER %d</string>
     <string name="game_player_card_influence">INFLUENCE: %d/10</string>
     <string name="game_player_card_vote">VOTE: %d/20</string>
     <string name="game_player_card_money">MONEY: %d</string>
-    <string name="game_player_card_popularity">POPULARITY: %d/%d</string>
+    <string name="game_player_card_popularity">POPULARITY: %1$d/%2$d</string>
     <string name="game_reroll_text">REROLL (%d left)</string>
     <string name="game_validate_dice">CONFIRM</string>
     <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>
