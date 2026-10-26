@@ -10,7 +10,7 @@ import com.epita.republic.R
 
 class CharacterAdapter(
     private val characters: List<CharacterItem>,
-    private val onCharacterClick: (String) -> Unit
+    private val onCharacterClick: (Int) -> Unit
 ) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,7 +39,7 @@ class CharacterAdapter(
         holder.name.text = character.name
 
         holder.image.setOnClickListener {
-            onCharacterClick(character.id)
+            onCharacterClick(character.imageRes)
         }
     }
 

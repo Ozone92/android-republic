@@ -43,10 +43,21 @@ class CharacterFragment : Fragment() {
 
         grid.layoutManager = GridLayoutManager(requireContext(), 3)
 
-        grid.adapter = CharacterAdapter(characters) { characterId ->
+        grid.adapter = CharacterAdapter(characters) { selectedCharacterId ->
+            val playersCharacter = ArrayList<Int>()
+            playersCharacter.add(selectedCharacterId)
+            for (i in 0..2) {
+                val iaCharacter = characters.random()
+                while (playersCharacter.contains(iaCharacter.imageRes)) {
+                    val iaCharacter = characters.random()
+                }
+                playersCharacter.add(iaCharacter.imageRes)
+            }
+
+
             val action =
                 CharacterFragmentDirections.actionCharacterFragmentToGameFragment(
-                    characterId
+                    playersCharacter.toIntArray()
                 )
             findNavController().navigate(action)
         }

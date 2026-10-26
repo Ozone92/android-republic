@@ -32,13 +32,12 @@
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
 
-        <argument
-            android:name="characterId"
-            app:argType="string" />
-
         <action
             android:id="@+id/action_gameFragment_to_endingFragment"
             app:destination="@id/endingFragment" />
+        <argument
+            android:name="PlayersRes"
+            app:argType="integer[]" />
     </fragment>
     <fragment
         android:id="@+id/characterFragment"
