@@ -8,12 +8,11 @@
     tools:layout_width="120dp">
 
 
-    <ImageView
+    <com.epita.republic.views.character.TopCropImageView
         android:id="@+id/character_image"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:contentDescription="@null"
-        android:scaleType="centerCrop"
         tools:src="@drawable/melanchon_2" />
 
     <TextView
