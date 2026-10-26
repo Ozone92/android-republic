@@ -33,8 +33,6 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val characterId = args.characterId
-        Log.d("CharacterSelection", "Personnage reçu : $characterId")
         activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
 
         turnPhaseTextView = view.findViewById(R.id.game_phase_text)
@@ -44,7 +42,9 @@ class GameFragment : Fragment() {
                 requireContext(),
                 0,
                 gameViewModel.players[0],
+                args.PlayersRes[0],
                 view.findViewById(R.id.game_player1_card),
+                view.findViewById(R.id.game_player1_image),
                 view.findViewById(R.id.game_player1_name_text),
                 view.findViewById(R.id.game_player1_influence_text),
                 view.findViewById(R.id.game_player1_popularity_text),
@@ -55,7 +55,9 @@ class GameFragment : Fragment() {
                 requireContext(),
                 1,
                 gameViewModel.players[1],
+                args.PlayersRes[1],
                 view.findViewById(R.id.game_player2_card),
+                view.findViewById(R.id.game_player2_image),
                 view.findViewById(R.id.game_player2_name_text),
                 view.findViewById(R.id.game_player2_influence_text),
                 view.findViewById(R.id.game_player2_popularity_text),
@@ -66,7 +68,9 @@ class GameFragment : Fragment() {
                 requireContext(),
                 2,
                 gameViewModel.players[2],
+                args.PlayersRes[2],
                 view.findViewById(R.id.game_player3_card),
+                view.findViewById(R.id.game_player3_image),
                 view.findViewById(R.id.game_player3_name_text),
                 view.findViewById(R.id.game_player3_influence_text),
                 view.findViewById(R.id.game_player3_popularity_text),
@@ -77,7 +81,9 @@ class GameFragment : Fragment() {
                 requireContext(),
                 3,
                 gameViewModel.players[3],
+                args.PlayersRes[3],
                 view.findViewById(R.id.game_player4_card),
+                view.findViewById(R.id.game_player4_image),
                 view.findViewById(R.id.game_player4_name_text),
                 view.findViewById(R.id.game_player4_influence_text),
                 view.findViewById(R.id.game_player4_popularity_text),
@@ -90,7 +96,9 @@ class GameFragment : Fragment() {
             requireContext(),
             0,
             null,
+            null,
             view.findViewById(R.id.game_middle_player_card),
+            view.findViewById(R.id.game_middle_player_image),
             view.findViewById(R.id.game_middle_player_name_text),
             view.findViewById(R.id.game_middle_player_influence_text),
             view.findViewById(R.id.game_middle_player_popularity_text),
@@ -177,7 +185,7 @@ class GameFragment : Fragment() {
         for (playerCard in playerCards) {
             val player = playerCard.getPlayer()!!
             if (player == gameViewModel.inCity.value) {
-                middleCard.changePlayer(player, playerCard.getIndex())
+                middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getResId())
                 middleCard.setVisibility(View.VISIBLE)
                 playerCard.setVisibility(View.INVISIBLE)
             } else {
