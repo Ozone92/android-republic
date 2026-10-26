@@ -18,4 +18,26 @@
     <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>
     <string name="game_stay_btn_text">STAY</string>
     <string name="game_leave_btn_text">LEAVE</string>
+    <string name="power_shop_title">Power Cards</string>
+    <string name="power_shop_open">Powers</string>
+    <string name="power_shop_close">Close</string>
+    <string name="power_shop_buy">Buy</string>
+
+    <string name="power_shop_allowed">Your turn: purchases available</string>
+    <string name="power_shop_blocked">Opponent’s turn: purchases unavailable</string>
+
+    <string name="power_placeholder_1">Power 1</string>
+    <string name="power_placeholder_2">Power 2</string>
+    <string name="power_placeholder_3">Power 3</string>
+    <string name="power_placeholder_4">Power 4</string>
+    <string name="power_placeholder_5">Power 5</string>
+    <string name="power_placeholder_6">Power 6</string>
+    <string name="power_placeholder_7">Power 7</string>
+
+    <string name="power_shop_reroll">Reroll — free for testing</string>
+    <string name="power_shop_empty">No card available</string>
+    <string name="power_shop_counts">Deck: %1$d · Discard: %2$d · Your cards: %3$d</string>
+    <string name="power_placeholder_description">Power description coming soon</string>
+
+    <string name="power_shop_placeholder_message">Card %1$d: purchase not implemented yet</string>
 </resources>

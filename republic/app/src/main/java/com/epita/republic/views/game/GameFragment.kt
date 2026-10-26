@@ -33,6 +33,12 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.findViewById<Button>(R.id.game_power_shop_btn).setOnClickListener {
+            if (childFragmentManager.findFragmentByTag(PowerShopDialogFragment.TAG) == null) {
+                PowerShopDialogFragment().show(childFragmentManager, PowerShopDialogFragment.TAG)
+            }
+        }
+
         val characterId = args.characterId
         Log.d("CharacterSelection", "Personnage reçu : $characterId")
         activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)

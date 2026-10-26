@@ -16,6 +16,7 @@ data class Player(
 
     var isBot: Boolean
 ) {
+    val powerCards: MutableList<PowerCard> = mutableListOf()
     fun isAlive(): Boolean {
         return popularity > 0
     }
