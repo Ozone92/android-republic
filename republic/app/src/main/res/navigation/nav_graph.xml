@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_endingFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="result"
+            app:argType="com.epita.republic.views.ending.EndingFragmentParameter" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
@@ -36,8 +39,17 @@
             android:id="@+id/action_gameFragment_to_endingFragment"
             app:destination="@id/endingFragment" />
         <argument
-            android:name="PlayersRes"
-            app:argType="integer[]" />
+            android:name="player1"
+            app:argType="com.epita.republic.domain.Character" />
+        <argument
+            android:name="player2"
+            app:argType="com.epita.republic.domain.Character" />
+        <argument
+            android:name="player3"
+            app:argType="com.epita.republic.domain.Character" />
+        <argument
+            android:name="player4"
+            app:argType="com.epita.republic.domain.Character" />
     </fragment>
     <fragment
         android:id="@+id/characterFragment"

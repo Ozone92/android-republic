@@ -11,9 +11,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.epita.republic.R
 import com.epita.republic.domain.DiceFace
 import androidx.navigation.fragment.navArgs
+import com.epita.republic.views.ending.EndingFragmentParameter
 
 class GameFragment : Fragment() {
     val gameViewModel: GameViewModel by viewModels()
@@ -42,7 +44,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 0,
                 gameViewModel.players[0],
-                args.PlayersRes[0],
+                args.player1,
                 view.findViewById(R.id.game_player1_card),
                 view.findViewById(R.id.game_player1_image),
                 view.findViewById(R.id.game_player1_name_text),
@@ -55,7 +57,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 1,
                 gameViewModel.players[1],
-                args.PlayersRes[1],
+                args.player2,
                 view.findViewById(R.id.game_player2_card),
                 view.findViewById(R.id.game_player2_image),
                 view.findViewById(R.id.game_player2_name_text),
@@ -68,7 +70,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 2,
                 gameViewModel.players[2],
-                args.PlayersRes[2],
+                args.player3,
                 view.findViewById(R.id.game_player3_card),
                 view.findViewById(R.id.game_player3_image),
                 view.findViewById(R.id.game_player3_name_text),
@@ -81,7 +83,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 3,
                 gameViewModel.players[3],
-                args.PlayersRes[3],
+                args.player4,
                 view.findViewById(R.id.game_player4_card),
                 view.findViewById(R.id.game_player4_image),
                 view.findViewById(R.id.game_player4_name_text),
@@ -104,6 +106,7 @@ class GameFragment : Fragment() {
             view.findViewById(R.id.game_middle_player_popularity_text),
             view.findViewById(R.id.game_middle_player_money_text),
             view.findViewById(R.id.game_middle_player_vote_text),
+            isMiddle = true
         )
         renderPlayers()
         renderTurnPhase()
@@ -176,6 +179,14 @@ class GameFragment : Fragment() {
                 diceView.visibility = View.VISIBLE
             } else if (newPhase == GamePhase.ASK_LEAVE) {
                 stayLeaveView.visibility = View.VISIBLE
+            } else if (newPhase == GamePhase.GAME_FINISH) {
+                val playersCharacter = arrayOf(args.player1, args.player2, args.player3, args.player4)
+                val playersWinningOrder = gameViewModel.getWinningPlayerOrder()
+                val result = EndingFragmentParameter(null, null, playersWinningOrder.map { player ->
+                    return@map Pair(player.playerIndex, playersCharacter[player.playerIndex])
+                }.toTypedArray())
+                val action = GameFragmentDirections.actionGameFragmentToEndingFragment(result)
+                findNavController().navigate(action)
             }
         }
     }
@@ -185,7 +196,7 @@ class GameFragment : Fragment() {
         for (playerCard in playerCards) {
             val player = playerCard.getPlayer()!!
             if (player == gameViewModel.inCity.value) {
-                middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getResId())
+                middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getCharacter())
                 middleCard.setVisibility(View.VISIBLE)
                 playerCard.setVisibility(View.INVISIBLE)
             } else {
