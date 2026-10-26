@@ -47,9 +47,9 @@ class CharacterFragment : Fragment() {
             val playersCharacter = ArrayList<Int>()
             playersCharacter.add(selectedCharacterId)
             for (i in 0..2) {
-                val iaCharacter = characters.random()
+                var iaCharacter = characters.random()
                 while (playersCharacter.contains(iaCharacter.imageRes)) {
-                    val iaCharacter = characters.random()
+                    iaCharacter = characters.random()
                 }
                 playersCharacter.add(iaCharacter.imageRes)
             }
