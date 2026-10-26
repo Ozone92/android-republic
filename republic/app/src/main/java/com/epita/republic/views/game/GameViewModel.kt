@@ -1,6 +1,7 @@
 package com.epita.republic.views.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,9 @@ import com.epita.republic.domain.InfluenceStep
 import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.InfluenceCard
 import com.epita.republic.repository.Player
+import com.epita.republic.repository.PowerCard
+import com.epita.republic.R
+import kotlin.random.Random
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -30,6 +34,13 @@ const val POINT_CITY_TURN = 2
 const val POINT_CITY_ENTER = 1
 const val BOT_SLEEP_ACTION = 3L
 
+data class PowerShopState(
+    val slots: List<PowerCard?>,
+    val deckCount: Int,
+    val discardCount: Int,
+    val ownedCount: Int
+)
+
 class GameViewModel : ViewModel() {
     private val gameLogic = GameLogic()
     private val influenceLogic = InfluenceLogic()
@@ -46,6 +57,60 @@ class GameViewModel : ViewModel() {
     val rerollLeft: MutableLiveData<Int> = MutableLiveData(3)
     val deadPlayers = mutableSetOf<Player>()
     val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
+
+    private val powerDeck = mutableListOf(
+        PowerCard("power_1", R.string.power_placeholder_1),
+        PowerCard("power_2", R.string.power_placeholder_2),
+        PowerCard("power_3", R.string.power_placeholder_3),
+        PowerCard("power_4", R.string.power_placeholder_4),
+        PowerCard("power_5", R.string.power_placeholder_5),
+        PowerCard("power_6", R.string.power_placeholder_6),
+        PowerCard("power_7", R.string.power_placeholder_7)
+    )
+    private val powerDiscard = mutableListOf<PowerCard>()
+    private val powerShopSlots = MutableList<PowerCard?>(3) { null }
+    private val _powerShop = MutableLiveData<PowerShopState>()
+    val powerShop: LiveData<PowerShopState> = _powerShop
+
+    private fun drawPowerCard(): PowerCard? {
+        if (powerDeck.isEmpty()) {
+            powerDeck.addAll(powerDiscard)
+            powerDiscard.clear()
+        }
+        if (powerDeck.isEmpty()) return null
+        return powerDeck.removeAt(Random.nextInt(powerDeck.size))
+    }
+
+    fun canUsePowerShop(): Boolean {
+        val player = currentPlayer.value ?: return false
+        return !player.isBot && player.isAlive() &&
+            currentPhase.value != GamePhase.GAME_FINISH
+    }
+
+    private fun publishPowerShop() {
+        _powerShop.value = PowerShopState(
+            powerShopSlots.toList(), powerDeck.size,
+            powerDiscard.size, players[0].powerCards.size
+        )
+    }
+
+    fun rerollPowerShop() {
+        if (!canUsePowerShop()) return
+        powerDiscard.addAll(powerShopSlots.filterNotNull())
+        powerShopSlots.indices.forEach { powerShopSlots[it] = null }
+        powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
+        publishPowerShop()
+    }
+
+    fun buyPowerCard(slotIndex: Int) {
+        if (!canUsePowerShop()) return
+        if (slotIndex !in powerShopSlots.indices) return
+        val card = powerShopSlots[slotIndex] ?: return
+        val player = currentPlayer.value ?: return
+        player.powerCards.add(card)
+        powerShopSlots[slotIndex] = drawPowerCard()
+        publishPowerShop()
+    }
 
     fun diceButtonClick(index: Int) {
         if (currentPhase.value!! == GamePhase.DICE) {
@@ -274,6 +339,8 @@ class GameViewModel : ViewModel() {
 
     // GAME LOOP
     init {
+        powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
+        publishPowerShop()
         viewModelScope.launch {
             while (!gameFinish()) {
                 Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")

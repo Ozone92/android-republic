@@ -36,6 +36,8 @@ class Player(
 
     val influenceCards: MutableList<InfluenceCard> = mutableListOf()
 
+    val powerCards: MutableList<PowerCard> = mutableListOf()
+
     fun isAlive(): Boolean {
         return popularity > 0
     }
