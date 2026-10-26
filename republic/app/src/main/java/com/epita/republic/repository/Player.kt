@@ -1,6 +1,9 @@
 package com.epita.republic.repository
 
-data class Player(
+import com.epita.republic.domain.Card
+
+// Pas de data class : deux joueurs avec les mêmes stats ne doivent pas être égaux
+class Player(
     // Health
     var popularity: Int = 10,
     var maxPopularity: Int = 10,
@@ -16,6 +19,16 @@ data class Player(
 
     var isBot: Boolean
 ) {
+    // Cartes Mesure permanentes
+    val cards: MutableList<Card> = mutableListOf()
+
+    // Garde rapprochée : déjà utilisée ce tour-ci
+    var guardUsed: Boolean = false
+
+    fun has(card: Card): Boolean {
+        return cards.contains(card)
+    }
+
     fun isAlive(): Boolean {
         return popularity > 0
     }

@@ -18,4 +18,67 @@
     <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>
     <string name="game_stay_btn_text">STAY</string>
     <string name="game_leave_btn_text">LEAVE</string>
+
+    <!-- Shop -->
+    <string name="game_shop_title">SHOP — MONEY: %d</string>
+    <string name="game_shop_card">%1$s\n%2$d €\n%3$s</string>
+    <string name="game_shop_refresh">REFRESH (2 €)</string>
+    <string name="game_shop_end_turn">END TURN</string>
+    <string name="game_shop_owned">Cards: %s</string>
+    <string name="game_shop_target_title">Target</string>
+    <string name="game_target_item">PLAYER %1$d (VOTE: %2$d)</string>
+    <string name="game_talking_points_btn">REROLL 1 DIE</string>
+    <string name="game_spin_doctor_btn">SPIN DOCTOR</string>
+    <string name="game_pick_die_hint">Tap a die</string>
+    <string name="game_spin_face_title">New face</string>
+
+    <!-- Cartes Mesure (docs/inventaire.pdf) -->
+    <string name="card_party_poll_title">Sondage commandé par le parti</string>
+    <string name="card_party_poll_desc">+2 Votes.</string>
+    <string name="card_minister_poaching_title">Débauchage d\'un ministre</string>
+    <string name="card_minister_poaching_desc">Volez 2 Votes à un adversaire de votre choix.</string>
+    <string name="card_farm_fair_selfie_title">Selfie au Salon de l\'agriculture</string>
+    <string name="card_farm_fair_selfie_desc">+3 Popularité.</string>
+    <string name="card_fundraising_dinner_title">Dîner à 7 500 € le couvert</string>
+    <string name="card_fundraising_dinner_desc">+6 Argent.</string>
+    <string name="card_live_clash_title">Clash en direct à 20 h</string>
+    <string name="card_live_clash_desc">+2 Votes. Chaque adversaire perd 1 Popularité.</string>
+    <string name="card_palace_revolution_title">Révolution de palais</string>
+    <string name="card_palace_revolution_desc">Le candidat à l\'Élysée perd 3 Popularité et doit en sortir : vous prenez sa place.</string>
+    <string name="card_press_leak_title">Fuite dans la presse</string>
+    <string name="card_press_leak_desc">Un adversaire de votre choix perd 2 Votes. « Selon une source proche du dossier. »</string>
+    <string name="card_dissolution_title">Dissolution</string>
+    <string name="card_dissolution_desc">Tous les candidats, vous compris, perdent 2 Popularité. Vous gagnez 2 Votes.</string>
+    <string name="card_night_tweet_title">Tweet à 2 h du matin</string>
+    <string name="card_night_tweet_desc">Un adversaire perd 1 Vote. Vous perdez 1 Popularité.</string>
+    <string name="card_sunny_sunday_title">Dimanche de grand soleil</string>
+    <string name="card_sunny_sunday_desc">Abstention record : tous les autres candidats perdent 2 Votes.</string>
+    <string name="card_theodule_committee_title">Comité Théodule</string>
+    <string name="card_theodule_committee_desc">Enterrez le sujet : renouvelez les 3 cartes visibles et gagnez 2 Argent.</string>
+    <string name="card_hologram_rally_title">Meeting avec hologramme</string>
+    <string name="card_hologram_rally_desc">+2 Votes et +2 Popularité.</string>
+    <string name="card_henchman_title">Porte-flingue</string>
+    <string name="card_henchman_desc">Si vous obtenez au moins 2 Attaques, infligez 1 dégât de plus.</string>
+    <string name="card_talking_points_title">Éléments de langage</string>
+    <string name="card_talking_points_desc">Une fois par tour, après votre dernier lancer, relancez un dé de votre choix.</string>
+    <string name="card_local_network_title">Réseau d\'élus locaux</string>
+    <string name="card_local_network_desc">+1 Argent au début de votre tour.</string>
+    <string name="card_bodyguard_title">Garde rapprochée</string>
+    <string name="card_bodyguard_desc">Une fois par tour, réduisez de 1 les dégâts que vous subissez.</string>
+    <string name="card_comeback_title">Retour en grâce</string>
+    <string name="card_comeback_desc">Si votre Popularité tombe à 0, défaussez cette carte et remontez à 4. On ne meurt jamais en politique.</string>
+    <string name="card_golden_sinecure_title">Recasé dans un placard doré</string>
+    <string name="card_golden_sinecure_desc">Quand vous quittez l\'Élysée, +3 Argent.</string>
+    <string name="card_clientelism_title">Clientélisme</string>
+    <string name="card_clientelism_desc">Chaque Bain de foule obtenu vous rapporte aussi 1 Argent, même à l\'Élysée.</string>
+    <string name="card_buzz_title">Petite phrase qui fait le buzz</string>
+    <string name="card_buzz_desc">Chaque série de 3 chiffres identiques rapporte +1 Vote.</string>
+    <string name="card_solid_base_title">Base électorale solide</string>
+    <string name="card_solid_base_desc">Votre Popularité maximale passe à 12.</string>
+    <string name="card_streisand_effect_title">Effet Streisand</string>
+    <string name="card_streisand_effect_desc">Quand vous êtes attaqué, l\'attaquant perd 1 Popularité.</string>
+    <string name="card_well_oiled_machine_title">Machine électorale bien huilée</string>
+    <string name="card_well_oiled_machine_desc">Si vous commencez votre tour à l\'Élysée : +1 Vote supplémentaire.</string>
+    <string name="card_spin_doctor_title">Spin doctor</string>
+    <string name="card_spin_doctor_desc">Une fois par tour, changez un de vos dés sur la face de votre choix. « Pas un recul : un ajustement. »</string>
 </resources>
