@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
 import com.epita.republic.domain.Character
-import java.util.Locale
-import java.util.Locale.getDefault
 
 class CharacterFragment : Fragment() {
 
