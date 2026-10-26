@@ -31,6 +31,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/game_middle_player_image"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:src="@drawable/hollande_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintEnd_toStartOf="@+id/game_middle_player_barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_middle_player_name_text"
                 android:layout_width="wrap_content"
@@ -44,53 +55,55 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/game_middle_player_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="game_middle_player_popularity_text,game_middle_player_vote_text,game_middle_player_influence_text,game_middle_player_money_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_middle_player_popularity_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="Popularity: 10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_middle_player_vote_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_middle_player_name_text" />
 
             <TextView
                 android:id="@+id/game_middle_player_vote_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="VOTE: 00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_middle_player_influence_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_middle_player_popularity_text" />
 
             <TextView
                 android:id="@+id/game_middle_player_influence_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="INFLUENCE: 00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_middle_player_money_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_middle_player_vote_text" />
 
             <TextView
                 android:id="@+id/game_middle_player_money_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="MONEY: 00"
@@ -98,7 +111,6 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_middle_player_influence_text" />
 
 
@@ -121,6 +133,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/game_player1_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="game_player1_popularity_text,game_player1_vote_text,game_player1_influence_text,game_player1_money_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_player1_name_text"
                 android:layout_width="wrap_content"
@@ -138,49 +159,42 @@
                 android:id="@+id/game_player1_popularity_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="Popularity: 10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player1_vote_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player1_name_text" />
 
             <TextView
                 android:id="@+id/game_player1_vote_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="VOTE: 00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player1_influence_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player1_popularity_text" />
 
             <TextView
                 android:id="@+id/game_player1_influence_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="INFLUENCE: 00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player1_money_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player1_vote_text" />
 
             <TextView
                 android:id="@+id/game_player1_money_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="MONEY: 00"
@@ -188,8 +202,18 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player1_influence_text" />
+
+            <ImageView
+                android:id="@+id/game_player1_image"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:src="@drawable/hollande_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintEnd_toStartOf="@+id/game_player1_barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -211,6 +235,75 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/game_player2_image"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:src="@drawable/hollande_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintEnd_toStartOf="@+id/game_player2_barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/game_player2_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="game_player2_popularity_text,game_player2_vote_text,game_player2_influence_text,game_player2_money_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/game_player2_popularity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Popularity: 10/10"
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/game_player2_vote_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/game_player2_name_text" />
+
+            <TextView
+                android:id="@+id/game_player2_vote_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="VOTE: 00/20"
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/game_player2_influence_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/game_player2_popularity_text" />
+
+            <TextView
+                android:id="@+id/game_player2_influence_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="INFLUENCE: 00/10"
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/game_player2_money_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/game_player2_vote_text" />
+
+            <TextView
+                android:id="@+id/game_player2_money_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="MONEY: 00"
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/game_player2_influence_text" />
+
             <TextView
                 android:id="@+id/game_player2_name_text"
                 android:layout_width="wrap_content"
@@ -223,63 +316,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
-
-            <TextView
-                android:id="@+id/game_player2_popularity_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="Popularity: 10/10"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/game_player2_vote_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/game_player2_name_text" />
-
-            <TextView
-                android:id="@+id/game_player2_vote_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="VOTE: 00/20"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/game_player2_influence_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/game_player2_popularity_text" />
-
-            <TextView
-                android:id="@+id/game_player2_influence_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="INFLUENCE: 00/10"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/game_player2_money_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/game_player2_vote_text" />
-
-            <TextView
-                android:id="@+id/game_player2_money_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="MONEY: 00"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/game_player2_influence_text" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -301,6 +337,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/game_player3_image"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:src="@drawable/hollande_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintEnd_toStartOf="@+id/game_player3_barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_player3_name_text"
                 android:layout_width="wrap_content"
@@ -314,53 +361,55 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/game_player3_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="game_player3_popularity_text,game_player3_vote_text,game_player3_influence_text,game_player3_money_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_player3_popularity_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="Popularity: 10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player3_vote_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player3_name_text" />
 
             <TextView
                 android:id="@+id/game_player3_vote_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="VOTE: 00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player3_influence_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player3_popularity_text" />
 
             <TextView
                 android:id="@+id/game_player3_influence_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="INFLUENCE: 00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player3_money_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player3_vote_text" />
 
             <TextView
                 android:id="@+id/game_player3_money_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="MONEY: 00"
@@ -368,7 +417,6 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player3_influence_text" />
 
 
@@ -391,6 +439,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/game_player4_image"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:src="@drawable/hollande_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintEnd_toStartOf="@+id/game_player4_barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_player4_name_text"
                 android:layout_width="wrap_content"
@@ -404,53 +463,55 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/game_player4_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="game_player4_popularity_text,game_player4_vote_text,game_player4_influence_text,game_player4_money_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_player4_popularity_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="Popularity: 10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player4_vote_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player4_name_text" />
 
             <TextView
                 android:id="@+id/game_player4_vote_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="VOTE: 00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player4_influence_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player4_popularity_text" />
 
             <TextView
                 android:id="@+id/game_player4_influence_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="INFLUENCE: 00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player4_money_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player4_vote_text" />
 
             <TextView
                 android:id="@+id/game_player4_money_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="MONEY: 00"
@@ -458,7 +519,6 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_player4_influence_text" />
 
 

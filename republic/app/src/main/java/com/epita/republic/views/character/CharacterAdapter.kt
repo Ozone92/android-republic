@@ -7,10 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
+import com.epita.republic.domain.Character
 
 class CharacterAdapter(
-    private val characters: List<CharacterItem>,
-    private val onCharacterClick: (String) -> Unit
+    private val characters: List<Character>,
+    private val onCharacterClick: (Character) -> Unit
 ) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,12 +35,12 @@ class CharacterAdapter(
     ) {
         val character = characters[position]
 
-        holder.image.setImageResource(character.imageRes)
+        holder.image.setImageResource(character.defaultImageRes)
         holder.image.contentDescription = character.name
         holder.name.text = character.name
 
         holder.image.setOnClickListener {
-            onCharacterClick(character.id)
+            onCharacterClick(character)
         }
     }
 

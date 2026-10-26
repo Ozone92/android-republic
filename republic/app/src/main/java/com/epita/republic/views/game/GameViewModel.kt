@@ -8,6 +8,7 @@ import com.epita.republic.domain.DiceFace
 import com.epita.republic.domain.GameLogic
 import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.Player
+import com.epita.republic.views.ending.EndingFragmentParameter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.max
@@ -30,7 +31,8 @@ const val BOT_SLEEP_ACTION = 3L
 class GameViewModel : ViewModel() {
     private val gameLogic = GameLogic()
     val signalController = SignalController()
-    val players: Array<Player> = Array(4) { i -> return@Array Player(isBot = i > 0) }
+    val players: Array<Player> =
+        Array(4) { i -> return@Array Player(playerIndex = i, isBot = i > 0) }
     val currentPlayerTurnIndex: MutableLiveData<Int> = MutableLiveData(0)
     val currentPlayer: MutableLiveData<Player> = MutableLiveData(players[0])
     val inCity: MutableLiveData<Player?> = MutableLiveData(null)
@@ -39,6 +41,7 @@ class GameViewModel : ViewModel() {
         MutableLiveData(Array(6) { return@Array DiceFace.ONE })
     val lockedDiceIndexes: MutableSet<Int> = mutableSetOf()
     val rerollLeft: MutableLiveData<Int> = MutableLiveData(3)
+    val deadPlayers = mutableSetOf<Player>()
 
     fun diceButtonClick(index: Int): Boolean {
         return if (lockedDiceIndexes.contains(index)) {
@@ -149,7 +152,12 @@ class GameViewModel : ViewModel() {
         // Damage to everyone outside == all player except myself
         for (player in players) {
             if (player != currentPlayer) {
-                player.popularity -= max(0, player.popularity - damageCount)
+                Log.d("GAME", "Inflict $damageCount damage to player ${player.playerIndex} (outside city) with health ${player.popularity}")
+                player.popularity = max(0, player.popularity - damageCount)
+                Log.d("GAME", "Player ${player.playerIndex} health left: ${player.popularity}")
+                if (player.popularity <= 0) {
+                    deadPlayers.add(player)
+                }
             }
         }
     }
@@ -157,10 +165,13 @@ class GameViewModel : ViewModel() {
     suspend fun damageFromOutside(damageCount: Int) {
         val playerInCity = inCity.value
         if (playerInCity != null) {
-            playerInCity.popularity -= max(0, playerInCity.popularity - damageCount)
+            Log.d("GAME", "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) with health ${playerInCity.popularity}")
+            playerInCity.popularity = max(0, playerInCity.popularity - damageCount)
+            Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity.popularity}")
 
             if (playerInCity.popularity <= 0) {
                 inCity.value = null
+                deadPlayers.add(currentPlayer.value!!)
             } else {
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
@@ -198,6 +209,22 @@ class GameViewModel : ViewModel() {
         } else {
             signalController.await()
         }
+    }
+
+    fun getWinningPlayerOrder(): Array<Player> {
+        val playersOrder =
+            mutableListOf(
+                *players
+                .filter { p -> p.isAlive() }
+                .sortedBy { p -> p.vote }
+                .toTypedArray()
+            )
+
+        for (player in deadPlayers.reversed()) {
+            playersOrder.add(player)
+        }
+
+        return playersOrder.toTypedArray()
     }
 
     // GAME LOOP

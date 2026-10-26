@@ -1,6 +1,7 @@
 package com.epita.republic.repository
 
 data class Player(
+    val playerIndex: Int,
     // Health
     var popularity: Int = 10,
     var maxPopularity: Int = 10,
@@ -18,10 +19,6 @@ data class Player(
 ) {
     fun isAlive(): Boolean {
         return popularity > 0
-    }
-
-    fun hasWin(): Boolean {
-        return vote >= 20
     }
 
     fun isBotGoOut(): Boolean {
