@@ -152,7 +152,9 @@ class GameViewModel : ViewModel() {
         // Damage to everyone outside == all player except myself
         for (player in players) {
             if (player != currentPlayer) {
-                player.popularity -= max(0, player.popularity - damageCount)
+                Log.d("GAME", "Inflict $damageCount damage to player ${player.playerIndex} (outside city) with health ${player.popularity}")
+                player.popularity = max(0, player.popularity - damageCount)
+                Log.d("GAME", "Player ${player.playerIndex} health left: ${player.popularity}")
                 if (player.popularity <= 0) {
                     deadPlayers.add(player)
                 }
@@ -163,7 +165,9 @@ class GameViewModel : ViewModel() {
     suspend fun damageFromOutside(damageCount: Int) {
         val playerInCity = inCity.value
         if (playerInCity != null) {
-            playerInCity.popularity -= max(0, playerInCity.popularity - damageCount)
+            Log.d("GAME", "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) with health ${playerInCity.popularity}")
+            playerInCity.popularity = max(0, playerInCity.popularity - damageCount)
+            Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity.popularity}")
 
             if (playerInCity.popularity <= 0) {
                 inCity.value = null
