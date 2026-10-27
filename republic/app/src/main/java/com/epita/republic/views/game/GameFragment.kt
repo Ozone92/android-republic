@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.epita.republic.R
 import com.epita.republic.domain.DiceFace
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.views.ending.EndingFragmentParameter
 
 class GameFragment : Fragment() {
@@ -113,6 +115,7 @@ class GameFragment : Fragment() {
 
         val diceView: CardView = view.findViewById(R.id.game_dice_card)
         val stayLeaveView: CardView = view.findViewById(R.id.game_stay_leave_card)
+        val influenceView: CardView = view.findViewById(R.id.game_influence_choice_card)
         val diceButtons: Array<Button> = arrayOf(
             view.findViewById(R.id.game_dice1_btn),
             view.findViewById(R.id.game_dice2_btn),
@@ -153,6 +156,15 @@ class GameFragment : Fragment() {
             gameViewModel.playerExitCityClick()
         }
 
+        val recyclerView: RecyclerView = view.findViewById(R.id.game_influence_choice_recycler)
+        setupInfluenceRecycler(recyclerView)
+        gameViewModel.availableInfluenceCards.observe(this.viewLifecycleOwner) { cards ->
+            val adapter = InfluenceCardAdapter(requireContext(), cards, { cardIndex ->
+                gameViewModel.influenceCardChoiceClick(cardIndex)
+            })
+            recyclerView.adapter = adapter
+        }
+
         gameViewModel.currentPhase.observe(this.viewLifecycleOwner) { newPhase ->
             Log.d("GAME", newPhase.name)
             renderTurnPhase()
@@ -161,6 +173,7 @@ class GameFragment : Fragment() {
 
             diceView.visibility = View.INVISIBLE
             stayLeaveView.visibility = View.INVISIBLE
+            influenceView.visibility = View.INVISIBLE
             when (newPhase) {
                 GamePhase.DICE, GamePhase.IMPROVE_DICE -> {
                     diceRerollBtn.isEnabled = isPlayerTurn
@@ -175,20 +188,37 @@ class GameFragment : Fragment() {
                 }
 
                 GamePhase.GAME_FINISH -> {
-                    val playersCharacter = arrayOf(args.player1, args.player2, args.player3, args.player4)
+                    val playersCharacter =
+                        arrayOf(args.player1, args.player2, args.player3, args.player4)
                     val playersWinningOrder = gameViewModel.getWinningPlayerOrder()
-                    val result = EndingFragmentParameter(null, null, playersWinningOrder.map { player ->
-                        return@map Pair(player.playerIndex, playersCharacter[player.playerIndex])
-                    }.toTypedArray())
+                    val result =
+                        EndingFragmentParameter(null, null, playersWinningOrder.map { player ->
+                            return@map Pair(
+                                player.playerIndex,
+                                playersCharacter[player.playerIndex]
+                            )
+                        }.toTypedArray())
                     val action = GameFragmentDirections.actionGameFragmentToEndingFragment(result)
                     findNavController().navigate(action)
                 }
 
 
-                GamePhase.INFLUENCE -> {} // TODO()
+                GamePhase.INFLUENCE -> {
+                    influenceView.visibility = View.VISIBLE
+                }
+
                 GamePhase.SHOP -> {} // TODO()
             }
         }
+    }
+
+    fun setupInfluenceRecycler(recyclerView: RecyclerView) {
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
     }
 
     fun renderPlayers() {
@@ -227,13 +257,15 @@ class GameFragment : Fragment() {
                     resources.getColor(
                         R.color.dice_lock,
                         null
-                    ))
+                    )
+                )
             } else {
                 button.setTextColor(
                     resources.getColor(
                         R.color.dice_unlock,
                         null
-                    ))
+                    )
+                )
             }
         }
     }
