@@ -20,6 +20,7 @@
     <string name="game_leave_btn_text">LEAVE</string>
 
 
+    <string name="wickedness_card_title">Vous avez atteint un pallier d\'influence. Choisissez une carte !</string>
     <!-- Wickedness tiles strings -->
     <string name="wickedness_step1_1_title">Levee de fond</string>
     <string name="wickedness_step1_1_description">Au debut de votre tour, recevez 1 ARGENT</string>
