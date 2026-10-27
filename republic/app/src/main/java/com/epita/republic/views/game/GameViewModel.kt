@@ -226,6 +226,8 @@ class GameViewModel : ViewModel() {
         influenceLogic.removeCard(influenceStep, card)
         currentPlayer.value!!.influenceCards.add(card)
         influenceLogic.handleImmediateCards(currentPlayerTurnIndex.value!!, players, card)
+
+        signalController.sendNotify()
     }
 
     fun playerExitCityClick() {
