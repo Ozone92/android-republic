@@ -16,7 +16,7 @@ import kotlin.time.Duration.Companion.seconds
 
 enum class GamePhase {
     DICE,
-    EVILNESS,
+    INFLUENCE,
     SHOP,
     ASK_LEAVE,
 

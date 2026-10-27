@@ -18,4 +18,36 @@
     <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>
     <string name="game_stay_btn_text">STAY</string>
     <string name="game_leave_btn_text">LEAVE</string>
+
+
+    <!-- Wickedness tiles strings -->
+    <string name="wickedness_step1_1_title">Pret a la banque</string>
+    <string name="wickedness_step1_1_description">Au debut de votre tour, recevez 1 ARGENT</string>
+
+    <string name="wickedness_step1_2_title">Populaire</string>
+    <string name="wickedness_step1_2_description">Au debut de votre tour, recuperez 1 POPULARITE</string>
+
+    <string name="wickedness_step1_3_title">Ami des petits gens</string>
+    <string name="wickedness_step1_3_description">Gagnez 1 VOTE supplementaire lorsque vous obtenez au moins 3 faces UN</string>
+
+    <string name="wickedness_step1_4_title">Indecis</string>
+    <string name="wickedness_step1_4_description">Gagnez un lance supplementaire a chaque tour</string>
+
+    <string name="wickedness_step2_1_title">Soutien de la societe civile</string>
+    <string name="wickedness_step2_1_description">Gagnez 2 POPULARITE maximum et recuperez toute votre POPULARITE quand vous gagnez cette tuile</string>
+
+    <string name="wickedness_step2_2_title">Corruption des medias</string>
+    <string name="wickedness_step2_2_description">Tous les autres candidats perdent 4 VOTE</string>
+
+    <string name="wickedness_step2_3_title">Amie des lobby</string>
+    <string name="wickedness_step2_3_description">Le prix des cartes dans le magasin diminue de 1 ARGENT pour vous</string>
+
+    <string name="wickedness_step2_4_title">Efficace</string>
+    <string name="wickedness_step2_4_description">Doublez l\'effet d\'un de au choix</string>
+
+    <string name="wickedness_step3_1_title">Primaire reussite</string>
+    <string name="wickedness_step3_1_description">Double l\'effet des faces ARGENT et POPULARITE</string>
+
+    <string name="wickedness_step3_2_title">Derive vers l\'extreme</string>
+    <string name="wickedness_step3_2_description">Double l\'effet des faces DEGAT</string>
 </resources>
