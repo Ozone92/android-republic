@@ -93,7 +93,18 @@ class GameViewModel : ViewModel() {
 
     private suspend fun handleDiceResult() {
         Log.d("GAME", "Start handleDiceResult")
-        val rolledDices = dices.value!!
+        val rolledDices: MutableList<DiceFace> = dices.value!!.toMutableList()
+
+        if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.EFFICIENT)) {
+            lockedDiceIndexes.clear()
+            lockedDiceIndexes.add(0)
+            rerollLeft.value = 0
+            currentPhase.value = GamePhase.IMPROVE_DICE
+            waitForInput()
+
+            rolledDices.add(rolledDices[lockedDiceIndexes.toList()[0]])
+        }
+
         val oneCount = rolledDices.count { face -> face == DiceFace.ONE }
         val twoCount = rolledDices.count { face -> face == DiceFace.TWO }
         val threeCount = rolledDices.count { face -> face == DiceFace.THREE }
@@ -122,8 +133,6 @@ class GameViewModel : ViewModel() {
         if (threeCount >= 3) {
             scoreGain = 3 + threeCount - 3
         }
-
-        // TODO Double dice influence effect
 
         if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.PRIMARY)) {
             moneyCount *= 2
@@ -164,7 +173,10 @@ class GameViewModel : ViewModel() {
         // Damage to everyone outside == all player except myself
         for (player in players) {
             if (player.playerIndex != currentPlayer.value!!.playerIndex) {
-                Log.d("GAME", "Inflict $damageCount damage to player ${player.playerIndex} (outside city) ${player}")
+                Log.d(
+                    "GAME",
+                    "Inflict $damageCount damage to player ${player.playerIndex} (outside city) ${player}"
+                )
                 player.popularity -= damageCount
                 Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
                 if (!player.isAlive()) {
@@ -177,7 +189,10 @@ class GameViewModel : ViewModel() {
     suspend fun damageFromOutside(damageCount: Int) {
         val playerInCity = inCity.value
         if (playerInCity != null) {
-            Log.d("GAME", "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) ${playerInCity}")
+            Log.d(
+                "GAME",
+                "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) ${playerInCity}"
+            )
             playerInCity.popularity -= damageCount
             Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity}")
 
@@ -243,9 +258,9 @@ class GameViewModel : ViewModel() {
         val playersOrder =
             mutableListOf(
                 *players
-                .filter { p -> p.isAlive() }
-                .sortedBy { p -> p.vote }
-                .toTypedArray()
+                    .filter { p -> p.isAlive() }
+                    .sortedBy { p -> p.vote }
+                    .toTypedArray()
             )
 
         for (player in deadPlayers.reversed()) {
@@ -287,8 +302,13 @@ class GameViewModel : ViewModel() {
                     waitForInput()
                     val oldInfluence = player.influence
                     handleDiceResult()
-                    val newInfluenceStep = gameLogic.hasReachInfluenceStep(oldInfluence, player.influence)
-                    if (newInfluenceStep != null && influenceLogic.remainingCardsCount(newInfluenceStep) > 0) {
+
+                    val newInfluenceStep =
+                        gameLogic.hasReachInfluenceStep(oldInfluence, player.influence)
+                    if (newInfluenceStep != null && influenceLogic.remainingCardsCount(
+                            newInfluenceStep
+                        ) > 0
+                    ) {
                         currentPhase.value = GamePhase.INFLUENCE
                         influencePhase(newInfluenceStep)
                     }

@@ -161,22 +161,32 @@ class GameFragment : Fragment() {
 
             diceView.visibility = View.INVISIBLE
             stayLeaveView.visibility = View.INVISIBLE
-            if (newPhase == GamePhase.DICE) {
-                diceRerollBtn.isEnabled = isPlayerTurn
-                diceConfirmBtn.isEnabled = isPlayerTurn
+            when (newPhase) {
+                GamePhase.DICE, GamePhase.IMPROVE_DICE -> {
+                    diceRerollBtn.isEnabled = isPlayerTurn
+                    diceConfirmBtn.isEnabled = isPlayerTurn
 
-                renderDicesColor(diceButtons)
-                diceView.visibility = View.VISIBLE
-            } else if (newPhase == GamePhase.ASK_LEAVE) {
-                stayLeaveView.visibility = View.VISIBLE
-            } else if (newPhase == GamePhase.GAME_FINISH) {
-                val playersCharacter = arrayOf(args.player1, args.player2, args.player3, args.player4)
-                val playersWinningOrder = gameViewModel.getWinningPlayerOrder()
-                val result = EndingFragmentParameter(null, null, playersWinningOrder.map { player ->
-                    return@map Pair(player.playerIndex, playersCharacter[player.playerIndex])
-                }.toTypedArray())
-                val action = GameFragmentDirections.actionGameFragmentToEndingFragment(result)
-                findNavController().navigate(action)
+                    renderDicesColor(diceButtons)
+                    diceView.visibility = View.VISIBLE
+                }
+
+                GamePhase.ASK_LEAVE -> {
+                    stayLeaveView.visibility = View.VISIBLE
+                }
+
+                GamePhase.GAME_FINISH -> {
+                    val playersCharacter = arrayOf(args.player1, args.player2, args.player3, args.player4)
+                    val playersWinningOrder = gameViewModel.getWinningPlayerOrder()
+                    val result = EndingFragmentParameter(null, null, playersWinningOrder.map { player ->
+                        return@map Pair(player.playerIndex, playersCharacter[player.playerIndex])
+                    }.toTypedArray())
+                    val action = GameFragmentDirections.actionGameFragmentToEndingFragment(result)
+                    findNavController().navigate(action)
+                }
+
+
+                GamePhase.INFLUENCE -> {} // TODO()
+                GamePhase.SHOP -> {} // TODO()
             }
         }
     }
