@@ -21,7 +21,7 @@
 
 
     <!-- Wickedness tiles strings -->
-    <string name="wickedness_step1_1_title">Pret a la banque</string>
+    <string name="wickedness_step1_1_title">Levee de fond</string>
     <string name="wickedness_step1_1_description">Au debut de votre tour, recevez 1 ARGENT</string>
 
     <string name="wickedness_step1_2_title">Populaire</string>

@@ -6,16 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epita.republic.domain.DiceFace
 import com.epita.republic.domain.GameLogic
+import com.epita.republic.domain.InfluenceLogic
+import com.epita.republic.domain.InfluenceStep
 import com.epita.republic.domain.SignalController
+import com.epita.republic.repository.InfluenceCard
 import com.epita.republic.repository.Player
-import com.epita.republic.views.ending.EndingFragmentParameter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.max
 import kotlin.time.Duration.Companion.seconds
 
 enum class GamePhase {
     DICE,
+    IMPROVE_DICE,
     INFLUENCE,
     SHOP,
     ASK_LEAVE,
@@ -30,6 +32,7 @@ const val BOT_SLEEP_ACTION = 3L
 
 class GameViewModel : ViewModel() {
     private val gameLogic = GameLogic()
+    private val influenceLogic = InfluenceLogic()
     val signalController = SignalController()
     val players: Array<Player> =
         Array(4) { i -> return@Array Player(playerIndex = i, isBot = i > 0) }
@@ -42,16 +45,20 @@ class GameViewModel : ViewModel() {
     val lockedDiceIndexes: MutableSet<Int> = mutableSetOf()
     val rerollLeft: MutableLiveData<Int> = MutableLiveData(3)
     val deadPlayers = mutableSetOf<Player>()
+    val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
 
-    fun diceButtonClick(index: Int): Boolean {
-        return if (lockedDiceIndexes.contains(index)) {
-            // Dice Unlock
-            lockedDiceIndexes.remove(index)
-            true
-        } else {
-            // Dice Lock
+    fun diceButtonClick(index: Int) {
+        if (currentPhase.value!! == GamePhase.DICE) {
+            if (lockedDiceIndexes.contains(index)) {
+                // Dice Unlock
+                lockedDiceIndexes.remove(index)
+            } else {
+                // Dice Lock
+                lockedDiceIndexes.add(index)
+            }
+        } else if (currentPhase.value == GamePhase.IMPROVE_DICE) {
+            lockedDiceIndexes.clear()
             lockedDiceIndexes.add(index)
-            false
         }
     }
 
@@ -90,9 +97,9 @@ class GameViewModel : ViewModel() {
         val oneCount = rolledDices.count { face -> face == DiceFace.ONE }
         val twoCount = rolledDices.count { face -> face == DiceFace.TWO }
         val threeCount = rolledDices.count { face -> face == DiceFace.THREE }
-        val healthCount = rolledDices.count { face -> face == DiceFace.HEAL }
-        val damageCount = rolledDices.count { face -> face == DiceFace.DAMAGE }
-        val moneyCount = rolledDices.count { face -> face == DiceFace.MONEY }
+        var healthCount = rolledDices.count { face -> face == DiceFace.HEAL }
+        var damageCount = rolledDices.count { face -> face == DiceFace.DAMAGE }
+        var moneyCount = rolledDices.count { face -> face == DiceFace.MONEY }
 
         var scoreGain = 0
         var influenceGain = 0
@@ -103,6 +110,10 @@ class GameViewModel : ViewModel() {
         if (oneCount >= 3) {
             scoreGain = 1 + oneCount - 3
             influenceGain = 2
+
+            if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.FRIEND)) {
+                scoreGain += 1
+            }
         }
         if (twoCount >= 3) {
             scoreGain = 2 + twoCount - 3
@@ -112,6 +123,17 @@ class GameViewModel : ViewModel() {
             scoreGain = 3 + threeCount - 3
         }
 
+        // TODO Double dice influence effect
+
+        if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.PRIMARY)) {
+            moneyCount *= 2
+            healthCount *= 2
+        }
+
+        if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.FAR)) {
+            damageCount *= 2
+        }
+
         Log.d("GAME", "Score Gain: ${scoreGain} | Influence Gain: ${influenceGain}")
 
         if (currentPlayer.value != inCity.value) {
@@ -119,9 +141,7 @@ class GameViewModel : ViewModel() {
             currentPlayer.value!!.popularity += healthCount
         }
 
-        // TODO Check if gain card
-        val influenceStepReach = currentPlayer.value!!.addInfluence(influenceGain)
-        if (influenceStepReach != null) {}
+        currentPlayer.value!!.influence += (influenceGain)
 
         currentPlayer.value!!.vote += scoreGain
         currentPlayer.value!!.money += moneyCount
@@ -143,7 +163,7 @@ class GameViewModel : ViewModel() {
     fun damageFromInside(damageCount: Int) {
         // Damage to everyone outside == all player except myself
         for (player in players) {
-            if (player != currentPlayer) {
+            if (player.playerIndex != currentPlayer.value!!.playerIndex) {
                 Log.d("GAME", "Inflict $damageCount damage to player ${player.playerIndex} (outside city) ${player}")
                 player.popularity -= damageCount
                 Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
@@ -175,6 +195,22 @@ class GameViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    suspend fun influencePhase(step: InfluenceStep) {
+        availableInfluenceCards.value = influenceLogic.getCards(step)
+        waitForInput()
+        if (currentPlayer.value!!.isBot) {
+            influenceCardChoiceClick(0)
+        }
+    }
+
+    fun influenceCardChoiceClick(index: Int) {
+        val influenceStep = currentPlayer.value!!.getInfluenceStep()!!
+        val card = availableInfluenceCards.value!![index]
+        influenceLogic.removeCard(influenceStep, card)
+        currentPlayer.value!!.influenceCards.add(card)
+        influenceLogic.handleImmediateCards(currentPlayerTurnIndex.value!!, players, card)
     }
 
     fun playerExitCityClick() {
@@ -224,19 +260,38 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             while (!gameFinish()) {
                 Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")
-                currentPlayer.value = players[currentPlayerTurnIndex.value!!]
-                if (currentPlayer.value!!.isAlive()) {
+                val player = players[currentPlayerTurnIndex.value!!]
+                currentPlayer.value = player
+                if (player.isAlive()) {
                     // Check de debut de tour (si au centre => ajouter points ; passif ; ...)
-                    if (currentPlayer.value!! == inCity.value) {
-                        currentPlayer.value!!.vote += POINT_CITY_TURN
+                    if (player == inCity.value) {
+                        player.vote += POINT_CITY_TURN
                     }
 
-                    rerollLeft.value = 3
+                    if (player.influenceCards.contains(InfluenceCard.RAISE)) {
+                        player.money += 1
+                    }
+                    if (player.influenceCards.contains(InfluenceCard.POPULAR)) {
+                        player.influence += 1
+                    }
+
+                    if (player.influenceCards.contains(InfluenceCard.UNDECIDED)) {
+                        rerollLeft.value = 4
+                    } else {
+                        rerollLeft.value = 3
+                    }
+
                     lockedDiceIndexes.clear()
                     rollDice()
                     currentPhase.value = GamePhase.DICE
                     waitForInput()
+                    val oldInfluence = player.influence
                     handleDiceResult()
+                    val newInfluenceStep = gameLogic.hasReachInfluenceStep(oldInfluence, player.influence)
+                    if (newInfluenceStep != null && influenceLogic.remainingCardsCount(newInfluenceStep) > 0) {
+                        currentPhase.value = GamePhase.INFLUENCE
+                        influencePhase(newInfluenceStep)
+                    }
 
                     currentPhase.value = GamePhase.SHOP
                     // waitForInput() TODO Add shop view

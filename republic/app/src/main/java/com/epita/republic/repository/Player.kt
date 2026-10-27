@@ -18,7 +18,9 @@ class Player(
 
     // Evilness
     var influence: Int = 0
-    private set
+        set(value) {
+            field = min(10, value)
+        }
 
     // Energy
     var money: Int = 0
@@ -32,6 +34,8 @@ class Player(
             field = min(POINT_FOR_VICTORY, max(0, value))
         }
 
+    val influenceCards: MutableList<InfluenceCard> = mutableListOf()
+
     fun isAlive(): Boolean {
         return popularity > 0
     }
@@ -44,12 +48,9 @@ class Player(
         return popularity < maxPopularity / 2
     }
 
-    fun addInfluence(toAdd: Int): InfluenceStep? {
-        val oldInfluence = influence
-        influence = min(10, influence + toAdd)
-
-        for (step in InfluenceStep.entries) {
-            if (step.requiredInfluence in (oldInfluence + 1)..influence) {
+    fun getInfluenceStep(): InfluenceStep? {
+        for (step in InfluenceStep.entries.reversed()) {
+            if (influence >= step.requiredInfluence) {
                 return step
             }
         }

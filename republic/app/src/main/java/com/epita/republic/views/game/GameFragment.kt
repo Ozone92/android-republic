@@ -123,11 +123,8 @@ class GameFragment : Fragment() {
         )
         for ((index, diceButton) in diceButtons.withIndex()) {
             diceButton.setOnClickListener {
-                if (gameViewModel.diceButtonClick(index)) {
-                    diceButton.setTextColor(resources.getColor(R.color.dice_unlock, null))
-                } else {
-                    diceButton.setTextColor(resources.getColor(R.color.dice_lock, null))
-                }
+                gameViewModel.diceButtonClick(index)
+                renderDicesColor(diceButtons)
             }
         }
 
@@ -168,14 +165,7 @@ class GameFragment : Fragment() {
                 diceRerollBtn.isEnabled = isPlayerTurn
                 diceConfirmBtn.isEnabled = isPlayerTurn
 
-                diceButtons.forEach { btn ->
-                    btn.setTextColor(
-                        resources.getColor(
-                            R.color.dice_unlock,
-                            null
-                        )
-                    )
-                }
+                renderDicesColor(diceButtons)
                 diceView.visibility = View.VISIBLE
             } else if (newPhase == GamePhase.ASK_LEAVE) {
                 stayLeaveView.visibility = View.VISIBLE
@@ -217,6 +207,24 @@ class GameFragment : Fragment() {
     fun renderDice(buttons: Array<Button>, diceFaces: Array<DiceFace>) {
         for ((index, button) in buttons.withIndex()) {
             button.text = diceFaces[index].name.slice(0..1)
+        }
+    }
+
+    fun renderDicesColor(diceButtons: Array<Button>) {
+        diceButtons.withIndex().forEach { (i, button) ->
+            if (gameViewModel.lockedDiceIndexes.contains(i)) {
+                button.setTextColor(
+                    resources.getColor(
+                        R.color.dice_lock,
+                        null
+                    ))
+            } else {
+                button.setTextColor(
+                    resources.getColor(
+                        R.color.dice_unlock,
+                        null
+                    ))
+            }
         }
     }
 }

@@ -1,58 +1,49 @@
 package com.epita.republic.domain
 
-import com.epita.republic.R
 import com.epita.republic.repository.InfluenceCard
+import com.epita.republic.repository.Player
 
 class InfluenceLogic {
     companion object {
-        private val influenceCards: Map<InfluenceStep, MutableList<InfluenceCard>> = mapOf(
-            Pair(
-                InfluenceStep.FIRST, mutableListOf(
-                    InfluenceCard(
-                        R.string.wickedness_step1_1_title,
-                        R.string.wickedness_step1_1_description,
-                        InfluenceStep.FIRST
-                    ),
-                    InfluenceCard(
-                        R.string.wickedness_step1_2_title,
-                        R.string.wickedness_step1_2_description,
-                        InfluenceStep.FIRST
-                    ),
-                    InfluenceCard(
-                        R.string.wickedness_step1_3_title,
-                        R.string.wickedness_step1_3_description,
-                        InfluenceStep.FIRST
-                    ),
-                    InfluenceCard(
-                        R.string.wickedness_step1_4_title,
-                        R.string.wickedness_step1_4_description,
-                        InfluenceStep.FIRST
-                    ),
-                )
-            ),
-            Pair(InfluenceStep.SECOND, mutableListOf(
-                InfluenceCard(R.string.wickedness_step2_1_title, R.string.wickedness_step2_1_description, InfluenceStep.SECOND),
-                InfluenceCard(R.string.wickedness_step2_2_title, R.string.wickedness_step2_2_description, InfluenceStep.SECOND),
-                InfluenceCard(R.string.wickedness_step2_3_title, R.string.wickedness_step2_3_description, InfluenceStep.SECOND),
-                InfluenceCard(R.string.wickedness_step2_4_title, R.string.wickedness_step2_4_description, InfluenceStep.SECOND),
-            )),
-            Pair(InfluenceStep.THIRD, mutableListOf(
-                InfluenceCard(R.string.wickedness_step3_1_title, R.string.wickedness_step3_1_description, InfluenceStep.THIRD),
-                InfluenceCard(R.string.wickedness_step3_2_title, R.string.wickedness_step3_2_description, InfluenceStep.THIRD),
-            ))
+        private val influenceCardsTaken: Map<InfluenceStep, MutableSet<InfluenceCard>> = mapOf(
+            Pair(InfluenceStep.FIRST, mutableSetOf()),
+            Pair(InfluenceStep.SECOND, mutableSetOf()),
+            Pair(InfluenceStep.THIRD, mutableSetOf())
         )
     }
 
     fun remainingCardsCount(step: InfluenceStep): Int {
-        return influenceCards[step]!!.size
+        return getForStep(step).size - influenceCardsTaken[step]!!.size
     }
 
     fun getCards(step: InfluenceStep): Array<InfluenceCard> {
-        return influenceCards[step]!!.toTypedArray()
+        val cardsTaken = influenceCardsTaken[step]!!
+        return getForStep(step).filter { card -> !cardsTaken.contains(card) }.toTypedArray()
     }
 
     fun removeCard(step: InfluenceStep, card: InfluenceCard) {
-        val cards = influenceCards[step]!!
-        cards.remove(card)
+        influenceCardsTaken[step]!!.add(card)
+    }
+
+    private fun getForStep(step: InfluenceStep): Array<InfluenceCard> {
+        return InfluenceCard.entries.filter { card -> card.step == step }.toTypedArray()
+    }
+
+    fun handleImmediateCards(ownerPlayerIndex: Int, players:  Array<Player>, card: InfluenceCard) {
+        when(card) {
+            InfluenceCard.CIVILIAN -> {
+                val player = players[ownerPlayerIndex]
+                player.maxPopularity += 2
+                player.popularity += player.maxPopularity
+            }
+            InfluenceCard.MEDIA -> {
+                for ((index, player) in players.withIndex()) {
+                    if (index != ownerPlayerIndex) {
+                        player.vote -= 4
+                    }
+                }
+            }
+            else -> {}
+        }
     }
 }
