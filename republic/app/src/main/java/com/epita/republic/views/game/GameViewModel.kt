@@ -56,16 +56,11 @@ class GameViewModel : ViewModel() {
     }
 
     private fun gameFinish(): Boolean {
-        if (currentPlayer.value!!.vote >= POINT_FOR_VICTORY) {
+        if (currentPlayer.value!!.hasWin()) {
             return true
         }
 
-        var playerAlive = 0
-        for (player in players) {
-            if (player.isAlive()) {
-                playerAlive++
-            }
-        }
+        val playerAlive = players.count { p -> p.isAlive() }
 
         return playerAlive <= 1
     }
@@ -121,15 +116,12 @@ class GameViewModel : ViewModel() {
 
         if (currentPlayer.value != inCity.value) {
             Log.d("GAME", "Healing player by ${healthCount}")
-            currentPlayer.value!!.popularity =
-                minOf(
-                    currentPlayer.value!!.popularity + healthCount,
-                    currentPlayer.value!!.maxPopularity
-                )
+            currentPlayer.value!!.popularity += healthCount
         }
 
         // TODO Check if gain card
-        currentPlayer.value!!.influence += influenceGain
+        val influenceStepReach = currentPlayer.value!!.addInfluence(influenceGain)
+        if (influenceStepReach != null) {}
 
         currentPlayer.value!!.vote += scoreGain
         currentPlayer.value!!.money += moneyCount
@@ -152,10 +144,10 @@ class GameViewModel : ViewModel() {
         // Damage to everyone outside == all player except myself
         for (player in players) {
             if (player != currentPlayer) {
-                Log.d("GAME", "Inflict $damageCount damage to player ${player.playerIndex} (outside city) with health ${player.popularity}")
-                player.popularity = max(0, player.popularity - damageCount)
-                Log.d("GAME", "Player ${player.playerIndex} health left: ${player.popularity}")
-                if (player.popularity <= 0) {
+                Log.d("GAME", "Inflict $damageCount damage to player ${player.playerIndex} (outside city) ${player}")
+                player.popularity -= damageCount
+                Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
+                if (!player.isAlive()) {
                     deadPlayers.add(player)
                 }
             }
@@ -165,11 +157,11 @@ class GameViewModel : ViewModel() {
     suspend fun damageFromOutside(damageCount: Int) {
         val playerInCity = inCity.value
         if (playerInCity != null) {
-            Log.d("GAME", "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) with health ${playerInCity.popularity}")
-            playerInCity.popularity = max(0, playerInCity.popularity - damageCount)
-            Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity.popularity}")
+            Log.d("GAME", "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) ${playerInCity}")
+            playerInCity.popularity -= damageCount
+            Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity}")
 
-            if (playerInCity.popularity <= 0) {
+            if (!playerInCity.isAlive()) {
                 inCity.value = null
                 deadPlayers.add(currentPlayer.value!!)
             } else {

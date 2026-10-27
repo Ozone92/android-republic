@@ -1,27 +1,59 @@
 package com.epita.republic.repository
 
-data class Player(
+import com.epita.republic.domain.InfluenceStep
+import com.epita.republic.views.game.POINT_FOR_VICTORY
+import kotlin.math.max
+import kotlin.math.min
+
+class Player(
     val playerIndex: Int,
+    val isBot: Boolean,
+) {
     // Health
-    var popularity: Int = 10,
-    var maxPopularity: Int = 10,
+    var popularity: Int = 10
+        set(value) {
+            field = min(maxPopularity, max(0, value))
+        }
+    var maxPopularity: Int = 10
 
     // Evilness
-    var influence: Int = 0,
+    var influence: Int = 0
+    private set
 
     // Energy
-    var money: Int = 0,
+    var money: Int = 0
+        set(value) {
+            field = max(0, value)
+        }
 
     // Score/Power
-    var vote: Int = 0,
+    var vote: Int = 0
+        set(value) {
+            field = min(POINT_FOR_VICTORY, max(0, value))
+        }
 
-    var isBot: Boolean
-) {
     fun isAlive(): Boolean {
         return popularity > 0
     }
 
+    fun hasWin(): Boolean {
+        return isAlive() && vote >= POINT_FOR_VICTORY
+    }
+
     fun isBotGoOut(): Boolean {
         return popularity < maxPopularity / 2
+    }
+
+    fun addInfluence(toAdd: Int): InfluenceStep? {
+        val oldInfluence = influence
+        influence = min(10, influence + toAdd)
+
+        for (step in InfluenceStep.entries) {
+            if (step.requiredInfluence in (oldInfluence + 1)..influence) {
+                return step
+            }
+        }
+
+        return null
     }
 }
