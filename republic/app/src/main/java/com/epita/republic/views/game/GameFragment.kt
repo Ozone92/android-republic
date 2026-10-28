@@ -192,7 +192,7 @@ class GameFragment : Fragment() {
                         arrayOf(args.player1, args.player2, args.player3, args.player4)
                     val playersWinningOrder = gameViewModel.getWinningPlayerOrder()
                     val result =
-                        EndingFragmentParameter(null, null, playersWinningOrder.map { player ->
+                        EndingFragmentParameter(playersWinningOrder.map { player ->
                             return@map Pair(
                                 player.playerIndex,
                                 playersCharacter[player.playerIndex]
