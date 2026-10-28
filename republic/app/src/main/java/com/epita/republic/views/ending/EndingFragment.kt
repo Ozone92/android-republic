@@ -51,7 +51,7 @@ class EndingFragment : Fragment() {
                 winnerVictoryText.visibility = View.VISIBLE
 
                 winnerImageView.setImageResource(winner.character.centerImageRes)
-                winnerNameText.text = getString(R.string.game_player_card_name, winner.playerIndex)
+                winnerNameText.text = getString(R.string.game_player_card_name, winner.playerIndex + 1)
                 winnerVictoryText.text = getString(winner.endPlayerState.text)
             }
         }
