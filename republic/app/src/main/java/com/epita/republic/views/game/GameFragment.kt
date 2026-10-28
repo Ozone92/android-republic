@@ -22,7 +22,9 @@ import com.epita.republic.views.ending.EndingFragmentParameter
 class GameFragment : Fragment() {
     val gameViewModel: GameViewModel by viewModels()
     private val args: GameFragmentArgs by navArgs()
-    private val characters = arrayOf(args.player1, args.player2, args.player3, args.player4)
+    private val characters by lazy {
+        arrayOf(args.player1, args.player2, args.player3, args.player4)
+    }
 
     lateinit var playerCards: Array<PlayerCard>
     lateinit var middleCard: PlayerCard

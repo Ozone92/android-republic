@@ -60,7 +60,7 @@ class EndingFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(
             requireContext(),
-            LinearLayoutManager.HORIZONTAL,
+            LinearLayoutManager.VERTICAL,
             false
         )
         endingViewModel.playersLost.observe(this.viewLifecycleOwner) { players ->
