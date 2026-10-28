@@ -5,30 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [EndingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EndingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    val endingViewModel: EndingViewModel by viewModels()
+    private val args: EndingFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +28,45 @@ class EndingFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_ending, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EndingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EndingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val menuButton: Button = view.findViewById(R.id.ending_menu_btn)
+        menuButton.setOnClickListener {
+            findNavController().navigate(EndingFragmentDirections.actionEndingFragmentToHomeFragment())
+        }
+
+        val playButton: Button = view.findViewById(R.id.ending_play_btn)
+        playButton.setOnClickListener {
+            findNavController().navigate(EndingFragmentDirections.actionEndingFragmentToCharacterFragment())
+        }
+
+        val winnerImageView: ImageView = view.findViewById(R.id.ending_winner_player_image)
+        val winnerNameText: TextView = view.findViewById(R.id.ending_winner_player_text)
+        val winnerVictoryText: TextView = view.findViewById(R.id.ending_winner_victory_text)
+        endingViewModel.winnerPlayer.observe(this.viewLifecycleOwner) { winner ->
+            if (winner != null) {
+                winnerImageView.visibility = View.VISIBLE
+                winnerNameText.visibility = View.VISIBLE
+                winnerVictoryText.visibility = View.VISIBLE
+
+                winnerImageView.setImageResource(winner.character.centerImageRes)
+                winnerNameText.text = getString(R.string.game_player_card_name, winner.playerIndex + 1)
+                winnerVictoryText.text = getString(winner.endPlayerState.text)
             }
+        }
+
+        val recyclerView: RecyclerView = view.findViewById(R.id.ending_recycler)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        endingViewModel.playersLost.observe(this.viewLifecycleOwner) { players ->
+            recyclerView.adapter = LostPlayerAdapter(requireContext(), players)
+        }
+
+        endingViewModel.parseResult(args.result)
     }
 }

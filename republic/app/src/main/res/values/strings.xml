@@ -51,4 +51,13 @@
 
     <string name="wickedness_step3_2_title">Derive vers l\'extreme</string>
     <string name="wickedness_step3_2_description">Double l\'effet des faces DEGAT</string>
+
+    <!-- Ending Fragment Text -->
+    <string name="ending_score_win">Victoire par le vote</string>
+    <string name="ending_last_alive_win">Victoire par la credibilite</string>
+    <string name="ending_no_win">Impopularite totale\nPas de gagnant !</string>
+    <string name="ending_lost_alive">Defaite electorale</string>
+    <string name="ending_lost_dead">Devenu impopulaire</string>
+    <string name="ending_menu_button">MENU</string>
+    <string name="ending_play_again_button">RELANCER</string>
 </resources>
