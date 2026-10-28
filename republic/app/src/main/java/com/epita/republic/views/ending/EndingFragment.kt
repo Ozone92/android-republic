@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
+import com.google.android.material.card.MaterialCardView
 
 
 class EndingFragment : Fragment() {
@@ -41,6 +42,7 @@ class EndingFragment : Fragment() {
             findNavController().navigate(EndingFragmentDirections.actionEndingFragmentToCharacterFragment())
         }
 
+        val winnerCard: MaterialCardView = view.findViewById(R.id.ending_winner_card)
         val winnerImageView: ImageView = view.findViewById(R.id.ending_winner_player_image)
         val winnerNameText: TextView = view.findViewById(R.id.ending_winner_player_text)
         val winnerVictoryText: TextView = view.findViewById(R.id.ending_winner_victory_text)
@@ -49,6 +51,12 @@ class EndingFragment : Fragment() {
                 winnerImageView.visibility = View.VISIBLE
                 winnerNameText.visibility = View.VISIBLE
                 winnerVictoryText.visibility = View.VISIBLE
+
+                if (winner.isBot) {
+                    winnerCard.strokeColor = requireContext().getColor(R.color.card_ia_border)
+                } else {
+                    winnerCard.strokeColor = requireContext().getColor(R.color.card_player_border)
+                }
 
                 winnerImageView.setImageResource(winner.character.centerImageRes)
                 winnerNameText.text = getString(R.string.game_player_card_name, winner.playerIndex + 1)
