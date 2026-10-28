@@ -261,7 +261,7 @@ class GameViewModel : ViewModel() {
             mutableListOf(
                 *players
                     .filter { p -> p.isAlive() }
-                    .sortedBy { p -> p.vote }
+                    .sortedByDescending { p -> p.vote }
                     .toTypedArray()
             )
 
