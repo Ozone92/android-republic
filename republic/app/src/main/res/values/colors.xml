@@ -6,4 +6,7 @@
     <color name="influence_card_background">#FFcccccc</color>
     <color name="dice_unlock">#FF0000FF</color>
     <color name="dice_lock">#FFFF0000</color>
+
+    <color name="card_ia_border">#FFAA0000</color>
+    <color name="card_player_border">#FF0000AA</color>
 </resources>
