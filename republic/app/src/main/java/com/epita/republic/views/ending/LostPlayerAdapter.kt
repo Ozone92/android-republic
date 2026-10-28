@@ -29,7 +29,7 @@ class LostPlayerAdapter(val context: Context, val players: Array<EndingPlayerInf
         val player = players[position]
 
         holder.characterImage.setImageResource(player.character.defaultImageRes)
-        holder.playerText.text = context.getString(R.string.game_player_card_name, player.playerIndex)
+        holder.playerText.text = context.getString(R.string.game_player_card_name, player.playerIndex + 1)
         holder.playerLostText.text = context.getString(player.endPlayerState.text)
     }
 
