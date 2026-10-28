@@ -27,7 +27,7 @@
             app:destination="@id/homeFragment" />
         <argument
             android:name="result"
-            app:argType="com.epita.republic.views.ending.EndingFragmentParameter" />
+            app:argType="com.epita.republic.views.ending.EndingFragmentParameter[]" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"

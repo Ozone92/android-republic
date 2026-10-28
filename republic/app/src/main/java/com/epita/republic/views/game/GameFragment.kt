@@ -22,6 +22,7 @@ import com.epita.republic.views.ending.EndingFragmentParameter
 class GameFragment : Fragment() {
     val gameViewModel: GameViewModel by viewModels()
     private val args: GameFragmentArgs by navArgs()
+    private val characters = arrayOf(args.player1, args.player2, args.player3, args.player4)
 
     lateinit var playerCards: Array<PlayerCard>
     lateinit var middleCard: PlayerCard
@@ -46,7 +47,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 0,
                 gameViewModel.players[0],
-                args.player1,
+                characters[0],
                 view.findViewById(R.id.game_player1_card),
                 view.findViewById(R.id.game_player1_image),
                 view.findViewById(R.id.game_player1_name_text),
@@ -59,7 +60,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 1,
                 gameViewModel.players[1],
-                args.player2,
+                characters[1],
                 view.findViewById(R.id.game_player2_card),
                 view.findViewById(R.id.game_player2_image),
                 view.findViewById(R.id.game_player2_name_text),
@@ -72,7 +73,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 2,
                 gameViewModel.players[2],
-                args.player3,
+                characters[2],
                 view.findViewById(R.id.game_player3_card),
                 view.findViewById(R.id.game_player3_image),
                 view.findViewById(R.id.game_player3_name_text),
@@ -85,7 +86,7 @@ class GameFragment : Fragment() {
                 requireContext(),
                 3,
                 gameViewModel.players[3],
-                args.player4,
+                characters[3],
                 view.findViewById(R.id.game_player4_card),
                 view.findViewById(R.id.game_player4_image),
                 view.findViewById(R.id.game_player4_name_text),
@@ -188,16 +189,10 @@ class GameFragment : Fragment() {
                 }
 
                 GamePhase.GAME_FINISH -> {
-                    val playersCharacter =
-                        arrayOf(args.player1, args.player2, args.player3, args.player4)
                     val playersWinningOrder = gameViewModel.getWinningPlayerOrder()
-                    val result =
-                        EndingFragmentParameter(playersWinningOrder.map { player ->
-                            return@map Pair(
-                                player.playerIndex,
-                                playersCharacter[player.playerIndex]
-                            )
-                        }.toTypedArray())
+                    val result = playersWinningOrder.map { player ->
+                        EndingFragmentParameter(player.playerIndex, player.popularity, player.vote, player.isBot, characters[player.playerIndex])
+                    }.toTypedArray()
                     val action = GameFragmentDirections.actionGameFragmentToEndingFragment(result)
                     findNavController().navigate(action)
                 }

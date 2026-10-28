@@ -55,7 +55,7 @@
     <!-- Ending Fragment Text -->
     <string name="ending_score_win">Victoire par le vote</string>
     <string name="ending_last_alive_win">Victoire par la credibilite</string>
-    <string name="ending_no_win">Impopularite totale. Pas de gagnant !</string>
+    <string name="ending_no_win">Impopularite totale\nPas de gagnant !</string>
     <string name="ending_lost_alive">Defaite electorale</string>
     <string name="ending_lost_dead">Devenu impopulaire</string>
     <string name="ending_menu_button">MENU</string>
