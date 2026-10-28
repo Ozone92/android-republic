@@ -289,7 +289,7 @@ class GameViewModel : ViewModel() {
                         player.money += 1
                     }
                     if (player.influenceCards.contains(InfluenceCard.POPULAR)) {
-                        player.influence += 1
+                        player.popularity += 1
                     }
 
                     if (player.influenceCards.contains(InfluenceCard.UNDECIDED)) {
