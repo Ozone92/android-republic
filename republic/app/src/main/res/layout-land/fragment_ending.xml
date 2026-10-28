@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".views.ending.EndingFragment">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,8 @@
         app:layout_constraintBottom_toTopOf="@+id/ending_play_btn"
         app:layout_constraintEnd_toStartOf="@+id/ending_land_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ending_title">
+        app:layout_constraintTop_toBottomOf="@+id/ending_title"
+        app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -72,7 +73,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ending_winner_player_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/ending_title"

@@ -3,10 +3,10 @@ package com.epita.republic.views.game
 import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import com.epita.republic.R
 import com.epita.republic.domain.Character
 import com.epita.republic.repository.Player
+import com.google.android.material.card.MaterialCardView
 
 class PlayerCard(
     private val context: Context,
@@ -14,7 +14,7 @@ class PlayerCard(
     private var player: Player?,
     private var playerCharacter: Character?,
 
-    private val cardView: CardView,
+    private val cardView: MaterialCardView,
     private val imageView: ImageView,
     private val nameTextView: TextView,
     private val influenceTextView: TextView,
