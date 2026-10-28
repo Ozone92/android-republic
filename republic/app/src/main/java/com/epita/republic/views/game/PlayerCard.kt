@@ -30,6 +30,12 @@ class PlayerCard(
 
     fun render() {
         if (player != null) {
+            if (player!!.isBot) {
+                cardView.strokeColor = context.getColor(R.color.card_ia_border)
+            } else {
+                cardView.strokeColor = context.getColor(R.color.card_player_border)
+            }
+
             playerCharacter?.let {
                 if (isMiddle) {
                     imageView.setImageResource(it.centerImageRes)

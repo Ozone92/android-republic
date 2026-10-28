@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
 import com.epita.republic.repository.EndingPlayerInfo
+import com.google.android.material.card.MaterialCardView
 
 class LostPlayerAdapter(val context: Context, val players: Array<EndingPlayerInfo>): RecyclerView.Adapter<LostPlayerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
@@ -28,6 +29,11 @@ class LostPlayerAdapter(val context: Context, val players: Array<EndingPlayerInf
     ) {
         val player = players[position]
 
+        if (player.isBot) {
+            holder.card.strokeColor = context.getColor(R.color.card_ia_border)
+        } else {
+            holder.card.strokeColor = context.getColor(R.color.card_player_border)
+        }
         holder.characterImage.setImageResource(player.character.defaultImageRes)
         holder.playerText.text = context.getString(R.string.game_player_card_name, player.playerIndex + 1)
         holder.playerLostText.text = context.getString(player.endPlayerState.text)
@@ -38,6 +44,7 @@ class LostPlayerAdapter(val context: Context, val players: Array<EndingPlayerInf
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val card: MaterialCardView = itemView.findViewById(R.id.ending_item_card)
         val characterImage: ImageView = itemView.findViewById(R.id.ending_item_player_image)
         val playerText: TextView = itemView.findViewById(R.id.ending_item_player)
         val playerLostText: TextView = itemView.findViewById(R.id.ending_item_lost_text)
