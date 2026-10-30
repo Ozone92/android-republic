@@ -33,6 +33,7 @@ const val POINT_FOR_VICTORY = 20
 const val POINT_CITY_TURN = 2
 const val POINT_CITY_ENTER = 1
 const val BOT_SLEEP_ACTION = 3L
+const val POWER_SHOP_REROLL_COST = 2
 
 data class PowerShopState(
     val slots: List<PowerCard?>,
@@ -59,13 +60,13 @@ class GameViewModel : ViewModel() {
     val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
 
     private val powerDeck = mutableListOf(
-        PowerCard("power_1", R.string.power_placeholder_1),
-        PowerCard("power_2", R.string.power_placeholder_2),
-        PowerCard("power_3", R.string.power_placeholder_3),
-        PowerCard("power_4", R.string.power_placeholder_4),
-        PowerCard("power_5", R.string.power_placeholder_5),
-        PowerCard("power_6", R.string.power_placeholder_6),
-        PowerCard("power_7", R.string.power_placeholder_7)
+        PowerCard("power_1", R.string.power_placeholder_1, cost = 0),
+        PowerCard("power_2", R.string.power_placeholder_2, cost = 0),
+        PowerCard("power_3", R.string.power_placeholder_3, cost = 0),
+        PowerCard("power_4", R.string.power_placeholder_4, cost = 0),
+        PowerCard("power_5", R.string.power_placeholder_5, cost = 0),
+        PowerCard("power_6", R.string.power_placeholder_6, cost = 0),
+        PowerCard("power_7", R.string.power_placeholder_7, cost = 0)
     )
     private val powerDiscard = mutableListOf<PowerCard>()
     private val powerShopSlots = MutableList<PowerCard?>(3) { null }
@@ -96,10 +97,15 @@ class GameViewModel : ViewModel() {
 
     fun rerollPowerShop() {
         if (!canUsePowerShop()) return
+        val player = currentPlayer.value ?: return
+        if (player.money < POWER_SHOP_REROLL_COST) return
+        if (powerShopSlots.all { it == null } && powerDeck.isEmpty() && powerDiscard.isEmpty()) return
+        player.money -= POWER_SHOP_REROLL_COST
         powerDiscard.addAll(powerShopSlots.filterNotNull())
         powerShopSlots.indices.forEach { powerShopSlots[it] = null }
         powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
         publishPowerShop()
+        currentPlayer.value = player
     }
 
     fun buyPowerCard(slotIndex: Int) {
@@ -107,9 +113,12 @@ class GameViewModel : ViewModel() {
         if (slotIndex !in powerShopSlots.indices) return
         val card = powerShopSlots[slotIndex] ?: return
         val player = currentPlayer.value ?: return
+        if (player.money < card.cost) return
+        player.money -= card.cost
         player.powerCards.add(card)
         powerShopSlots[slotIndex] = drawPowerCard()
         publishPowerShop()
+        currentPlayer.value = player
     }
 
     fun diceButtonClick(index: Int) {
@@ -219,6 +228,7 @@ class GameViewModel : ViewModel() {
 
         currentPlayer.value!!.vote += scoreGain
         currentPlayer.value!!.money += moneyCount
+        currentPlayer.value = currentPlayer.value
         if (damageCount > 0) {
             onDamage(damageCount)
         }

@@ -121,6 +121,8 @@ class GameFragment : Fragment() {
         )
         renderPlayers()
         renderTurnPhase()
+        gameViewModel.currentPlayer.observe(viewLifecycleOwner) { renderPlayers() }
+
 
         val diceView: CardView = view.findViewById(R.id.game_dice_card)
         val stayLeaveView: CardView = view.findViewById(R.id.game_stay_leave_card)

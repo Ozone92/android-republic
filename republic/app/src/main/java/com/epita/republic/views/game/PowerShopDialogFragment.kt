@@ -38,16 +38,23 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
         fun renderShop() {
             val state = gameViewModel.powerShop.value ?: return
             val canAct = gameViewModel.canUsePowerShop()
+            val money = gameViewModel.currentPlayer.value?.money ?: 0
+            reroll.text = getString(R.string.power_shop_reroll, POWER_SHOP_REROLL_COST)
             status.setText(if (canAct) R.string.power_shop_allowed else R.string.power_shop_blocked)
             counts.text = getString(R.string.power_shop_counts,
-                state.deckCount, state.discardCount, state.ownedCount)
+                state.deckCount, state.discardCount, gameViewModel.players[0].money)
             names.indices.forEach { index ->
                 val card = state.slots[index]
                 names[index].setText(card?.nameRes ?: R.string.power_shop_empty)
                 descriptions[index].visibility = if (card == null) View.GONE else View.VISIBLE
-                buttons[index].isEnabled = canAct && card != null
+                buttons[index].text = if (card != null) {
+                    getString(R.string.power_shop_buy_cost, card.cost)
+                } else {
+                    getString(R.string.power_shop_buy)
+                }
+                buttons[index].isEnabled = canAct && card != null && money >= card.cost
             }
-            reroll.isEnabled = canAct && (state.slots.any { it != null } ||
+            reroll.isEnabled = canAct && money >= POWER_SHOP_REROLL_COST && (state.slots.any { it != null } ||
                 state.deckCount > 0 || state.discardCount > 0)
         }
 

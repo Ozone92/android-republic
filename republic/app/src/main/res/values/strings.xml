@@ -64,6 +64,7 @@
     <string name="power_shop_open">Powers</string>
     <string name="power_shop_close">Close</string>
     <string name="power_shop_buy">Buy</string>
+    <string name="power_shop_buy_cost">Buy (%1$d money)</string>
 
     <string name="power_shop_allowed">Your turn: purchases available</string>
     <string name="power_shop_blocked">Opponent’s turn: purchases unavailable</string>
@@ -76,9 +77,9 @@
     <string name="power_placeholder_6">Power 6</string>
     <string name="power_placeholder_7">Power 7</string>
 
-    <string name="power_shop_reroll">Reroll — free for testing</string>
+    <string name="power_shop_reroll">Reroll (%1$d money)</string>
     <string name="power_shop_empty">No card available</string>
-    <string name="power_shop_counts">Deck: %1$d · Discard: %2$d · Your cards: %3$d</string>
+    <string name="power_shop_counts">Deck: %1$d · Discard: %2$d · Your Money: %3$d</string>
     <string name="power_placeholder_description">Power description coming soon</string>
 
     <string name="power_shop_placeholder_message">Card %1$d: purchase not implemented yet</string>

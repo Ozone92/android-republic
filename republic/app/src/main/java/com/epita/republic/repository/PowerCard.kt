@@ -4,5 +4,6 @@ import androidx.annotation.StringRes
 
 data class PowerCard(
     val id: String,
-    @param:StringRes val nameRes: Int
+    @param:StringRes val nameRes: Int,
+    val cost: Int = 0
 )
