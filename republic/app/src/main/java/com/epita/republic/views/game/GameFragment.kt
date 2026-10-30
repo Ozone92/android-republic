@@ -2,6 +2,9 @@ package com.epita.republic.views.game
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.content.res.ColorStateList
+import com.google.android.material.button.MaterialButton
+import androidx.core.view.ViewCompat
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -123,6 +126,12 @@ class GameFragment : Fragment() {
         renderTurnPhase()
         gameViewModel.currentPlayer.observe(viewLifecycleOwner) { renderPlayers() }
 
+
+        view.findViewById<View>(R.id.game_dice_info).setOnClickListener {
+            if (childFragmentManager.findFragmentByTag(DiceLegendDialogFragment.TAG) == null) {
+                DiceLegendDialogFragment().show(childFragmentManager, DiceLegendDialogFragment.TAG)
+            }
+        }
 
         val diceView: CardView = view.findViewById(R.id.game_dice_card)
         val stayLeaveView: CardView = view.findViewById(R.id.game_stay_leave_card)
@@ -251,27 +260,43 @@ class GameFragment : Fragment() {
 
     fun renderDice(buttons: Array<Button>, diceFaces: Array<DiceFace>) {
         for ((index, button) in buttons.withIndex()) {
-            button.text = diceFaces[index].name.slice(0..1)
+            val face = diceFaces[index]
+            val iconRes = when (face) {
+                DiceFace.ONE -> R.drawable.dice_one
+                DiceFace.TWO -> R.drawable.dice_two
+                DiceFace.THREE -> R.drawable.dice_three
+                DiceFace.MONEY -> R.drawable.dice_money
+                DiceFace.DAMAGE -> R.drawable.dice_damage
+                DiceFace.HEAL -> R.drawable.dice_health
+            }
+            (button as MaterialButton).apply {
+                icon = androidx.appcompat.content.res.AppCompatResources.getDrawable(context, iconRes)
+                iconTint = null
+                text = ""
+                contentDescription = getString(when (face) {
+                    DiceFace.ONE -> R.string.dice_face_one
+                    DiceFace.TWO -> R.string.dice_face_two
+                    DiceFace.THREE -> R.string.dice_face_three
+                    DiceFace.MONEY -> R.string.dice_face_money
+                    DiceFace.DAMAGE -> R.string.dice_face_damage
+                    DiceFace.HEAL -> R.string.dice_face_health
+                })
+            }
         }
+        renderDicesColor(buttons)
     }
 
     fun renderDicesColor(diceButtons: Array<Button>) {
-        diceButtons.withIndex().forEach { (i, button) ->
-            if (gameViewModel.lockedDiceIndexes.contains(i)) {
-                button.setTextColor(
-                    resources.getColor(
-                        R.color.dice_lock,
-                        null
-                    )
-                )
-            } else {
-                button.setTextColor(
-                    resources.getColor(
-                        R.color.dice_unlock,
-                        null
-                    )
-                )
-            }
+        diceButtons.withIndex().forEach { (index, button) ->
+            val locked = gameViewModel.lockedDiceIndexes.contains(index)
+            val color = resources.getColor(
+                if (locked) R.color.dice_lock else R.color.dice_unlock, null
+            )
+            button.setTextColor(color)
+            (button as MaterialButton).strokeColor = ColorStateList.valueOf(color)
+            ViewCompat.setStateDescription(button, getString(
+                if (locked) R.string.dice_locked else R.string.dice_unlocked
+            ))
         }
     }
 }

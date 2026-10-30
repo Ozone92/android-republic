@@ -83,4 +83,18 @@
     <string name="power_placeholder_description">Power description coming soon</string>
 
     <string name="power_shop_placeholder_message">Card %1$d: purchase not implemented yet</string>
+    <string name="dice_face_one">One vote</string>
+    <string name="dice_face_two">Two votes</string>
+    <string name="dice_face_three">Three votes</string>
+    <string name="dice_face_money">Money</string>
+    <string name="dice_face_damage">Damage</string>
+    <string name="dice_face_health">Health</string>
+    <string name="dice_locked">Locked</string>
+    <string name="dice_unlocked">Unlocked</string>
+    <string name="dice_legend_open">Show dice values</string>
+    <string name="dice_legend_title">Dice values</string>
+    <string name="dice_legend_close">Close</string>
+    <string name="dice_value_one">1</string>
+    <string name="dice_value_two">2</string>
+    <string name="dice_value_three">3</string>
 </resources>
