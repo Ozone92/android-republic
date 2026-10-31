@@ -69,10 +69,10 @@
 
             <TextView
                 android:id="@+id/game_middle_player_popularity_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Popularity: 10/10"
+                android:text="10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_middle_player_vote_text"
@@ -81,10 +81,10 @@
 
             <TextView
                 android:id="@+id/game_middle_player_vote_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="VOTE: 00/20"
+                android:text="00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_middle_player_influence_text"
@@ -93,10 +93,10 @@
 
             <TextView
                 android:id="@+id/game_middle_player_influence_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="INFLUENCE: 00/10"
+                android:text="00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_middle_player_money_text"
@@ -105,11 +105,11 @@
 
             <TextView
                 android:id="@+id/game_middle_player_money_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="MONEY: 00"
+                android:text="00"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -161,10 +161,10 @@
 
             <TextView
                 android:id="@+id/game_player1_popularity_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Popularity: 10/10"
+                android:text="10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player1_vote_text"
@@ -173,10 +173,10 @@
 
             <TextView
                 android:id="@+id/game_player1_vote_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="VOTE: 00/20"
+                android:text="00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player1_influence_text"
@@ -185,10 +185,10 @@
 
             <TextView
                 android:id="@+id/game_player1_influence_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="INFLUENCE: 00/10"
+                android:text="00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player1_money_text"
@@ -197,11 +197,11 @@
 
             <TextView
                 android:id="@+id/game_player1_money_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="MONEY: 00"
+                android:text="00"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -262,10 +262,10 @@
 
             <TextView
                 android:id="@+id/game_player2_popularity_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Popularity: 10/10"
+                android:text="10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player2_vote_text"
@@ -274,10 +274,10 @@
 
             <TextView
                 android:id="@+id/game_player2_vote_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="VOTE: 00/20"
+                android:text="00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player2_influence_text"
@@ -286,10 +286,10 @@
 
             <TextView
                 android:id="@+id/game_player2_influence_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="INFLUENCE: 00/10"
+                android:text="00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player2_money_text"
@@ -298,11 +298,11 @@
 
             <TextView
                 android:id="@+id/game_player2_money_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="MONEY: 00"
+                android:text="00"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -378,10 +378,10 @@
 
             <TextView
                 android:id="@+id/game_player3_popularity_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Popularity: 10/10"
+                android:text="10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player3_vote_text"
@@ -390,10 +390,10 @@
 
             <TextView
                 android:id="@+id/game_player3_vote_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="VOTE: 00/20"
+                android:text="00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player3_influence_text"
@@ -402,10 +402,10 @@
 
             <TextView
                 android:id="@+id/game_player3_influence_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="INFLUENCE: 00/10"
+                android:text="00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player3_money_text"
@@ -414,11 +414,11 @@
 
             <TextView
                 android:id="@+id/game_player3_money_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="MONEY: 00"
+                android:text="00"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -481,10 +481,10 @@
 
             <TextView
                 android:id="@+id/game_player4_popularity_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Popularity: 10/10"
+                android:text="10/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player4_vote_text"
@@ -493,10 +493,10 @@
 
             <TextView
                 android:id="@+id/game_player4_vote_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="VOTE: 00/20"
+                android:text="00/20"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player4_influence_text"
@@ -505,10 +505,10 @@
 
             <TextView
                 android:id="@+id/game_player4_influence_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="INFLUENCE: 00/10"
+                android:text="00/10"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/game_player4_money_text"
@@ -517,11 +517,11 @@
 
             <TextView
                 android:id="@+id/game_player4_money_text"
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="MONEY: 00"
+                android:text="00"
                 android:textColor="@color/black"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
