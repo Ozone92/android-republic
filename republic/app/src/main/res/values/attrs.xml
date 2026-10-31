@@ -17,4 +17,8 @@
     <attr name="colorStatInfluence" format="color" />
     <attr name="colorFeedbackGain" format="color" />
     <attr name="colorFeedbackLoss" format="color" />
+
+    <!-- Game-specific text styles, used with ?attr/textAppearancePhase -->
+    <attr name="textAppearancePhase" format="reference" />
+    <attr name="textAppearanceStat" format="reference" />
 </resources>

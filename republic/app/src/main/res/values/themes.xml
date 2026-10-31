@@ -1,6 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Shared theme: everything that does not depend on light or dark mode -->
-    <style name="Base.Theme.Republic" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Base.Theme.Republic" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Typography (styles.xml) -->
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.Republic.Display</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Republic.Headline</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Republic.Title</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Republic.Body</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Republic.Label</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Republic.Caption</item>
+        <item name="textAppearancePhase">@style/TextAppearance.Republic.Phase</item>
+        <item name="textAppearanceStat">@style/TextAppearance.Republic.Stat</item>
+    </style>
 
     <!--
         Light theme: semantic color roles (docs/design-system.pdf page 4).
