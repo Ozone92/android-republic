@@ -1,12 +1,15 @@
 package com.epita.republic.views.game
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.ColorUtils
 import com.epita.republic.R
 import com.epita.republic.domain.Character
 import com.epita.republic.repository.Player
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.color.MaterialColors
 
 class PlayerCard(
     private val context: Context,
@@ -21,6 +24,7 @@ class PlayerCard(
     private val popularityTextView: TextView,
     private val moneyTextView: TextView,
     private val voteTextView: TextView,
+    private val awayTextView: TextView? = null,
 
     private val isMiddle: Boolean = false,
 ) {
@@ -46,12 +50,34 @@ class PlayerCard(
         cardView.visibility = visibility
     }
 
+    // While the player sits in the Élysée, the seat stays in place as a dashed placeholder
+    fun setAway(away: Boolean) {
+        val contentVisibility = if (away) View.INVISIBLE else View.VISIBLE
+        listOf(imageView, influenceTextView, popularityTextView, moneyTextView, voteTextView)
+            .forEach { it.visibility = contentVisibility }
+        awayTextView?.visibility = if (away) View.VISIBLE else View.GONE
+
+        val surface = MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurfaceContainer)
+        cardView.setCardBackgroundColor(if (away) ColorUtils.setAlphaComponent(surface, 0xD9) else surface)
+        cardView.cardElevation =
+            if (away) 0f else context.resources.getDimension(R.dimen.elevation_level1)
+        cardView.strokeWidth =
+            if (away) 0 else context.resources.getDimensionPixelSize(R.dimen.border_default)
+        cardView.getChildAt(0).setBackgroundResource(if (away) R.drawable.bg_seat_away else 0)
+        cardView.visibility = View.VISIBLE
+    }
+
     fun render() {
         if (player != null) {
-            if (player!!.isBot) {
-                cardView.strokeColor = context.getColor(R.color.card_ia_border)
+            if (isMiddle) {
+                // The Élysée slot keeps its gold look, whoever sits in it
+                cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, R.attr.colorElyseeContainer))
+                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorElysee)
+                cardView.strokeWidth = context.resources.getDimensionPixelSize(R.dimen.border_emphasis)
+            } else if (player!!.isBot) {
+                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorPlayerBot)
             } else {
-                cardView.strokeColor = context.getColor(R.color.card_player_border)
+                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorPlayerHuman)
             }
 
             playerCharacter?.let {

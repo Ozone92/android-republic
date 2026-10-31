@@ -13,6 +13,7 @@
     <string name="game_player_card_vote">VOTE: %d/20</string>
     <string name="game_player_card_money">MONEY: %d</string>
     <string name="game_player_card_popularity">POPULARITY: %1$d/%2$d</string>
+    <string name="game_player_card_away">IN THE ÉLYSÉE</string>
     <string name="game_reroll_text">REROLL (%d left)</string>
     <string name="game_validate_dice">CONFIRM</string>
     <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>

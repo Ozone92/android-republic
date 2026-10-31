@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="6dp"
+    android:padding="@dimen/space_xs"
     tools:layout_width="120dp">
 
-
-    <ImageView
+    <!-- 3:4 frame: the portraits are about that ratio, so faces are not cropped -->
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/character_image"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        tools:src="@drawable/melanchon_2" />
+        app:layout_constraintDimensionRatio="3:4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="?attr/shapeAppearanceCornerMedium"
+        tools:src="@drawable/melanchon_1" />
 
     <TextView
         android:id="@+id/character_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="@dimen/space_s"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="2"
-        android:textSize="16sp"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_image"
         tools:text="Nom du personnage" />
 
-
-</LinearLayout>
-
-
-
+</androidx.constraintlayout.widget.ConstraintLayout>

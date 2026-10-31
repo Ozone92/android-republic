@@ -11,15 +11,19 @@
 
     <!-- Component sizes, compact screens. Tablet values in values-sw600dp/dimens.xml -->
     <dimen name="size_touch_target">48dp</dimen>
+    <dimen name="size_button_wide">160dp</dimen>
     <dimen name="size_dice">56dp</dimen>
     <dimen name="size_dice_icon">36dp</dimen>
     <dimen name="size_player_card">156dp</dimen>
     <dimen name="size_avatar">40dp</dimen>
     <dimen name="size_stat_icon">14dp</dimen>
+    <dimen name="size_stat_column">64dp</dimen>
+    <dimen name="size_winner_avatar">75dp</dimen>
 
     <!-- Borders -->
     <dimen name="border_default">1dp</dimen>
     <dimen name="border_emphasis">3dp</dimen>
+    <dimen name="border_dice">2dp</dimen>
 
     <!-- Elevation levels -->
     <dimen name="elevation_level0">0dp</dimen>

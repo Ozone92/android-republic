@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
 import com.epita.republic.repository.EndingPlayerInfo
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.color.MaterialColors
 
 class LostPlayerAdapter(val context: Context, val players: Array<EndingPlayerInfo>): RecyclerView.Adapter<LostPlayerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
@@ -30,9 +31,9 @@ class LostPlayerAdapter(val context: Context, val players: Array<EndingPlayerInf
         val player = players[position]
 
         if (player.isBot) {
-            holder.card.strokeColor = context.getColor(R.color.card_ia_border)
+            holder.card.strokeColor = MaterialColors.getColor(holder.card, R.attr.colorPlayerBot)
         } else {
-            holder.card.strokeColor = context.getColor(R.color.card_player_border)
+            holder.card.strokeColor = MaterialColors.getColor(holder.card, R.attr.colorPlayerHuman)
         }
         holder.characterImage.setImageResource(player.character.defaultImageRes)
         holder.playerText.text = context.getString(R.string.game_player_card_name, player.playerIndex + 1)

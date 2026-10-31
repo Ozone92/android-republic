@@ -30,7 +30,7 @@ class CharacterFragment : Fragment() {
 
         val grid = view.findViewById<RecyclerView>(R.id.character_grid)
 
-        grid.layoutManager = GridLayoutManager(requireContext(), 3)
+        grid.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.character_grid_columns))
 
         grid.adapter = CharacterAdapter(Character.entries) { selectedCharacter ->
             val playersCharacter = ArrayList<Character>()

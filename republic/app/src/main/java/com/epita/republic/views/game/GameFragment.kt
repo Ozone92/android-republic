@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.content.res.ColorStateList
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.color.MaterialColors
 import androidx.core.view.ViewCompat
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -66,6 +67,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player1_popularity_text),
                 view.findViewById(R.id.game_player1_money_text),
                 view.findViewById(R.id.game_player1_vote_text),
+                awayTextView = view.findViewById(R.id.game_player1_away_text),
             ),
             PlayerCard(
                 requireContext(),
@@ -79,6 +81,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player2_popularity_text),
                 view.findViewById(R.id.game_player2_money_text),
                 view.findViewById(R.id.game_player2_vote_text),
+                awayTextView = view.findViewById(R.id.game_player2_away_text),
             ),
             PlayerCard(
                 requireContext(),
@@ -92,6 +95,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player3_popularity_text),
                 view.findViewById(R.id.game_player3_money_text),
                 view.findViewById(R.id.game_player3_vote_text),
+                awayTextView = view.findViewById(R.id.game_player3_away_text),
             ),
             PlayerCard(
                 requireContext(),
@@ -105,6 +109,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player4_popularity_text),
                 view.findViewById(R.id.game_player4_money_text),
                 view.findViewById(R.id.game_player4_vote_text),
+                awayTextView = view.findViewById(R.id.game_player4_away_text),
             ),
         )
 
@@ -242,9 +247,9 @@ class GameFragment : Fragment() {
             if (player == gameViewModel.inCity.value) {
                 middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getCharacter())
                 middleCard.setVisibility(View.VISIBLE)
-                playerCard.setVisibility(View.INVISIBLE)
+                playerCard.setAway(true)
             } else {
-                playerCard.setVisibility(View.VISIBLE)
+                playerCard.setAway(false)
                 playerCard.render()
             }
         }
@@ -289,11 +294,17 @@ class GameFragment : Fragment() {
     fun renderDicesColor(diceButtons: Array<Button>) {
         diceButtons.withIndex().forEach { (index, button) ->
             val locked = gameViewModel.lockedDiceIndexes.contains(index)
-            val color = resources.getColor(
-                if (locked) R.color.dice_lock else R.color.dice_unlock, null
+            val color = MaterialColors.getColor(
+                button,
+                if (locked) R.attr.colorDiceLocked else com.google.android.material.R.attr.colorOutline
             )
             button.setTextColor(color)
-            (button as MaterialButton).strokeColor = ColorStateList.valueOf(color)
+            (button as MaterialButton).apply {
+                strokeColor = ColorStateList.valueOf(color)
+                strokeWidth = resources.getDimensionPixelSize(
+                    if (locked) R.dimen.border_emphasis else R.dimen.border_dice
+                )
+            }
             ViewCompat.setStateDescription(button, getString(
                 if (locked) R.string.dice_locked else R.string.dice_unlocked
             ))

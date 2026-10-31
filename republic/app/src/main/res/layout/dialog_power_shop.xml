@@ -1,125 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/bg_dialog"
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/space_m">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/power_shop_title"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
         <TextView
             android:id="@+id/power_shop_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:accessibilityLiveRegion="polite" />
+            android:layout_marginTop="@dimen/space_xs"
+            android:accessibilityLiveRegion="polite"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
         <TextView
             android:id="@+id/power_shop_counts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/space_sm"
             android:orientation="horizontal"
             android:baselineAligned="false">
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="4dp"
-                android:orientation="vertical"
-                android:padding="8dp">
-                <TextView
-                    android:id="@+id/power_name_1"
+                android:layout_marginHorizontal="@dimen/space_xs">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/power_placeholder_1"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/power_description_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/power_placeholder_description" />
-                <Button
-                    android:id="@+id/power_buy_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="@string/power_shop_buy" />
-            </LinearLayout>
-            <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_sm">
+                    <TextView
+                        android:id="@+id/power_name_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        tools:text="@string/power_placeholder_1" />
+                    <TextView
+                        android:id="@+id/power_description_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:text="@string/power_placeholder_description"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                    <Button
+                        android:id="@+id/power_buy_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_s"
+                        android:enabled="false"
+                        android:text="@string/power_shop_buy" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="4dp"
-                android:orientation="vertical"
-                android:padding="8dp">
-                <TextView
-                    android:id="@+id/power_name_2"
+                android:layout_marginHorizontal="@dimen/space_xs">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/power_placeholder_2"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/power_description_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/power_placeholder_description" />
-                <Button
-                    android:id="@+id/power_buy_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="@string/power_shop_buy" />
-            </LinearLayout>
-            <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_sm">
+                    <TextView
+                        android:id="@+id/power_name_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        tools:text="@string/power_placeholder_2" />
+                    <TextView
+                        android:id="@+id/power_description_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:text="@string/power_placeholder_description"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                    <Button
+                        android:id="@+id/power_buy_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_s"
+                        android:enabled="false"
+                        android:text="@string/power_shop_buy" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="4dp"
-                android:orientation="vertical"
-                android:padding="8dp">
-                <TextView
-                    android:id="@+id/power_name_3"
+                android:layout_marginHorizontal="@dimen/space_xs">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/power_placeholder_3"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/power_description_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/power_placeholder_description" />
-                <Button
-                    android:id="@+id/power_buy_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="@string/power_shop_buy" />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_sm">
+                    <TextView
+                        android:id="@+id/power_name_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        tools:text="@string/power_placeholder_3" />
+                    <TextView
+                        android:id="@+id/power_description_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:text="@string/power_placeholder_description"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                    <Button
+                        android:id="@+id/power_buy_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_s"
+                        android:enabled="false"
+                        android:text="@string/power_shop_buy" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_m"
             android:gravity="end"
             android:orientation="horizontal">
             <Button
                 android:id="@+id/power_shop_reroll"
+                style="@style/Widget.Republic.Button.Tonal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="@string/power_shop_reroll" />
             <Button
                 android:id="@+id/power_shop_close"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/space_s"
                 android:text="@string/power_shop_close" />
         </LinearLayout>
     </LinearLayout>
