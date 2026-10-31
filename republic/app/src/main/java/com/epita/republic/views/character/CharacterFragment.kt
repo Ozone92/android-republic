@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,9 +31,10 @@ class CharacterFragment : Fragment() {
 
         val grid = view.findViewById<RecyclerView>(R.id.character_grid)
 
-        grid.layoutManager = GridLayoutManager(requireContext(), 3)
+        val layoutManager = GridLayoutManager(requireContext(), 5)
+        grid.layoutManager = layoutManager
 
-        grid.adapter = CharacterAdapter(Character.entries) { selectedCharacter ->
+        val adapter = CharacterAdapter(Character.entries) { selectedCharacter ->
             val playersCharacter = ArrayList<Character>()
             playersCharacter.add(selectedCharacter)
             for (i in 0..2) {
@@ -51,6 +53,29 @@ class CharacterFragment : Fragment() {
                     playersCharacter[3]
                 )
             findNavController().navigate(action)
+        }
+
+        fun resizeCards() {
+            val columns = if (grid.width > grid.height) 5 else 3
+            layoutManager.spanCount = columns
+            val rows = (Character.entries.size + columns - 1) / columns
+            val availableHeight = grid.height - grid.paddingTop - grid.paddingBottom
+            // Keep cards usable in unusually short windows; RecyclerView can scroll.
+            val minimumHeight = (96 * resources.displayMetrics.density).toInt()
+            adapter.updateCardHeight(maxOf(minimumHeight, availableHeight / rows))
+        }
+
+        grid.doOnLayout {
+            grid.post {
+                resizeCards()
+                grid.adapter = adapter
+            }
+        }
+        grid.addOnLayoutChangeListener { _, left, top, right, bottom,
+                                        oldLeft, oldTop, oldRight, oldBottom ->
+            if (right - left != oldRight - oldLeft || bottom - top != oldBottom - oldTop) {
+                grid.post { resizeCards() }
+            }
         }
     }
 }
