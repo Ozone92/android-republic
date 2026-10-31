@@ -14,6 +14,14 @@ class CharacterAdapter(
     private val onCharacterClick: (Character) -> Unit
 ) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
+    private var cardHeight = 0
+
+    fun updateCardHeight(height: Int) {
+        if (height == cardHeight) return
+        cardHeight = height
+        notifyItemRangeChanged(0, itemCount)
+    }
+
     class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.character_image)
         val name: TextView = view.findViewById(R.id.character_name)
@@ -34,6 +42,11 @@ class CharacterAdapter(
         position: Int
     ) {
         val character = characters[position]
+        if (cardHeight > 0) {
+            holder.itemView.layoutParams = holder.itemView.layoutParams.apply {
+                height = cardHeight
+            }
+        }
 
         holder.image.setImageResource(character.defaultImageRes)
         holder.image.contentDescription = character.name
