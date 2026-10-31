@@ -1,8 +1,10 @@
 package com.epita.republic.views.game
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.ColorUtils
 import com.epita.republic.R
 import com.epita.republic.domain.Character
 import com.epita.republic.repository.Player
@@ -22,6 +24,7 @@ class PlayerCard(
     private val popularityTextView: TextView,
     private val moneyTextView: TextView,
     private val voteTextView: TextView,
+    private val awayTextView: TextView? = null,
 
     private val isMiddle: Boolean = false,
 ) {
@@ -45,6 +48,23 @@ class PlayerCard(
 
     fun setVisibility(visibility: Int) {
         cardView.visibility = visibility
+    }
+
+    // While the player sits in the Élysée, the seat stays in place as a dashed placeholder
+    fun setAway(away: Boolean) {
+        val contentVisibility = if (away) View.INVISIBLE else View.VISIBLE
+        listOf(imageView, influenceTextView, popularityTextView, moneyTextView, voteTextView)
+            .forEach { it.visibility = contentVisibility }
+        awayTextView?.visibility = if (away) View.VISIBLE else View.GONE
+
+        val surface = MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurfaceContainer)
+        cardView.setCardBackgroundColor(if (away) ColorUtils.setAlphaComponent(surface, 0xD9) else surface)
+        cardView.cardElevation =
+            if (away) 0f else context.resources.getDimension(R.dimen.elevation_level1)
+        cardView.strokeWidth =
+            if (away) 0 else context.resources.getDimensionPixelSize(R.dimen.border_default)
+        cardView.getChildAt(0).setBackgroundResource(if (away) R.drawable.bg_seat_away else 0)
+        cardView.visibility = View.VISIBLE
     }
 
     fun render() {

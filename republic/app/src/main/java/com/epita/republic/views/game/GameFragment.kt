@@ -67,6 +67,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player1_popularity_text),
                 view.findViewById(R.id.game_player1_money_text),
                 view.findViewById(R.id.game_player1_vote_text),
+                awayTextView = view.findViewById(R.id.game_player1_away_text),
             ),
             PlayerCard(
                 requireContext(),
@@ -80,6 +81,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player2_popularity_text),
                 view.findViewById(R.id.game_player2_money_text),
                 view.findViewById(R.id.game_player2_vote_text),
+                awayTextView = view.findViewById(R.id.game_player2_away_text),
             ),
             PlayerCard(
                 requireContext(),
@@ -93,6 +95,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player3_popularity_text),
                 view.findViewById(R.id.game_player3_money_text),
                 view.findViewById(R.id.game_player3_vote_text),
+                awayTextView = view.findViewById(R.id.game_player3_away_text),
             ),
             PlayerCard(
                 requireContext(),
@@ -106,6 +109,7 @@ class GameFragment : Fragment() {
                 view.findViewById(R.id.game_player4_popularity_text),
                 view.findViewById(R.id.game_player4_money_text),
                 view.findViewById(R.id.game_player4_vote_text),
+                awayTextView = view.findViewById(R.id.game_player4_away_text),
             ),
         )
 
@@ -243,9 +247,9 @@ class GameFragment : Fragment() {
             if (player == gameViewModel.inCity.value) {
                 middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getCharacter())
                 middleCard.setVisibility(View.VISIBLE)
-                playerCard.setVisibility(View.INVISIBLE)
+                playerCard.setAway(true)
             } else {
-                playerCard.setVisibility(View.VISIBLE)
+                playerCard.setAway(false)
                 playerCard.render()
             }
         }

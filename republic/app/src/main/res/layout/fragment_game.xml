@@ -152,6 +152,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
+            <!-- Shown instead of the stats while this player sits in the Élysée -->
+            <TextView
+                android:id="@+id/game_player1_away_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_player_card_away"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorTertiary"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/game_player1_popularity_text"
                 android:layout_width="@dimen/size_stat_column"
@@ -308,6 +322,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
+            <!-- Shown instead of the stats while this player sits in the Élysée -->
+            <TextView
+                android:id="@+id/game_player2_away_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_player_card_away"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorTertiary"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -351,6 +379,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
+
+            <!-- Shown instead of the stats while this player sits in the Élysée -->
+            <TextView
+                android:id="@+id/game_player3_away_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_player_card_away"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorTertiary"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/game_player3_barrier"
@@ -449,6 +491,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
+
+            <!-- Shown instead of the stats while this player sits in the Élysée -->
+            <TextView
+                android:id="@+id/game_player4_away_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_player_card_away"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorTertiary"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/game_player4_barrier"
