@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.color.MaterialColors
 
 
 class EndingFragment : Fragment() {
@@ -53,9 +54,9 @@ class EndingFragment : Fragment() {
                 winnerVictoryText.visibility = View.VISIBLE
 
                 if (winner.isBot) {
-                    winnerCard.strokeColor = requireContext().getColor(R.color.card_ia_border)
+                    winnerCard.strokeColor = MaterialColors.getColor(winnerCard, R.attr.colorPlayerBot)
                 } else {
-                    winnerCard.strokeColor = requireContext().getColor(R.color.card_player_border)
+                    winnerCard.strokeColor = MaterialColors.getColor(winnerCard, R.attr.colorPlayerHuman)
                 }
 
                 winnerImageView.setImageResource(winner.character.centerImageRes)
