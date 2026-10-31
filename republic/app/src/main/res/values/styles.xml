@@ -113,6 +113,16 @@
         <item name="iconTint">@color/button_danger_content</item>
     </style>
 
+    <!--
+        Tonal button: Material uses the secondary container (rouge Marianne here),
+        but red means danger in this game, so it is mapped to the primary container.
+    -->
+    <style name="Widget.Republic.Button.Tonal" parent="Widget.Material3.Button.TonalButton">
+        <item name="backgroundTint">@color/button_tonal_background</item>
+        <item name="android:textColor">@color/button_tonal_content</item>
+        <item name="iconTint">@color/button_tonal_content</item>
+    </style>
+
     <!-- Default card: applied to every MaterialCardView through the theme -->
     <style name="Widget.Republic.Card" parent="Widget.Material3.CardView.Filled">
         <item name="cardBackgroundColor">?attr/colorSurfaceContainer</item>

@@ -10,6 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:src="@drawable/background"
         android:contentDescription="@null"
         android:importantForAccessibility="no"
@@ -23,10 +24,10 @@
         style="@style/Widget.Republic.Card.Player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/game_elysee_offset"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/space_s"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/game_player1_card">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -35,10 +36,12 @@
             <ImageView
                 android:id="@+id/game_middle_player_image"
                 android:layout_width="@dimen/size_avatar"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/size_avatar"
+                android:layout_marginStart="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_s"
+                android:scaleType="centerCrop"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toStartOf="@+id/game_middle_player_barrier"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -118,7 +121,7 @@
         style="@style/Widget.Republic.Card.Player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/game_middle_player_card"
+        android:layout_marginTop="@dimen/space_s"
         app:layout_constraintEnd_toStartOf="@+id/game_player2_card"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -197,10 +200,12 @@
             <ImageView
                 android:id="@+id/game_player1_image"
                 android:layout_width="@dimen/size_avatar"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/size_avatar"
+                android:layout_marginStart="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_s"
+                android:scaleType="centerCrop"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toStartOf="@+id/game_player1_barrier"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -214,7 +219,7 @@
         style="@style/Widget.Republic.Card.Player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/game_middle_player_card"
+        android:layout_marginTop="@dimen/space_s"
         app:layout_constraintEnd_toStartOf="@+id/game_player3_card"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/game_player1_card"
@@ -227,10 +232,12 @@
             <ImageView
                 android:id="@+id/game_player2_image"
                 android:layout_width="@dimen/size_avatar"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/size_avatar"
+                android:layout_marginStart="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_s"
+                android:scaleType="centerCrop"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toStartOf="@+id/game_player2_barrier"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -310,7 +317,7 @@
         style="@style/Widget.Republic.Card.Player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/game_middle_player_card"
+        android:layout_marginTop="@dimen/space_s"
         app:layout_constraintEnd_toStartOf="@+id/game_player4_card"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/game_player2_card"
@@ -323,10 +330,12 @@
             <ImageView
                 android:id="@+id/game_player3_image"
                 android:layout_width="@dimen/size_avatar"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/size_avatar"
+                android:layout_marginStart="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_s"
+                android:scaleType="centerCrop"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toStartOf="@+id/game_player3_barrier"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -406,7 +415,7 @@
         style="@style/Widget.Republic.Card.Player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/game_middle_player_card"
+        android:layout_marginTop="@dimen/space_s"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/game_player3_card"
@@ -419,10 +428,12 @@
             <ImageView
                 android:id="@+id/game_player4_image"
                 android:layout_width="@dimen/size_avatar"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/size_avatar"
+                android:layout_marginStart="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_s"
+                android:scaleType="centerCrop"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toStartOf="@+id/game_player4_barrier"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -598,7 +609,7 @@
 
             <Button
                 android:id="@+id/game_dice_reroll"
-                style="@style/Widget.Material3.Button.TonalButton"
+                style="@style/Widget.Republic.Button.Tonal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -735,7 +746,7 @@
 
     <Button
         android:id="@+id/game_power_shop_btn"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+        style="@style/Widget.Republic.Button.Tonal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/space_sm"

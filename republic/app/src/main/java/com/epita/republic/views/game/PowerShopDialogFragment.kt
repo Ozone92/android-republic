@@ -70,6 +70,8 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
 
     override fun onStart() {
         super.onStart()
+        // The layout draws its own rounded background
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.window?.setLayout(
             (resources.displayMetrics.widthPixels * 0.9f).toInt(),
             ViewGroup.LayoutParams.WRAP_CONTENT
