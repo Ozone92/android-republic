@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="6dp"
+    android:padding="@dimen/space_xs"
     tools:layout_width="120dp">
 
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/character_image"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="@dimen/size_character_portrait"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
+        app:shapeAppearance="?attr/shapeAppearanceCornerMedium"
         tools:src="@drawable/melanchon_2" />
 
     <TextView
         android:id="@+id/character_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="@dimen/space_s"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="2"
-        android:textSize="16sp"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
         tools:text="Nom du personnage" />
 
 

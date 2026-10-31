@@ -6,4 +6,5 @@
     <dimen name="size_player_card">200dp</dimen>
     <dimen name="size_avatar">56dp</dimen>
     <dimen name="size_stat_icon">18dp</dimen>
+    <dimen name="size_character_portrait">180dp</dimen>
 </resources>

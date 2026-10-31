@@ -16,6 +16,7 @@
     <dimen name="size_player_card">156dp</dimen>
     <dimen name="size_avatar">40dp</dimen>
     <dimen name="size_stat_icon">14dp</dimen>
+    <dimen name="size_character_portrait">140dp</dimen>
 
     <!-- Borders -->
     <dimen name="border_default">1dp</dimen>
