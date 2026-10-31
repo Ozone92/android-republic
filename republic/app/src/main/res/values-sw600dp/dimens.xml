@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Expanded screens (tablets, smallest width >= 600dp): only the sizes that change -->
+    <dimen name="size_dice">72dp</dimen>
+    <dimen name="size_dice_icon">48dp</dimen>
+    <dimen name="size_player_card">200dp</dimen>
+    <dimen name="size_avatar">56dp</dimen>
+    <dimen name="size_stat_icon">18dp</dimen>
+</resources>

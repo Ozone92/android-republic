@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing scale on a 4dp grid (docs/design-system.pdf page 7) -->
+    <dimen name="space_xxs">2dp</dimen>
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_s">8dp</dimen>
+    <dimen name="space_sm">12dp</dimen>
+    <dimen name="space_m">16dp</dimen>
+    <dimen name="space_l">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+
+    <!-- Component sizes, compact screens. Tablet values in values-sw600dp/dimens.xml -->
+    <dimen name="size_touch_target">48dp</dimen>
+    <dimen name="size_dice">56dp</dimen>
+    <dimen name="size_dice_icon">36dp</dimen>
+    <dimen name="size_player_card">156dp</dimen>
+    <dimen name="size_avatar">40dp</dimen>
+    <dimen name="size_stat_icon">14dp</dimen>
+
+    <!-- Borders -->
+    <dimen name="border_default">1dp</dimen>
+    <dimen name="border_emphasis">3dp</dimen>
+
+    <!-- Elevation levels -->
+    <dimen name="elevation_level0">0dp</dimen>
+    <dimen name="elevation_level1">1dp</dimen>
+    <dimen name="elevation_level3">6dp</dimen>
+    <dimen name="elevation_level4">8dp</dimen>
+</resources>

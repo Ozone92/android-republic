@@ -1,9 +1,84 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Shared theme: everything that does not depend on light or dark mode -->
     <style name="Base.Theme.Republic" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Typography (styles.xml) -->
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.Republic.Display</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Republic.Headline</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Republic.Title</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Republic.Body</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Republic.Label</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Republic.Caption</item>
+        <item name="textAppearancePhase">@style/TextAppearance.Republic.Phase</item>
+        <item name="textAppearanceStat">@style/TextAppearance.Republic.Stat</item>
+
+        <!-- Corner radii (styles.xml) -->
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Republic.Small</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Republic.Medium</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Republic.Large</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Republic.ExtraLarge</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Republic.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Republic.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Republic.Large</item>
+
+        <!-- Default component styles (styles.xml) -->
+        <item name="materialCardViewStyle">@style/Widget.Republic.Card</item>
     </style>
 
-    <style name="Theme.Republic" parent="Base.Theme.Republic" />
+    <!--
+        Light theme: semantic color roles (docs/design-system.pdf page 4).
+        The dark values live in values-night/themes.xml under the same style name.
+    -->
+    <style name="Theme.Republic" parent="Base.Theme.Republic">
+        <item name="colorPrimary">@color/palette_bleu_700</item>
+        <item name="colorOnPrimary">@color/palette_blanc</item>
+        <item name="colorPrimaryContainer">@color/palette_bleu_100</item>
+        <item name="colorOnPrimaryContainer">@color/palette_bleu_900</item>
+        <item name="colorPrimaryInverse">@color/palette_bleu_200</item>
+
+        <item name="colorSecondary">@color/palette_rouge_700</item>
+        <item name="colorOnSecondary">@color/palette_blanc</item>
+        <item name="colorSecondaryContainer">@color/palette_rouge_100</item>
+        <item name="colorOnSecondaryContainer">@color/palette_rouge_900</item>
+
+        <item name="colorTertiary">@color/palette_or_700</item>
+        <item name="colorOnTertiary">@color/palette_blanc</item>
+        <item name="colorTertiaryContainer">@color/palette_or_100</item>
+        <item name="colorOnTertiaryContainer">@color/palette_or_900</item>
+
+        <item name="colorError">@color/palette_erreur_700</item>
+        <item name="colorOnError">@color/palette_blanc</item>
+        <item name="colorErrorContainer">@color/palette_erreur_100</item>
+        <item name="colorOnErrorContainer">@color/palette_erreur_900</item>
+
+        <item name="android:colorBackground">@color/palette_gris_papier</item>
+        <item name="colorOnBackground">@color/palette_gris_encre</item>
+        <item name="colorSurface">@color/palette_gris_papier</item>
+        <item name="colorOnSurface">@color/palette_gris_encre</item>
+        <item name="colorSurfaceVariant">@color/palette_gris_100</item>
+        <item name="colorOnSurfaceVariant">@color/palette_gris_700</item>
+        <item name="colorSurfaceInverse">@color/palette_gris_ardoise</item>
+        <item name="colorOnSurfaceInverse">@color/palette_gris_100</item>
+        <item name="colorSurfaceContainerLowest">@color/palette_blanc</item>
+        <item name="colorSurfaceContainerLow">@color/palette_gris_50</item>
+        <item name="colorSurfaceContainer">@color/palette_gris_100</item>
+        <item name="colorSurfaceContainerHigh">@color/palette_gris_150</item>
+        <item name="colorSurfaceContainerHighest">@color/palette_gris_200</item>
+
+        <item name="colorOutline">@color/palette_gris_500</item>
+        <item name="colorOutlineVariant">@color/palette_gris_300</item>
+
+        <!-- Game-specific colors (attrs.xml) -->
+        <item name="colorPlayerHuman">@color/palette_bleu_700</item>
+        <item name="colorPlayerBot">@color/palette_rouge_500</item>
+        <item name="colorElysee">@color/palette_or_500</item>
+        <item name="colorElyseeContainer">@color/palette_or_100</item>
+        <item name="colorDiceFace">@color/palette_gris_ivoire</item>
+        <item name="colorDiceLocked">@color/palette_or_500</item>
+        <item name="colorStatVote">@color/palette_bleu_700</item>
+        <item name="colorStatPopularity">@color/palette_rouge_700</item>
+        <item name="colorStatMoney">@color/palette_or_700</item>
+        <item name="colorStatInfluence">@color/palette_gris_700</item>
+        <item name="colorFeedbackGain">@color/palette_vert_700</item>
+        <item name="colorFeedbackLoss">@color/palette_erreur_700</item>
+    </style>
 </resources>
