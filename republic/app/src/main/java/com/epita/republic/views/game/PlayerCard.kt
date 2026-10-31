@@ -24,6 +24,24 @@ class PlayerCard(
 
     private val isMiddle: Boolean = false,
 ) {
+    init {
+        val iconSize = (18 * context.resources.displayMetrics.density).toInt()
+        val iconPadding = (4 * context.resources.displayMetrics.density).toInt()
+        listOf(
+            voteTextView to R.drawable.stat_vote,
+            moneyTextView to R.drawable.dice_money,
+            popularityTextView to R.drawable.stat_popularity,
+            influenceTextView to R.drawable.stat_influence
+        ).forEach { (label, resource) ->
+            val icon = androidx.appcompat.content.res.AppCompatResources
+                .getDrawable(context, resource)?.mutate()
+            icon?.setBounds(0, 0, iconSize, iconSize)
+            label.setCompoundDrawablesRelative(icon, null, null, null)
+            label.compoundDrawablePadding = iconPadding
+            label.gravity = android.view.Gravity.CENTER_VERTICAL
+        }
+    }
+
     fun setVisibility(visibility: Int) {
         cardView.visibility = visibility
     }
@@ -46,14 +64,22 @@ class PlayerCard(
 
             nameTextView.text = context.getString(R.string.game_player_card_name, playerIndex + 1)
             influenceTextView.text =
-                context.getString(R.string.game_player_card_influence, player!!.influence)
+                context.getString(R.string.game_player_card_influence_value, player!!.influence)
             popularityTextView.text = context.getString(
-                R.string.game_player_card_popularity,
+                R.string.game_player_card_popularity_value,
                 player!!.popularity,
                 player!!.maxPopularity
             )
-            moneyTextView.text = context.getString(R.string.game_player_card_money, player!!.money)
-            voteTextView.text = context.getString(R.string.game_player_card_vote, player!!.vote)
+            influenceTextView.contentDescription = context.getString(
+                R.string.game_player_card_influence, player!!.influence
+            )
+            popularityTextView.contentDescription = context.getString(
+                R.string.game_player_card_popularity, player!!.popularity, player!!.maxPopularity
+            )
+            moneyTextView.text = context.getString(R.string.game_player_card_money_value, player!!.money)
+            voteTextView.text = context.getString(R.string.game_player_card_vote_value, player!!.vote)
+            moneyTextView.contentDescription = context.getString(R.string.game_player_card_money, player!!.money)
+            voteTextView.contentDescription = context.getString(R.string.game_player_card_vote, player!!.vote)
         }
     }
 

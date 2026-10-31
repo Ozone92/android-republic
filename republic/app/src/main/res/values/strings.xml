@@ -97,4 +97,8 @@
     <string name="dice_value_one">1</string>
     <string name="dice_value_two">2</string>
     <string name="dice_value_three">3</string>
+    <string name="game_player_card_money_value">%1$d</string>
+    <string name="game_player_card_vote_value">%1$d/20</string>
+    <string name="game_player_card_influence_value">%1$d/10</string>
+    <string name="game_player_card_popularity_value">%1$d/%2$d</string>
 </resources>
