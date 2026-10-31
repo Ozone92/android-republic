@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Game-specific color tokens (docs/design-system.pdf page 5).
+        Material 3 has no role for bots or the Élysée: these attributes get a value
+        in each theme and are used like the standard roles, with ?attr/colorPlayerBot.
+    -->
+    <attr name="colorPlayerHuman" format="color" />
+    <attr name="colorPlayerBot" format="color" />
+    <attr name="colorElysee" format="color" />
+    <attr name="colorElyseeContainer" format="color" />
+    <attr name="colorDiceFace" format="color" />
+    <attr name="colorDiceLocked" format="color" />
+    <attr name="colorStatVote" format="color" />
+    <attr name="colorStatPopularity" format="color" />
+    <attr name="colorStatMoney" format="color" />
+    <attr name="colorStatInfluence" format="color" />
+    <attr name="colorFeedbackGain" format="color" />
+    <attr name="colorFeedbackLoss" format="color" />
+</resources>

@@ -44,5 +44,19 @@
 
         <item name="colorOutline">@color/palette_gris_500</item>
         <item name="colorOutlineVariant">@color/palette_gris_300</item>
+
+        <!-- Game-specific colors (attrs.xml) -->
+        <item name="colorPlayerHuman">@color/palette_bleu_700</item>
+        <item name="colorPlayerBot">@color/palette_rouge_500</item>
+        <item name="colorElysee">@color/palette_or_500</item>
+        <item name="colorElyseeContainer">@color/palette_or_100</item>
+        <item name="colorDiceFace">@color/palette_gris_ivoire</item>
+        <item name="colorDiceLocked">@color/palette_or_500</item>
+        <item name="colorStatVote">@color/palette_bleu_700</item>
+        <item name="colorStatPopularity">@color/palette_rouge_700</item>
+        <item name="colorStatMoney">@color/palette_or_700</item>
+        <item name="colorStatInfluence">@color/palette_gris_700</item>
+        <item name="colorFeedbackGain">@color/palette_vert_700</item>
+        <item name="colorFeedbackLoss">@color/palette_erreur_700</item>
     </style>
 </resources>
