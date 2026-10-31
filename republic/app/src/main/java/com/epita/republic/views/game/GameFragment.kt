@@ -1,6 +1,5 @@
 package com.epita.republic.views.game
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.content.res.ColorStateList
 import com.google.android.material.button.MaterialButton
@@ -50,7 +49,6 @@ class GameFragment : Fragment() {
             }
         }
 
-        activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
 
         turnPhaseTextView = view.findViewById(R.id.game_phase_text)
 
