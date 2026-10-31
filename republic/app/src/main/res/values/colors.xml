@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Legacy colors, to be removed once every screen uses the design system -->
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="card_background">#FFbbbbbb</color>
-    <color name="dice_unlock">#FF0000FF</color>
-    <color name="dice_lock">#FFFF0000</color>
-
-    <color name="card_ia_border">#FFAA0000</color>
-    <color name="card_player_border">#FF0000AA</color>
-
     <!--
         Design system: base palette (primitive tokens, docs/design-system.pdf page 3).
         Named by hue and level, never by usage: layouts must not reference them directly,

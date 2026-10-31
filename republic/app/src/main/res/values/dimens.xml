@@ -16,12 +16,17 @@
     <dimen name="size_player_card">156dp</dimen>
     <dimen name="size_avatar">40dp</dimen>
     <dimen name="size_stat_icon">14dp</dimen>
+    <dimen name="size_stat_column">64dp</dimen>
     <dimen name="size_character_portrait">140dp</dimen>
     <dimen name="size_winner_avatar">75dp</dimen>
+
+    <!-- Game screen: space kept under the Élysée slot for the dice and choice panels -->
+    <dimen name="game_elysee_offset">128dp</dimen>
 
     <!-- Borders -->
     <dimen name="border_default">1dp</dimen>
     <dimen name="border_emphasis">3dp</dimen>
+    <dimen name="border_dice">2dp</dimen>
 
     <!-- Elevation levels -->
     <dimen name="elevation_level0">0dp</dimen>

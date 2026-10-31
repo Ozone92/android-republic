@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.content.res.ColorStateList
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.color.MaterialColors
 import androidx.core.view.ViewCompat
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -289,11 +290,17 @@ class GameFragment : Fragment() {
     fun renderDicesColor(diceButtons: Array<Button>) {
         diceButtons.withIndex().forEach { (index, button) ->
             val locked = gameViewModel.lockedDiceIndexes.contains(index)
-            val color = resources.getColor(
-                if (locked) R.color.dice_lock else R.color.dice_unlock, null
+            val color = MaterialColors.getColor(
+                button,
+                if (locked) R.attr.colorDiceLocked else com.google.android.material.R.attr.colorOutline
             )
             button.setTextColor(color)
-            (button as MaterialButton).strokeColor = ColorStateList.valueOf(color)
+            (button as MaterialButton).apply {
+                strokeColor = ColorStateList.valueOf(color)
+                strokeWidth = resources.getDimensionPixelSize(
+                    if (locked) R.dimen.border_emphasis else R.dimen.border_dice
+                )
+            }
             ViewCompat.setStateDescription(button, getString(
                 if (locked) R.string.dice_locked else R.string.dice_unlocked
             ))

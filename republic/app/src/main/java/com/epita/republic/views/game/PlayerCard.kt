@@ -7,6 +7,7 @@ import com.epita.republic.R
 import com.epita.republic.domain.Character
 import com.epita.republic.repository.Player
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.color.MaterialColors
 
 class PlayerCard(
     private val context: Context,
@@ -48,10 +49,15 @@ class PlayerCard(
 
     fun render() {
         if (player != null) {
-            if (player!!.isBot) {
-                cardView.strokeColor = context.getColor(R.color.card_ia_border)
+            if (isMiddle) {
+                // The Élysée slot keeps its gold look, whoever sits in it
+                cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, R.attr.colorElyseeContainer))
+                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorElysee)
+                cardView.strokeWidth = context.resources.getDimensionPixelSize(R.dimen.border_emphasis)
+            } else if (player!!.isBot) {
+                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorPlayerBot)
             } else {
-                cardView.strokeColor = context.getColor(R.color.card_player_border)
+                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorPlayerHuman)
             }
 
             playerCharacter?.let {

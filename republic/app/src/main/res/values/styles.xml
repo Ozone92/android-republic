@@ -137,7 +137,7 @@
         <item name="android:insetBottom">0dp</item>
         <item name="backgroundTint">?attr/colorDiceFace</item>
         <item name="strokeColor">?attr/colorOutline</item>
-        <item name="strokeWidth">2dp</item>
+        <item name="strokeWidth">@dimen/border_dice</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Republic.Medium</item>
         <item name="iconTint">@null</item>
         <item name="iconSize">@dimen/size_dice_icon</item>
