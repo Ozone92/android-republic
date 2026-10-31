@@ -72,4 +72,76 @@
         <item name="lineHeight">16sp</item>
         <item name="android:letterSpacing">0.045</item>
     </style>
+
+    <!-- Corner radii (docs/design-system.pdf page 7) -->
+    <style name="ShapeAppearance.Republic.Small" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Republic.Medium" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Republic.Large" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <!-- Bottom sheet: Material only rounds its top corners -->
+    <style name="ShapeAppearance.Republic.ExtraLarge" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">28dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Republic.Full" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!--
+        Component styles (docs/design-system.pdf pages 9-10).
+        Filled, tonal, outlined and text buttons use the Material 3 styles as they are:
+        the theme already gives them the right colors, label text and pill shape.
+    -->
+
+    <!-- Action with heavy consequences, e.g. leaving the Élysée -->
+    <style name="Widget.Republic.Button.Danger" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/button_danger_background</item>
+        <item name="android:textColor">@color/button_danger_content</item>
+        <item name="iconTint">@color/button_danger_content</item>
+    </style>
+
+    <!-- Default card: applied to every MaterialCardView through the theme -->
+    <style name="Widget.Republic.Card" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">?attr/colorSurfaceContainer</item>
+        <item name="cardElevation">@dimen/elevation_level1</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Republic.Medium</item>
+    </style>
+
+    <!-- Player card: the stroke color is set per player (colorPlayerHuman, colorPlayerBot, colorElysee) -->
+    <style name="Widget.Republic.Card.Player">
+        <item name="strokeWidth">@dimen/border_default</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+    </style>
+
+    <!-- Die: a square button showing a face icon; the locked state changes the stroke -->
+    <style name="Widget.Republic.Dice" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">@dimen/size_dice</item>
+        <item name="android:layout_height">@dimen/size_dice</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">?attr/colorDiceFace</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Republic.Medium</item>
+        <item name="iconTint">@null</item>
+        <item name="iconSize">@dimen/size_dice_icon</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+    </style>
 </resources>

@@ -10,6 +10,18 @@
         <item name="textAppearanceLabelSmall">@style/TextAppearance.Republic.Caption</item>
         <item name="textAppearancePhase">@style/TextAppearance.Republic.Phase</item>
         <item name="textAppearanceStat">@style/TextAppearance.Republic.Stat</item>
+
+        <!-- Corner radii (styles.xml) -->
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Republic.Small</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Republic.Medium</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Republic.Large</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Republic.ExtraLarge</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Republic.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Republic.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Republic.Large</item>
+
+        <!-- Default component styles (styles.xml) -->
+        <item name="materialCardViewStyle">@style/Widget.Republic.Card</item>
     </style>
 
     <!--
