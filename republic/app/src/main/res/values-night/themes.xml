@@ -1,7 +1,42 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Republic" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!-- Dark theme: same roles as values/themes.xml, with dark values -->
+    <style name="Theme.Republic" parent="Base.Theme.Republic">
+        <item name="colorPrimary">@color/palette_bleu_200</item>
+        <item name="colorOnPrimary">@color/palette_bleu_900</item>
+        <item name="colorPrimaryContainer">@color/palette_bleu_600</item>
+        <item name="colorOnPrimaryContainer">@color/palette_bleu_100</item>
+        <item name="colorPrimaryInverse">@color/palette_bleu_700</item>
+
+        <item name="colorSecondary">@color/palette_rouge_200</item>
+        <item name="colorOnSecondary">@color/palette_rouge_900</item>
+        <item name="colorSecondaryContainer">@color/palette_rouge_800</item>
+        <item name="colorOnSecondaryContainer">@color/palette_rouge_100</item>
+
+        <item name="colorTertiary">@color/palette_or_300</item>
+        <item name="colorOnTertiary">@color/palette_or_900</item>
+        <item name="colorTertiaryContainer">@color/palette_or_800</item>
+        <item name="colorOnTertiaryContainer">@color/palette_or_100</item>
+
+        <item name="colorError">@color/palette_erreur_200</item>
+        <item name="colorOnError">@color/palette_erreur_900</item>
+        <item name="colorErrorContainer">@color/palette_erreur_800</item>
+        <item name="colorOnErrorContainer">@color/palette_erreur_100</item>
+
+        <item name="android:colorBackground">@color/palette_gris_nuit</item>
+        <item name="colorOnBackground">@color/palette_gris_brume</item>
+        <item name="colorSurface">@color/palette_gris_nuit</item>
+        <item name="colorOnSurface">@color/palette_gris_brume</item>
+        <item name="colorSurfaceVariant">@color/palette_gris_700</item>
+        <item name="colorOnSurfaceVariant">@color/palette_gris_300</item>
+        <item name="colorSurfaceInverse">@color/palette_gris_brume</item>
+        <item name="colorOnSurfaceInverse">@color/palette_gris_ardoise</item>
+        <item name="colorSurfaceContainerLowest">@color/palette_gris_abysse</item>
+        <item name="colorSurfaceContainerLow">@color/palette_gris_encre</item>
+        <item name="colorSurfaceContainer">@color/palette_gris_graphite</item>
+        <item name="colorSurfaceContainerHigh">@color/palette_gris_ardoise</item>
+        <item name="colorSurfaceContainerHighest">@color/palette_gris_anthracite</item>
+
+        <item name="colorOutline">@color/palette_gris_400</item>
+        <item name="colorOutlineVariant">@color/palette_gris_700</item>
     </style>
 </resources>
