@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Design system — King of Republic</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --bleu: #002395; --bleu-900: #00154F; --bleu-100: #DCE3FA;
+    --rouge: #B81D2C; --rouge-500: #ED2939; --rouge-100: #FBDCDF;
+    --or: #8C6D0E; --or-500: #C9A227; --or-100: #F6ECC9;
+    --ink: #1A1C22; --g700: #44474F; --g500: #75777F; --g300: #C5C6D0; --g100: #EEEFF4;
+    --papier: #FBF9F4; --de: #FFFDF5; --vert: #1E7D46;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Roboto, Helvetica, Arial, sans-serif; color: var(--ink); font-size: 9.5pt; line-height: 1.45; background: #fff; }
+  .page { width: 210mm; height: 297mm; padding: 14mm 15mm 16mm; position: relative; page-break-after: always; overflow: hidden; }
+  .page:last-child { page-break-after: auto; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6mm; }
+  .flag { display: flex; gap: 3mm; }
+  .flag span { display: block; width: 11mm; height: 1.4mm; }
+  .flag .b { background: var(--bleu); } .flag .w { background: transparent; } .flag .r { background: var(--rouge-500); }
+  .brand { font-size: 7pt; font-weight: 700; letter-spacing: .08em; color: var(--g700); }
+  .foot { position: absolute; bottom: 8mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; font-size: 7pt; color: var(--g500); }
+  h1 { font-family: Oswald, sans-serif; font-weight: 600; font-size: 22pt; line-height: 1.1; letter-spacing: .01em; }
+  h2 { font-family: Oswald, sans-serif; font-weight: 600; font-size: 13pt; margin: 6mm 0 2.5mm; color: var(--bleu); }
+  h3 { font-size: 9.5pt; font-weight: 700; margin: 4mm 0 1.5mm; }
+  .sub { color: var(--g700); font-size: 9pt; margin-top: 1.5mm; }
+  p { margin-bottom: 2mm; }
+  .muted { color: var(--g500); }
+  .small { font-size: 8pt; }
+  code, .mono { font-family: "Roboto Mono", monospace; font-size: 8pt; }
+  code { background: var(--g100); padding: .2mm 1mm; border-radius: 1mm; }
+  pre { font-family: "Roboto Mono", monospace; font-size: 7.4pt; line-height: 1.38; background: #F4F4F7; border-left: 1mm solid var(--bleu); padding: 2.5mm 3.5mm; margin: 1.5mm 0 3mm; white-space: pre; overflow: hidden; }
+  pre .c { color: var(--g500); } pre .k { color: var(--bleu); } pre .v { color: var(--rouge); }
+  table { width: 100%; border-collapse: collapse; margin: 1.5mm 0 3mm; font-size: 8.5pt; }
+  th { text-align: left; font-size: 7.5pt; font-weight: 700; color: var(--g700); border-bottom: .4mm solid var(--ink); padding: 1.4mm 2mm 1.4mm 0; }
+  td { border-bottom: .2mm solid var(--g300); padding: 1.5mm 2mm 1.5mm 0; vertical-align: top; }
+  td.mono { white-space: nowrap; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+  .note { background: var(--bleu-100); border-radius: 2mm; padding: 2.5mm 3.5mm; font-size: 8.5pt; margin: 2mm 0 3mm; }
+  .note.warn { background: var(--or-100); }
+  .note b { color: var(--bleu-900); }
+  ul { padding-left: 4.5mm; margin-bottom: 2mm; } li { margin-bottom: .8mm; }
+  .sw { display: inline-block; width: 3.4mm; height: 3.4mm; border-radius: .8mm; vertical-align: -.6mm; margin-right: 1.5mm; border: .2mm solid rgba(0,0,0,.15); }
+  .ok { color: var(--vert); font-weight: 700; } .ko { color: var(--rouge); font-weight: 700; }
+
+  /* Cover */
+  .cover-title { font-family: Oswald, sans-serif; font-weight: 700; font-size: 40pt; line-height: 1; color: var(--bleu); margin-top: 18mm; }
+  .cover-sub { font-family: Oswald, sans-serif; font-weight: 500; font-size: 16pt; color: var(--ink); margin-top: 3mm; }
+  .stripe { display: flex; height: 5mm; margin: 9mm 0 9mm; width: 60mm; }
+  .stripe div { flex: 1; }
+  .toc { margin-top: 4mm; }
+  .toc div { display: flex; justify-content: space-between; border-bottom: .2mm dotted var(--g300); padding: 1.6mm 0; font-size: 10pt; }
+  .toc span:first-child b { color: var(--bleu); display: inline-block; width: 8mm; }
+  .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-top: 3mm; }
+  .principle { border: .3mm solid var(--g300); border-radius: 2.5mm; padding: 3mm 3.5mm; }
+  .principle b { font-family: Oswald, sans-serif; font-weight: 600; font-size: 10.5pt; color: var(--bleu); display: block; margin-bottom: 1mm; }
+
+  /* Palette */
+  .ramp { display: flex; border-radius: 2mm; overflow: hidden; margin-bottom: 3.5mm; }
+  .ramp div { flex: 1; height: 19mm; padding: 1.6mm 2mm; display: flex; flex-direction: column; justify-content: flex-end; font-size: 6.8pt; line-height: 1.3; }
+  .ramp .n { font-family: "Roboto Mono", monospace; font-size: 6.4pt; }
+  .ramp-label { font-weight: 700; font-size: 8.5pt; margin-bottom: 1.2mm; }
+  .ramp-label span { font-weight: 400; color: var(--g500); }
+
+  /* Role tiles */
+  .roles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6mm; margin-bottom: 2mm; }
+  .role { border-radius: 1.6mm; padding: 1.8mm 2mm; height: 14mm; font-size: 6.8pt; line-height: 1.25; display: flex; flex-direction: column; justify-content: space-between; }
+  .role b { font-size: 7.2pt; }
+  .theme-panel { border-radius: 2.5mm; padding: 3mm; }
+
+  /* Type */
+  .type-row { display: grid; grid-template-columns: 44mm 1fr 34mm; align-items: baseline; border-bottom: .2mm solid var(--g300); padding: 2mm 0; gap: 3mm; }
+  .type-row .meta { font-size: 7.2pt; color: var(--g700); }
+  .type-row .attr { font-family: "Roboto Mono", monospace; font-size: 6.8pt; color: var(--bleu); }
+
+  /* Components */
+  .canvas { background: var(--papier); border: .2mm solid var(--g300); border-radius: 2.5mm; padding: 4mm; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; height: 10mm; padding: 0 5mm; border-radius: 5mm; font-weight: 500; font-size: 8.5pt; letter-spacing: .02em; margin-right: 2mm; }
+  .btn.filled { background: var(--bleu); color: #fff; }
+  .btn.tonal { background: var(--bleu-100); color: var(--bleu-900); }
+  .btn.outlined { border: .3mm solid var(--g500); color: var(--bleu); }
+  .btn.text { color: var(--bleu); padding: 0 3mm; }
+  .btn.danger { background: var(--rouge); color: #fff; }
+  .btn.disabled { background: rgba(26,28,34,.12); color: rgba(26,28,34,.38); }
+
+  .pcard { width: 46mm; background: #fff; border-radius: 3mm; border: .5mm solid var(--g300); padding: 2.2mm; box-shadow: 0 .3mm .8mm rgba(0,0,0,.12); font-size: 7pt; }
+  .pcard .hd { display: flex; gap: 2mm; align-items: center; margin-bottom: 1.6mm; }
+  .pcard .av { width: 9mm; height: 9mm; border-radius: 50%; background: linear-gradient(135deg, #9aa6c7, #5b678c); flex: none; }
+  .pcard .nm { font-family: Oswald, sans-serif; font-weight: 600; font-size: 8.5pt; line-height: 1.1; }
+  .badge { display: inline-block; font-size: 5.8pt; font-weight: 700; padding: .3mm 1.4mm; border-radius: 2mm; letter-spacing: .04em; }
+  .badge.you { background: var(--bleu); color: #fff; } .badge.bot { background: var(--rouge-100); color: #410007; } .badge.ely { background: var(--or-500); color: #2B2000; }
+  .stat { display: grid; grid-template-columns: 3.4mm 1fr 9mm; align-items: center; gap: 1.2mm; margin-top: .9mm; }
+  .stat .ic { width: 3.2mm; height: 3.2mm; border-radius: .8mm; }
+  .bar { height: 1.2mm; background: var(--g100); border-radius: .6mm; overflow: hidden; }
+  .bar i { display: block; height: 100%; }
+  .stat .v { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .pcard.active { border: .9mm solid var(--bleu); box-shadow: 0 1mm 2.5mm rgba(0,35,149,.25); }
+  .pcard.elysee { background: var(--or-100); border: .9mm solid var(--or-500); }
+  .pcard.dead { opacity: .38; filter: grayscale(1); }
+  .pcard.botc { border-color: var(--rouge-500); }
+  .state-label { font-size: 7pt; font-weight: 700; color: var(--g700); margin-top: 1.5mm; text-align: center; }
+
+  .die { width: 14mm; height: 14mm; border-radius: 2.6mm; background: var(--de); border: .5mm solid var(--g500); display: inline-flex; align-items: center; justify-content: center; font-family: Oswald, sans-serif; font-size: 15pt; font-weight: 600; position: relative; margin-right: 2mm; }
+  .die.locked { border: .9mm solid var(--or-500); transform: translateY(-1.2mm); box-shadow: 0 1.2mm 1.8mm rgba(140,109,14,.35); }
+  .die.locked::after { content: ""; position: absolute; top: -1.6mm; right: -1.6mm; width: 4mm; height: 4mm; border-radius: 50%; background: var(--or-500) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%232B2000' d='M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm-7-2a2 2 0 0 1 4 0v2h-4z'/%3E%3C/svg%3E") center/2.6mm no-repeat; }
+  .die.dis { opacity: .6; }
+  .die svg { width: 8mm; height: 8mm; }
+
+  .phase { display: flex; align-items: center; gap: 3mm; background: var(--bleu); color: #fff; border-radius: 2.5mm; padding: 2.4mm 4mm; }
+  .phase .t { font-family: Oswald, sans-serif; font-weight: 600; font-size: 11pt; }
+  .phase .s { font-size: 7.5pt; opacity: .85; }
+  .phase.bot { background: var(--g100); color: var(--ink); }
+
+  .icard { width: 44mm; border-radius: 3mm; background: #fff; border: .3mm solid var(--g300); padding: 3mm; box-shadow: 0 .3mm .8mm rgba(0,0,0,.1); }
+  .icard .ti { font-family: Oswald, sans-serif; font-weight: 600; font-size: 9.5pt; margin: 1.5mm 0 1mm; }
+  .icard .de { font-size: 7.2pt; color: var(--g700); line-height: 1.35; }
+  .cost { display: inline-flex; align-items: center; gap: 1mm; background: var(--or-100); color: #2B2000; border-radius: 3mm; padding: .5mm 2mm; font-size: 7pt; font-weight: 700; }
+
+  .log { background: #fff; border: .3mm solid var(--g300); border-radius: 2.5mm; padding: 2mm 3mm; font-size: 7.4pt; }
+  .log div { padding: .8mm 0; border-bottom: .2mm solid var(--g100); }
+  .log div:last-child { border: 0; }
+  .float { font-family: Oswald, sans-serif; font-weight: 700; font-size: 12pt; margin-right: 4mm; }
+
+  .spacing-row { display: flex; align-items: center; gap: 3mm; margin: 1.2mm 0; font-size: 7.6pt; }
+  .spacing-row .blk { background: var(--bleu-100); border: .2mm solid var(--bleu); height: 4mm; }
+  .shape { width: 24mm; height: 15mm; background: var(--bleu-100); border: .3mm solid var(--bleu); display: flex; align-items: center; justify-content: center; font-size: 7pt; color: var(--bleu-900); text-align: center; line-height: 1.2; }
+  .ico { display: inline-flex; flex-direction: column; align-items: center; gap: 1mm; width: 25mm; font-size: 6.8pt; vertical-align: top; text-align: center; margin-bottom: 2mm; }
+  .ico .bx { width: 9mm; height: 9mm; border-radius: 2mm; display: flex; align-items: center; justify-content: center; }
+  .ico .mono { font-size: 6pt; }
+  .ico .bx.ph { border: .35mm dashed var(--g500); background: var(--g100); }
+  .icon-group { margin-top: 2mm; }
+  .icon-label { display: block; font-size: 7.4pt; font-weight: 700; color: var(--g700); margin-bottom: 1.5mm; }
+  .ico svg { width: 5.5mm; height: 5.5mm; }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1 : COUVERTURE ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <div class="cover-title">Design system</div>
+  <div class="cover-sub">King of Republic</div>
+  <p class="sub">Référence visuelle de l'application : principes, tokens (couleurs, typographie, formes, espacements, élévation, mouvement), icônes et composants. Ce document est indépendant de toute plateforme et de toute technologie : chaque implémentation traduit les tokens dans son propre format.</p>
+  <div class="stripe"><div style="background:var(--bleu)"></div><div style="background:#fff;border-top:.2mm solid var(--g300);border-bottom:.2mm solid var(--g300)"></div><div style="background:var(--rouge-500)"></div></div>
+
+  <h2 style="margin-top:0">Sommaire</h2>
+  <div class="toc">
+    <div><span><b>1</b>Principes</span><span>1</span></div>
+    <div><span><b>2</b>Tokens : structure et nommage</span><span>2</span></div>
+    <div><span><b>3</b>Couleurs — palette de base</span><span>3</span></div>
+    <div><span><b>4</b>Couleurs — rôles sémantiques (clair et sombre)</span><span>4</span></div>
+    <div><span><b>5</b>Couleurs propres au jeu</span><span>5</span></div>
+    <div><span><b>6</b>Typographie</span><span>6</span></div>
+    <div><span><b>7</b>Formes, espacements, élévation et mouvement</span><span>7</span></div>
+    <div><span><b>8</b>Icônes</span><span>8</span></div>
+    <div><span><b>9</b>Composants — boutons et carte joueur</span><span>9</span></div>
+    <div><span><b>10</b>Composants — dés, bandeau de tour, cartes et retours</span><span>10</span></div>
+  </div>
+
+  <h2>1 · Principes</h2>
+  <div class="principles">
+    <div class="principle"><b>Un seul endroit par décision</b>Une couleur, une taille ou une forme est définie une seule fois, sous forme de token. Aucun écran ni composant n'utilise de valeur brute (un code hexadécimal, une taille en chiffres).</div>
+    <div class="principle"><b>Des rôles, pas des couleurs</b>Les composants utilisent des tokens sémantiques (<code>color.surface</code>, <code>color.player.bot</code>) dont la valeur change selon le thème clair ou sombre.</div>
+    <div class="principle"><b>Lisible en un coup d'œil</b>Le joueur doit comprendre à tout moment à qui est le tour, ce qui vient de se passer et ce qu'il peut faire. Tout état passe par la couleur <i>et</i> un second indice (icône, texte, forme).</div>
+    <div class="principle"><b>République, sans folklore</b>Bleu, blanc, rouge et l'or de l'Élysée, utilisés avec retenue : le bleu pour le joueur et les actions, le rouge pour les adversaires et les attaques, l'or pour l'Élysée et l'argent.</div>
+  </div>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 1</span></div>
+</section>
+
+<!-- ============ PAGE 2 : TOKENS ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>2 — Tokens : structure et nommage</h1>
+  <p class="sub">Un token est une décision de design nommée : « la couleur des bots », « l'espacement moyen ». Les tokens sont organisés en trois niveaux qui se référencent les uns les autres.</p>
+
+  <h2>Les trois niveaux</h2>
+  <table>
+    <tr><th style="width:26mm">Niveau</th><th>Rôle</th><th style="width:62mm">Exemple</th></tr>
+    <tr><td><b>Primitifs</b></td><td>Valeurs brutes, nommées par ce qu'elles sont (teinte, niveau). Ils ne sont jamais utilisés directement par un composant.</td><td class="mono">palette.bleu.700 = #002395</td></tr>
+    <tr><td><b>Sémantiques</b></td><td>Nommés par usage. Ils pointent vers un primitif, et ce primitif change selon le thème (clair ou sombre).</td><td class="mono">color.primary → palette.bleu.700<br><span class="muted">(sombre : palette.bleu.200)</span></td></tr>
+    <tr><td><b>Composants</b></td><td>Propres à un composant. Ils pointent vers un token sémantique, ce qui permet d'ajuster un composant sans toucher au reste.</td><td class="mono">player-card.border.active<br>→ color.player.human</td></tr>
+  </table>
+
+  <div class="canvas" style="display:flex;align-items:center;justify-content:center;gap:4mm;margin:3mm 0 4mm;font-size:8pt">
+    <div style="background:#fff;border:.3mm solid var(--g300);border-radius:2mm;padding:2.5mm 3.5mm;text-align:center"><div class="muted small">Primitif</div><span class="mono"><span class="sw" style="background:#ED2939"></span>palette.rouge.500</span></div>
+    <span style="font-size:14pt;color:var(--g500)">→</span>
+    <div style="background:#fff;border:.3mm solid var(--g300);border-radius:2mm;padding:2.5mm 3.5mm;text-align:center"><div class="muted small">Sémantique</div><span class="mono">color.player.bot</span></div>
+    <span style="font-size:14pt;color:var(--g500)">→</span>
+    <div style="background:#fff;border:.3mm solid var(--g300);border-radius:2mm;padding:2.5mm 3.5mm;text-align:center"><div class="muted small">Composant</div><span class="mono">player-card.border.bot</span></div>
+  </div>
+
+  <h2>Convention de nommage</h2>
+  <p>Format : <code>catégorie.rôle.variante.état</code>, en minuscules, mots composés reliés par un tiret. On ne garde que les segments utiles.</p>
+  <table>
+    <tr><th style="width:30mm">Catégorie</th><th>Contenu</th><th style="width:58mm">Exemples</th></tr>
+    <tr><td class="mono">palette</td><td>Couleurs primitives</td><td class="mono">palette.or.500, palette.gris.300</td></tr>
+    <tr><td class="mono">color</td><td>Couleurs sémantiques</td><td class="mono">color.on-surface, color.dice.locked</td></tr>
+    <tr><td class="mono">font</td><td>Familles et graisses</td><td class="mono">font.family.title, font.weight.bold</td></tr>
+    <tr><td class="mono">type</td><td>Styles de texte complets</td><td class="mono">type.headline, type.stat</td></tr>
+    <tr><td class="mono">space</td><td>Marges et espacements</td><td class="mono">space.s, space.m</td></tr>
+    <tr><td class="mono">size</td><td>Dimensions de composants</td><td class="mono">size.dice, size.touch-target</td></tr>
+    <tr><td class="mono">radius</td><td>Arrondis des coins</td><td class="mono">radius.m, radius.full</td></tr>
+    <tr><td class="mono">border</td><td>Épaisseurs de bordure</td><td class="mono">border.default, border.emphasis</td></tr>
+    <tr><td class="mono">elevation</td><td>Niveaux de profondeur</td><td class="mono">elevation.1, elevation.4</td></tr>
+    <tr><td class="mono">motion</td><td>Durées et courbes d'animation</td><td class="mono">motion.duration.medium</td></tr>
+  </table>
+
+  <div class="note"><b>Unités.</b> Les dimensions sont exprimées en <b>px indépendants de la densité</b> : une valeur de 16 vaut 16 dp sur Android, 16 pt sur iOS et 16 px CSS sur le web. Les tailles de texte suivent en plus le réglage de taille de texte choisi par l'utilisateur.</div>
+  <div class="note warn"><b>Règle d'or.</b> Un écran ou un composant n'utilise que des tokens sémantiques ou de composant. Jamais un primitif, jamais une valeur brute.</div>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 2</span></div>
+</section>
+
+<!-- ============ PAGE 3 : PALETTE ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>3 — Couleurs : palette de base</h1>
+  <p class="sub">Tokens primitifs. Ils sont nommés par teinte et par niveau, jamais par usage : l'usage est défini par les tokens sémantiques (page 4).</p>
+
+  <h2>Bleu République <span class="muted small" style="font-family:Roboto;font-weight:400">— joueur humain, actions principales</span></h2>
+  <div class="ramp">
+    <div style="background:#00154F;color:#fff">palette.bleu.900<span class="n">#00154F</span></div>
+    <div style="background:#002395;color:#fff">palette.bleu.700<span class="n">#002395</span></div>
+    <div style="background:#1F3A9E;color:#fff">palette.bleu.600<span class="n">#1F3A9E</span></div>
+    <div style="background:#B5C4FF">palette.bleu.200<span class="n">#B5C4FF</span></div>
+    <div style="background:#DCE3FA">palette.bleu.100<span class="n">#DCE3FA</span></div>
+  </div>
+
+  <h2>Rouge Marianne <span class="muted small" style="font-family:Roboto;font-weight:400">— bots, attaques, perte de popularité</span></h2>
+  <div class="ramp">
+    <div style="background:#410007;color:#fff">palette.rouge.900<span class="n">#410007</span></div>
+    <div style="background:#92101F;color:#fff">palette.rouge.800<span class="n">#92101F</span></div>
+    <div style="background:#B81D2C;color:#fff">palette.rouge.700<span class="n">#B81D2C</span></div>
+    <div style="background:#ED2939;color:#fff">palette.rouge.500<span class="n">#ED2939</span></div>
+    <div style="background:#FFB3B4">palette.rouge.200<span class="n">#FFB3B4</span></div>
+    <div style="background:#FBDCDF">palette.rouge.100<span class="n">#FBDCDF</span></div>
+  </div>
+
+  <h2>Or Élysée <span class="muted small" style="font-family:Roboto;font-weight:400">— l'Élysée, l'argent, les dés gardés</span></h2>
+  <div class="ramp">
+    <div style="background:#2B2000;color:#fff">palette.or.900<span class="n">#2B2000</span></div>
+    <div style="background:#5A4600;color:#fff">palette.or.800<span class="n">#5A4600</span></div>
+    <div style="background:#8C6D0E;color:#fff">palette.or.700<span class="n">#8C6D0E</span></div>
+    <div style="background:#C9A227">palette.or.500<span class="n">#C9A227</span></div>
+    <div style="background:#E6C55A">palette.or.300<span class="n">#E6C55A</span></div>
+    <div style="background:#F6ECC9">palette.or.100<span class="n">#F6ECC9</span></div>
+  </div>
+
+  <h2>Neutres <span class="muted small" style="font-family:Roboto;font-weight:400">— textes, fonds, bordures</span></h2>
+  <div class="ramp">
+    <div style="background:#121318;color:#fff">gris.nuit<span class="n">#121318</span></div>
+    <div style="background:#1A1C22;color:#fff">gris.encre<span class="n">#1A1C22</span></div>
+    <div style="background:#2A2C33;color:#fff">gris.ardoise<span class="n">#2A2C33</span></div>
+    <div style="background:#44474F;color:#fff">gris.700<span class="n">#44474F</span></div>
+    <div style="background:#75777F;color:#fff">gris.500<span class="n">#75777F</span></div>
+    <div style="background:#C5C6D0">gris.300<span class="n">#C5C6D0</span></div>
+    <div style="background:#EEEFF4">gris.100<span class="n">#EEEFF4</span></div>
+    <div style="background:#FBF9F4">gris.papier<span class="n">#FBF9F4</span></div>
+    <div style="background:#FFFDF5">gris.ivoire<span class="n">#FFFDF5</span></div>
+  </div>
+  <p class="small muted" style="margin-top:-2mm">Préfixe <code>palette.</code> omis pour la lisibilité : <code>gris.700</code> = <code>palette.gris.700</code>.</p>
+
+  <h2>Signalisation</h2>
+  <div class="ramp" style="width:60%">
+    <div style="background:#1E7D46;color:#fff">palette.vert.700<span class="n">#1E7D46</span></div>
+    <div style="background:#7FD99A">palette.vert.300<span class="n">#7FD99A</span></div>
+    <div style="background:#BA1A1A;color:#fff">palette.erreur.700<span class="n">#BA1A1A</span></div>
+    <div style="background:#FFB4AB">palette.erreur.200<span class="n">#FFB4AB</span></div>
+  </div>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 3</span></div>
+</section>
+
+<!-- ============ PAGE 4 : ROLES ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>4 — Couleurs : rôles sémantiques</h1>
+  <p class="sub">Rôles inspirés de Material 3, déclinés en thème clair et en thème sombre. Chaque couleur <code>on-…</code> est celle du texte ou de l'icône posé sur la couleur du même nom (<code>color.on-primary</code> sur <code>color.primary</code>).</p>
+
+  <div class="grid2" style="margin-top:4mm">
+    <div class="theme-panel" style="background:#FBF9F4;border:.3mm solid var(--g300)">
+      <h3 style="margin-top:0">Thème clair</h3>
+      <div class="roles">
+        <div class="role" style="background:#002395;color:#fff"><b>primary</b>#002395</div>
+        <div class="role" style="background:#DCE3FA;color:#00154F"><b>primary-container</b>#DCE3FA</div>
+        <div class="role" style="background:#B81D2C;color:#fff"><b>secondary</b>#B81D2C</div>
+        <div class="role" style="background:#FBDCDF;color:#410007"><b>secondary-container</b>#FBDCDF</div>
+        <div class="role" style="background:#8C6D0E;color:#fff"><b>tertiary</b>#8C6D0E</div>
+        <div class="role" style="background:#F6ECC9;color:#2B2000"><b>tertiary-container</b>#F6ECC9</div>
+        <div class="role" style="background:#FBF9F4;color:#1A1C22;border:.2mm solid #C5C6D0"><b>surface</b>#FBF9F4</div>
+        <div class="role" style="background:#EEEFF4;color:#1A1C22"><b>surface-container</b>#EEEFF4</div>
+        <div class="role" style="background:#1A1C22;color:#fff"><b>on-surface</b>#1A1C22</div>
+        <div class="role" style="background:#44474F;color:#fff"><b>on-surface-variant</b>#44474F</div>
+        <div class="role" style="background:#75777F;color:#fff"><b>outline</b>#75777F</div>
+        <div class="role" style="background:#BA1A1A;color:#fff"><b>error</b>#BA1A1A</div>
+      </div>
+    </div>
+    <div class="theme-panel" style="background:#121318;color:#E3E2E9">
+      <h3 style="margin-top:0">Thème sombre</h3>
+      <div class="roles">
+        <div class="role" style="background:#B5C4FF;color:#00237A"><b>primary</b>#B5C4FF</div>
+        <div class="role" style="background:#1F3A9E;color:#DCE3FA"><b>primary-container</b>#1F3A9E</div>
+        <div class="role" style="background:#FFB3B4;color:#680012"><b>secondary</b>#FFB3B4</div>
+        <div class="role" style="background:#92101F;color:#FBDCDF"><b>secondary-container</b>#92101F</div>
+        <div class="role" style="background:#E6C55A;color:#3D2F00"><b>tertiary</b>#E6C55A</div>
+        <div class="role" style="background:#5A4600;color:#F6ECC9"><b>tertiary-container</b>#5A4600</div>
+        <div class="role" style="background:#121318;color:#E3E2E9;border:.2mm solid #44474F"><b>surface</b>#121318</div>
+        <div class="role" style="background:#1E2027;color:#E3E2E9"><b>surface-container</b>#1E2027</div>
+        <div class="role" style="background:#E3E2E9;color:#121318"><b>on-surface</b>#E3E2E9</div>
+        <div class="role" style="background:#C5C6D0;color:#121318"><b>on-surface-variant</b>#C5C6D0</div>
+        <div class="role" style="background:#8F909A;color:#121318"><b>outline</b>#8F909A</div>
+        <div class="role" style="background:#FFB4AB;color:#690005"><b>error</b>#FFB4AB</div>
+      </div>
+    </div>
+  </div>
+  <p class="small muted">Tous les tokens de cette page sont préfixés par <code>color.</code> (<code>color.primary</code>, <code>color.surface-container</code>…).</p>
+
+  <h2>Usage des rôles</h2>
+  <table>
+    <tr><th style="width:42mm">Rôle</th><th>Usage dans le jeu</th></tr>
+    <tr><td class="mono">primary</td><td>Action principale, tour du joueur humain, liens</td></tr>
+    <tr><td class="mono">secondary</td><td>Adversaires, attaques, action risquée (quitter l'Élysée)</td></tr>
+    <tr><td class="mono">tertiary</td><td>Élysée, argent, éléments mis en valeur</td></tr>
+    <tr><td class="mono">*-container</td><td>Fonds atténués de la même famille (badges, chips, cartes mises en avant)</td></tr>
+    <tr><td class="mono">surface / surface-container</td><td>Fond des écrans / fond des cartes et des panneaux</td></tr>
+    <tr><td class="mono">outline</td><td>Bordures et séparateurs, dé libre</td></tr>
+  </table>
+
+  <h2>Contrastes vérifiés (WCAG)</h2>
+  <p class="small muted">Minimum : 4,5:1 pour le texte courant, 3:1 pour les grands textes et les éléments graphiques (bordures, icônes).</p>
+  <table>
+    <tr><th>Paire</th><th>Clair</th><th>Sombre</th><th>Statut</th></tr>
+    <tr><td>on-primary / primary</td><td>12,5:1</td><td>8,1:1</td><td class="ok">AA</td></tr>
+    <tr><td>on-secondary / secondary</td><td>6,5:1</td><td>7,7:1</td><td class="ok">AA</td></tr>
+    <tr><td>on-tertiary / tertiary</td><td>4,9:1</td><td>7,8:1</td><td class="ok">AA</td></tr>
+    <tr><td>on-surface / surface</td><td>16,2:1</td><td>14,4:1</td><td class="ok">AAA</td></tr>
+    <tr><td>on-surface-variant / surface</td><td>8,8:1</td><td>10,9:1</td><td class="ok">AAA</td></tr>
+    <tr><td>on-…-container / …-container (les trois)</td><td>13,4 à 13,6:1</td><td>7,1 à 7,7:1</td><td class="ok">AAA</td></tr>
+    <tr><td>outline / surface (bordures)</td><td>4,2:1</td><td>—</td><td class="ok">≥ 3:1</td></tr>
+  </table>
+  <div class="note"><b>Astuce.</b> <i>Material Theme Builder</i> (material-foundation.github.io/material-theme-builder) peut régénérer tous ces rôles à partir de la couleur <code>#002395</code>, et les exporter vers Figma ou vers n'importe quelle plateforme.</div>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 4</span></div>
+</section>
+
+<!-- ============ PAGE 5 : COULEURS DU JEU ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>5 — Couleurs propres au jeu</h1>
+  <p class="sub">Les rôles standard ne connaissent ni les bots ni l'Élysée. Ces tokens sémantiques complètent la page 4 : ils ont eux aussi une valeur par thème.</p>
+
+  <table style="margin-top:4mm">
+    <tr><th style="width:46mm">Token</th><th style="width:30mm">Clair</th><th style="width:30mm">Sombre</th><th>Usage</th></tr>
+    <tr><td class="mono">color.player.human</td><td><span class="sw" style="background:#002395"></span>bleu.700</td><td><span class="sw" style="background:#B5C4FF"></span>bleu.200</td><td>Bordure et badge « Vous » de la carte du joueur humain</td></tr>
+    <tr><td class="mono">color.player.bot</td><td><span class="sw" style="background:#ED2939"></span>rouge.500</td><td><span class="sw" style="background:#FFB3B4"></span>rouge.200</td><td>Bordure des cartes des bots</td></tr>
+    <tr><td class="mono">color.elysee</td><td><span class="sw" style="background:#C9A227"></span>or.500</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Bordure du joueur dans l'Élysée, emplacement central</td></tr>
+    <tr><td class="mono">color.elysee-container</td><td><span class="sw" style="background:#F6ECC9"></span>or.100</td><td><span class="sw" style="background:#5A4600"></span>or.800</td><td>Fond de la carte du joueur dans l'Élysée</td></tr>
+    <tr><td class="mono">color.dice.face</td><td><span class="sw" style="background:#FFFDF5"></span>gris.ivoire</td><td><span class="sw" style="background:#2A2C33"></span>gris.ardoise</td><td>Fond des dés</td></tr>
+    <tr><td class="mono">color.dice.locked</td><td><span class="sw" style="background:#C9A227"></span>or.500</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Bordure et pastille cadenas d'un dé gardé</td></tr>
+    <tr><td class="mono">color.stat.vote</td><td><span class="sw" style="background:#002395"></span>bleu.700</td><td><span class="sw" style="background:#B5C4FF"></span>bleu.200</td><td>Icône et barre des votes (0–20)</td></tr>
+    <tr><td class="mono">color.stat.popularity</td><td><span class="sw" style="background:#B81D2C"></span>rouge.700</td><td><span class="sw" style="background:#FFB3B4"></span>rouge.200</td><td>Icône et barre de popularité (0–10, 12 avec carte)</td></tr>
+    <tr><td class="mono">color.stat.money</td><td><span class="sw" style="background:#8C6D0E"></span>or.700</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Icône et chip d'argent, coût des cartes</td></tr>
+    <tr><td class="mono">color.stat.influence</td><td><span class="sw" style="background:#44474F"></span>gris.700</td><td><span class="sw" style="background:#C5C6D0"></span>gris.300</td><td>Icône et barre d'influence (0–10)</td></tr>
+    <tr><td class="mono">color.feedback.gain</td><td><span class="sw" style="background:#1E7D46"></span>vert.700</td><td><span class="sw" style="background:#7FD99A"></span>vert.300</td><td>Chiffres flottants « +1 », lignes positives du journal</td></tr>
+    <tr><td class="mono">color.feedback.loss</td><td><span class="sw" style="background:#BA1A1A"></span>erreur.700</td><td><span class="sw" style="background:#FFB4AB"></span>erreur.200</td><td>Chiffres flottants « −2 », dégâts subis</td></tr>
+  </table>
+
+  <h2>Signification des couleurs</h2>
+  <div class="grid3">
+    <div class="principle" style="border-color:var(--bleu)"><b>Bleu = vous</b>Votre carte, vos actions, votre tour. Tout ce qui est bleu vous concerne ou attend votre décision.</div>
+    <div class="principle" style="border-color:var(--rouge-500)"><b style="color:var(--rouge)">Rouge = menace</b>Les bots, les attaques, la popularité qui baisse. Le rouge signale ce qui peut vous faire perdre.</div>
+    <div class="principle" style="border-color:var(--or-500)"><b style="color:var(--or)">Or = pouvoir</b>L'Élysée, l'argent, les dés que vous gardez. L'or marque ce qui a de la valeur.</div>
+  </div>
+
+  <div class="note warn"><b>Accessibilité.</b> La couleur seule ne suffit jamais : un bot a aussi le badge « BOT », un dé gardé a aussi le cadenas et le décalage vers le haut, une perte s'écrit avec le signe « − ». Le jeu reste jouable pour une personne daltonienne.</div>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 5</span></div>
+</section>
+
+<!-- ============ PAGE 6 : TYPOGRAPHIE ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>6 — Typographie</h1>
+  <p class="sub">Deux familles, toutes deux libres (Google Fonts) : <b>Oswald</b> pour les titres et les chiffres de jeu, dans l'esprit « affiche de campagne », et <b>Roboto</b> pour le texte courant et les boutons. Les tailles suivent le réglage de taille de texte de l'utilisateur.</p>
+
+  <h2>Familles</h2>
+  <table>
+    <tr><th style="width:46mm">Token</th><th style="width:40mm">Valeur</th><th>Usage</th></tr>
+    <tr><td class="mono">font.family.title</td><td style="font-family:Oswald;font-weight:600;font-size:10pt">Oswald</td><td>Titres, noms des candidats, bandeau de tour, chiffres flottants</td></tr>
+    <tr><td class="mono">font.family.body</td><td style="font-size:10pt">Roboto</td><td>Texte courant, descriptions, boutons, stats</td></tr>
+    <tr><td class="mono">font.weight.regular / medium / semibold / bold</td><td>400 / 500 / 600 / 700</td><td>Graisses autorisées</td></tr>
+  </table>
+
+  <h2>Échelle typographique</h2>
+  <div>
+    <div class="type-row"><div><span class="attr">type.display</span><div class="meta">Oswald 700 · 36 / 44</div></div><div style="font-family:Oswald;font-weight:700;font-size:26pt;line-height:1;color:var(--bleu)">KING OF REPUBLIC</div><div class="meta">Titre du jeu (accueil, fin)</div></div>
+    <div class="type-row"><div><span class="attr">type.headline</span><div class="meta">Oswald 600 · 24 / 32</div></div><div style="font-family:Oswald;font-weight:600;font-size:17pt">Choisissez votre candidat</div><div class="meta">Titres d'écran et de fenêtre</div></div>
+    <div class="type-row"><div><span class="attr">type.phase</span><div class="meta">Oswald 600 · 18 / 24</div></div><div style="font-family:Oswald;font-weight:600;font-size:13pt">À vous ! Lancez les dés</div><div class="meta">Bandeau de tour</div></div>
+    <div class="type-row"><div><span class="attr">type.title</span><div class="meta">Oswald 600 · 16 / 22</div></div><div style="font-family:Oswald;font-weight:600;font-size:12pt">Emmanuel Macron</div><div class="meta">Nom sur les cartes, titres de carte</div></div>
+    <div class="type-row"><div><span class="attr">type.body</span><div class="meta">Roboto 400 · 14 / 20</div></div><div style="font-size:10.5pt">Au début de votre tour, recevez 1 argent.</div><div class="meta">Descriptions, règles</div></div>
+    <div class="type-row"><div><span class="attr">type.label</span><div class="meta">Roboto 500 · 14 / 20</div></div><div style="font-size:10.5pt;font-weight:500;letter-spacing:.02em">Valider les dés</div><div class="meta">Boutons</div></div>
+    <div class="type-row"><div><span class="attr">type.stat</span><div class="meta">Roboto 500 · 12 / 16 · chiffres tabulaires</div></div><div style="font-size:9pt;font-weight:500;font-variant-numeric:tabular-nums">12 / 20 &nbsp;&nbsp; 07 / 10</div><div class="meta">Stats des cartes joueur</div></div>
+    <div class="type-row"><div><span class="attr">type.caption</span><div class="meta">Roboto 500 · 11 / 16 · espacement +0,5</div></div><div style="font-size:8.3pt;font-weight:500;letter-spacing:.04em">BOT · PALIER 2</div><div class="meta">Badges, légendes · <b>taille minimale</b></div></div>
+  </div>
+  <p class="small muted" style="margin-top:2mm">Notation : taille / hauteur de ligne.</p>
+
+  <h2>Règles</h2>
+  <ul>
+    <li><b>Taille minimale : 11.</b> En dessous, le texte devient illisible sur un petit téléphone tenu en paysage.</li>
+    <li><b>Casse de phrase</b> pour les boutons et les titres (« Valider les dés »), pas de majuscules continues sauf pour les badges et le titre du jeu.</li>
+    <li><b>Chiffres tabulaires</b> pour toutes les stats, pour que les valeurs ne « sautent » pas quand elles changent.</li>
+    <li>Une seule action par ligne de texte ; les phrases du bandeau de tour commencent par un verbe (« Lancez », « Choisissez »).</li>
+  </ul>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 6</span></div>
+</section>
+
+<!-- ============ PAGE 7 : FORMES / ESPACEMENTS ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>7 — Formes, espacements, élévation, mouvement</h1>
+
+  <h2>Arrondis</h2>
+  <div style="display:flex;gap:4mm;align-items:flex-end">
+    <div><div class="shape" style="border-radius:2mm">radius.s<br>8</div><div class="small muted" style="margin-top:1mm">Chips, badges</div></div>
+    <div><div class="shape" style="border-radius:3mm">radius.m<br>12</div><div class="small muted" style="margin-top:1mm">Cartes, dés</div></div>
+    <div><div class="shape" style="border-radius:4mm">radius.l<br>16</div><div class="small muted" style="margin-top:1mm">Fenêtres modales</div></div>
+    <div><div class="shape" style="border-radius:5mm 5mm 0 0">radius.xl<br>28 (haut)</div><div class="small muted" style="margin-top:1mm">Panneau du bas</div></div>
+    <div><div class="shape" style="border-radius:8mm;width:30mm">radius.full<br>pilule</div><div class="small muted" style="margin-top:1mm">Boutons</div></div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <h2>Espacements</h2>
+      <div class="spacing-row"><div class="blk" style="width:1mm"></div><span class="mono">space.xxs</span> 2</div>
+      <div class="spacing-row"><div class="blk" style="width:2mm"></div><span class="mono">space.xs</span> 4</div>
+      <div class="spacing-row"><div class="blk" style="width:4mm"></div><span class="mono">space.s</span> 8</div>
+      <div class="spacing-row"><div class="blk" style="width:6mm"></div><span class="mono">space.sm</span> 12</div>
+      <div class="spacing-row"><div class="blk" style="width:8mm"></div><span class="mono">space.m</span> 16</div>
+      <div class="spacing-row"><div class="blk" style="width:12mm"></div><span class="mono">space.l</span> 24</div>
+      <div class="spacing-row"><div class="blk" style="width:16mm"></div><span class="mono">space.xl</span> 32</div>
+      <p class="small muted" style="margin-top:1.5mm">Grille de 4. Toute marge ou tout espacement interne en fait partie.</p>
+    </div>
+    <div>
+      <h2>Tailles de composants</h2>
+      <table>
+        <tr><th>Token</th><th>Compact</th><th>Étendu</th></tr>
+        <tr><td class="mono">size.touch-target</td><td>48</td><td>48</td></tr>
+        <tr><td class="mono">size.dice</td><td>56</td><td>72</td></tr>
+        <tr><td class="mono">size.dice-icon</td><td>36</td><td>48</td></tr>
+        <tr><td class="mono">size.player-card</td><td>156</td><td>200</td></tr>
+        <tr><td class="mono">size.avatar</td><td>40</td><td>56</td></tr>
+        <tr><td class="mono">size.stat-icon</td><td>14</td><td>18</td></tr>
+        <tr><td class="mono">border.default</td><td>1</td><td>1</td></tr>
+        <tr><td class="mono">border.emphasis</td><td>3</td><td>3</td></tr>
+      </table>
+      <p class="small muted">Compact : écran de moins de 600 de large (téléphone). Étendu : 600 et plus (tablette).</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <h2>Élévation</h2>
+      <table>
+        <tr><th style="width:24mm">Token</th><th style="width:12mm">Valeur</th><th>Utilisation</th></tr>
+        <tr><td class="mono">elevation.0</td><td>0</td><td>Plateau, bandeau de tour</td></tr>
+        <tr><td class="mono">elevation.1</td><td>1</td><td>Cartes au repos</td></tr>
+        <tr><td class="mono">elevation.3</td><td>6</td><td>Joueur actif, dé gardé</td></tr>
+        <tr><td class="mono">elevation.4</td><td>8</td><td>Fenêtres modales, panneau du bas</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>Mouvement</h2>
+      <table>
+        <tr><th style="width:38mm">Token</th><th style="width:14mm">Valeur</th><th>Utilisation</th></tr>
+        <tr><td class="mono">motion.duration.short</td><td>150 ms</td><td>Changement d'état (dé gardé)</td></tr>
+        <tr><td class="mono">motion.duration.medium</td><td>300 ms</td><td>Lancer de dés, changement de tour</td></tr>
+        <tr><td class="mono">motion.duration.long</td><td>600 ms</td><td>Chiffres flottants</td></tr>
+        <tr><td class="mono">motion.easing.standard</td><td colspan="2">cubic-bezier(0.2, 0, 0, 1)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 7</span></div>
+</section>
+
+<!-- ============ PAGE 8 : ICONES ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>8 — Icônes</h1>
+  <p class="sub">Deux familles. Les <b>icônes du jeu</b> sont des illustrations propres au projet, en couleur : elles ne prennent pas de couleur de token. Les <b>icônes d'interface</b> viennent de Material Symbols Rounded (taille de base 24) et prennent la couleur d'un token. <span class="muted">Les icônes du jeu ne sont pas encore livrées : les cases en pointillés sont des emplacements réservés.</span></p>
+  <h2>Catalogue</h2>
+  <div class="icon-group"><span class="icon-label">Faces de dés · <code>size.dice-icon</code></span>
+    <div class="ico"><div class="bx ph"></div>Vote 1<span class="mono">icon.dice.one</span></div><div class="ico"><div class="bx ph"></div>Vote 2<span class="mono">icon.dice.two</span></div><div class="ico"><div class="bx ph"></div>Vote 3<span class="mono">icon.dice.three</span></div><div class="ico"><div class="bx ph"></div>Popularité<span class="mono">icon.dice.heal</span></div><div class="ico"><div class="bx ph"></div>Attaque<span class="mono">icon.dice.attack</span></div><div class="ico"><div class="bx ph"></div>Argent<span class="mono">icon.dice.money</span></div>
+  </div>
+  <div class="icon-group"><span class="icon-label">Stats · <code>size.stat-icon</code> &nbsp;·&nbsp; Interface · Material Symbols</span>
+    <div class="ico"><div class="bx ph"></div>Popularité<span class="mono">icon.stat.popularity</span></div><div class="ico"><div class="bx ph"></div>Votes<span class="mono">icon.stat.vote</span></div><div class="ico"><div class="bx ph"></div>Influence<span class="mono">icon.stat.influence</span></div><div class="ico"><div class="bx ph"></div>Argent<span class="mono">icon.stat.money</span></div>
+    <div class="ico"><div class="bx" style="background:var(--or-100)"><svg viewBox="0 0 24 24"><path fill="#8C6D0E" d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm-7-2a2 2 0 0 1 4 0v2h-4z"/></svg></div>Dé gardé<span class="mono">(lock)</span></div>
+    <div class="ico"><div class="bx" style="background:var(--bleu-100)"><svg viewBox="0 0 24 24"><path fill="#002395" d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg></div>Règles<span class="mono">(help)</span></div>
+  </div>
+
+  <h2>Inventaire des icônes du jeu</h2>
+  <table>
+    <tr><th style="width:44mm">Token</th><th style="width:30mm">Signification</th><th>Où elle apparaît</th><th style="width:22mm">Statut</th></tr>
+    <tr><td class="mono">icon.dice.one / two / three</td><td>Vote 1, 2, 3</td><td>Faces de dés, légende des dés</td><td class="muted">À livrer</td></tr>
+    <tr><td class="mono">icon.dice.heal</td><td>Popularité</td><td>Face de dé « soin »</td><td class="muted">À livrer</td></tr>
+    <tr><td class="mono">icon.dice.attack</td><td>Attaque</td><td>Face de dé « attaque », journal des événements</td><td class="muted">À livrer</td></tr>
+    <tr><td class="mono">icon.dice.money</td><td>Argent</td><td>Face de dé « argent »</td><td class="muted">À livrer</td></tr>
+    <tr><td class="mono">icon.stat.popularity</td><td>Popularité</td><td>Carte joueur, écran de fin</td><td class="muted">À livrer</td></tr>
+    <tr><td class="mono">icon.stat.vote</td><td>Votes</td><td>Carte joueur, écran de fin</td><td class="muted">À livrer</td></tr>
+    <tr><td class="mono">icon.stat.influence</td><td>Influence</td><td>Carte joueur, cartes d'influence</td><td class="muted">À livrer</td></tr>
+    <tr><td class="mono">icon.stat.money</td><td>Argent</td><td>Carte joueur, coût des cartes de la boutique</td><td class="muted">À livrer</td></tr>
+  </table>
+
+  <h2>Règles</h2>
+  <ul>
+    <li>Une icône du jeu garde toujours la même signification : l'argent du dé et l'argent de la carte joueur partagent le même dessin.</li>
+    <li>Les icônes du jeu sont toujours accompagnées d'une valeur ou d'un libellé ; seules, elles ne suffisent pas à comprendre une stat.</li>
+    <li>Chaque icône a une description accessible lue par les lecteurs d'écran (« Face attaque », « Popularité 7 sur 10 »).</li>
+    <li>Zone de contact d'au moins <code>size.touch-target</code> (48) quand l'icône est cliquable, même si le dessin est plus petit.</li>
+  </ul>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 8</span></div>
+</section>
+
+<!-- ============ PAGE 9 : BOUTONS / CARTE JOUEUR ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>9 — Composants : boutons et carte joueur</h1>
+
+  <h2>Boutons</h2>
+  <div class="canvas">
+    <span class="btn filled">Valider les dés</span><span class="btn tonal">Relancer (2)</span><span class="btn outlined">Boutique</span><span class="btn text">Règles</span><span class="btn danger">Quitter l'Élysée</span><span class="btn disabled">Valider</span>
+  </div>
+  <table>
+    <tr><th style="width:24mm">Variante</th><th style="width:70mm">Tokens (fond · texte · bordure)</th><th>Quand l'utiliser</th></tr>
+    <tr><td>Plein</td><td class="mono">primary · on-primary · —</td><td>Action principale de l'écran, une seule à la fois</td></tr>
+    <tr><td>Tonal</td><td class="mono">primary-container · on-primary-container · —</td><td>Action secondaire fréquente (Relancer)</td></tr>
+    <tr><td>Contour</td><td class="mono">— · primary · outline</td><td>Action secondaire (Boutique, Menu)</td></tr>
+    <tr><td>Texte</td><td class="mono">— · primary · —</td><td>Action discrète (Règles, Fermer)</td></tr>
+    <tr><td>Danger</td><td class="mono">secondary · on-secondary · —</td><td>Choix lourd de conséquences (Quitter l'Élysée)</td></tr>
+    <tr><td>Désactivé</td><td class="mono">on-surface 12 % · on-surface 38 % · —</td><td>Action impossible pour l'instant</td></tr>
+  </table>
+  <p class="small">Hauteur <code>size.touch-target</code> (48) minimum, arrondi <code>radius.full</code>, texte <code>type.label</code> en casse de phrase.</p>
+
+  <h2>Carte joueur</h2>
+  <p class="small">Un seul composant, identique pour les quatre joueurs et pour l'emplacement de l'Élysée. Il affiche l'avatar, le nom, un badge (« Vous », « Bot », « Élysée ») et les quatre stats.</p>
+  <div class="canvas" style="display:flex;gap:4mm;justify-content:space-between">
+    <div>
+      <div class="pcard active" style="border-color:var(--bleu)">
+        <div class="hd"><div class="av"></div><div><div class="nm">Emmanuel Macron</div><span class="badge you">VOUS</span></div></div>
+        <div class="stat"><span class="ic" style="background:#002395"></span><div class="bar"><i style="width:60%;background:#002395"></i></div><span class="v">12/20</span></div>
+        <div class="stat"><span class="ic" style="background:#B81D2C"></span><div class="bar"><i style="width:70%;background:#B81D2C"></i></div><span class="v">7/10</span></div>
+        <div class="stat"><span class="ic" style="background:#44474F"></span><div class="bar"><i style="width:30%;background:#44474F"></i></div><span class="v">3/10</span></div>
+        <div class="stat"><span class="ic" style="background:#C9A227"></span><div></div><span class="v">5 €</span></div>
+      </div>
+      <div class="state-label">Tour actif</div>
+    </div>
+    <div>
+      <div class="pcard botc">
+        <div class="hd"><div class="av" style="background:linear-gradient(135deg,#d6a0a6,#8c4b55)"></div><div><div class="nm">Valérie Pécresse</div><span class="badge bot">BOT</span></div></div>
+        <div class="stat"><span class="ic" style="background:#002395"></span><div class="bar"><i style="width:35%;background:#002395"></i></div><span class="v">7/20</span></div>
+        <div class="stat"><span class="ic" style="background:#B81D2C"></span><div class="bar"><i style="width:90%;background:#B81D2C"></i></div><span class="v">9/10</span></div>
+        <div class="stat"><span class="ic" style="background:#44474F"></span><div class="bar"><i style="width:10%;background:#44474F"></i></div><span class="v">1/10</span></div>
+        <div class="stat"><span class="ic" style="background:#C9A227"></span><div></div><span class="v">2 €</span></div>
+      </div>
+      <div class="state-label">Au repos (bot)</div>
+    </div>
+    <div>
+      <div class="pcard elysee">
+        <div class="hd"><div class="av" style="background:linear-gradient(135deg,#b7c49a,#5d6b3c)"></div><div><div class="nm">Jean Lassalle</div><span class="badge bot">BOT</span> <span class="badge ely">ÉLYSÉE</span></div></div>
+        <div class="stat"><span class="ic" style="background:#002395"></span><div class="bar"><i style="width:80%;background:#002395"></i></div><span class="v">16/20</span></div>
+        <div class="stat"><span class="ic" style="background:#B81D2C"></span><div class="bar"><i style="width:40%;background:#B81D2C"></i></div><span class="v">4/10</span></div>
+        <div class="stat"><span class="ic" style="background:#44474F"></span><div class="bar"><i style="width:60%;background:#44474F"></i></div><span class="v">6/10</span></div>
+        <div class="stat"><span class="ic" style="background:#C9A227"></span><div></div><span class="v">8 €</span></div>
+      </div>
+      <div class="state-label">Dans l'Élysée</div>
+    </div>
+  </div>
+  <table>
+    <tr><th style="width:26mm">État</th><th>Rendu</th></tr>
+    <tr><td>Au repos</td><td>Fond <code>color.surface-container</code>, bordure <code>border.default</code> en <code>color.player.human</code> ou <code>color.player.bot</code>, <code>elevation.1</code></td></tr>
+    <tr><td>Tour actif</td><td>Bordure <code>border.emphasis</code> de la couleur du joueur, <code>elevation.3</code>, léger agrandissement (×1,05) animé en <code>motion.duration.medium</code></td></tr>
+    <tr><td>Dans l'Élysée</td><td>Fond <code>color.elysee-container</code>, bordure <code>border.emphasis</code> en <code>color.elysee</code>, badge « ÉLYSÉE », illustration alternative du candidat</td></tr>
+    <tr><td>Éliminé</td><td>Opacité 38 %, avatar en niveaux de gris, mention « Éliminé »</td></tr>
+  </table>
+  <p class="small muted">Stats : icône <code>size.stat-icon</code> + barre de progression de la couleur <code>color.stat.*</code> + valeur en <code>type.stat</code>. L'argent n'a pas de barre (pas de maximum).</p>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 9</span></div>
+</section>
+
+<!-- ============ PAGE 10 : DES / BANDEAU / CARTES ============ -->
+<section class="page">
+  <div class="top"><div class="flag"><span class="b"></span><span class="w"></span><span class="r"></span></div><div class="brand">KING OF REPUBLIC</div></div>
+  <h1>10 — Composants : dés, tour, cartes, retours</h1>
+
+  <h2>Dé</h2>
+  <div class="canvas" style="display:flex;align-items:center;gap:6mm">
+    <div style="text-align:center"><div class="die">1</div><div class="state-label">Libre</div></div>
+    <div style="text-align:center"><div class="die locked">3</div><div class="state-label">Gardé</div></div>
+    <div style="text-align:center"><div class="die dis">2</div><div class="state-label">Tour d'un bot</div></div>
+    <div class="small" style="flex:1">
+      <b>Libre :</b> fond <code>color.dice.face</code>, bordure 2 en <code>color.outline</code>.<br>
+      <b>Gardé :</b> bordure <code>border.emphasis</code> en <code>color.dice.locked</code>, pastille cadenas, décalé de 4 vers le haut, <code>elevation.3</code>. Annoncé « Gardé » aux lecteurs d'écran.<br>
+      <b>Tour d'un bot :</b> visible mais non interactif, opacité 60 % ; les dés gardés par le bot restent marqués.
+    </div>
+  </div>
+  <p class="small">Taille <code>size.dice</code>, arrondi <code>radius.m</code>. Lancer animé (rotation + changement de face) en <code>motion.duration.medium</code>.</p>
+
+  <h2>Bandeau de tour</h2>
+  <div class="canvas">
+    <div class="phase"><div><div class="t">À vous ! Gardez des dés puis validez</div><div class="s">Tour 4 · 2 relances restantes</div></div></div>
+    <div style="height:2.5mm"></div>
+    <div class="phase bot"><div><div class="t">Tour de Valérie Pécresse (bot)</div><div class="s" style="opacity:.7">Elle lance les dés…</div></div></div>
+  </div>
+  <p class="small">Fond <code>color.primary</code> pendant le tour du joueur, <code>color.surface-container</code> pendant celui d'un bot. Texte <code>type.phase</code>, rédigé pour un humain et jamais un nom technique de phase.</p>
+
+  <h2>Cartes d'influence et de pouvoir <span class="muted small" style="font-family:Roboto;font-weight:400">— cartes de pouvoir données à titre d'exemple</span></h2>
+  <div class="canvas" style="display:flex;gap:5mm">
+    <div class="icard"><span class="badge" style="background:var(--g100);color:var(--g700)">PALIER 2 · INFLUENCE</span><div class="ti">Corruption des médias</div><div class="de">Tous les autres candidats perdent 4 votes.</div></div>
+    <div class="icard"><span class="cost">5 €</span> <span class="badge" style="background:var(--bleu-100);color:var(--bleu-900)">PERMANENTE</span><div class="ti">Meeting géant</div><div class="de">+1 vote chaque fois que vous entrez dans l'Élysée.</div></div>
+    <div class="icard" style="opacity:.55"><span class="cost">8 €</span> <span class="badge" style="background:var(--rouge-100);color:#410007">IMMÉDIATE</span><div class="ti">Scandale</div><div class="de">Trop cher : bouton « Acheter » désactivé.</div></div>
+  </div>
+  <p class="small">Fond <code>color.surface-container</code>, arrondi <code>radius.m</code>, <code>elevation.1</code>. Coût dans une pastille <code>color.stat.money</code>. La boutique s'ouvre dans un panneau qui monte du bas de l'écran (<code>radius.xl</code>), uniquement pendant la phase d'achat.</p>
+
+  <div class="grid2">
+    <div>
+      <h2>Journal des événements</h2>
+      <div class="log">
+        <div><b>Pécresse</b> attaque l'Élysée : <span style="color:var(--rouge);font-weight:700">−2</span> popularité pour Lassalle</div>
+        <div><b>Lassalle</b> reste dans l'Élysée</div>
+        <div><b>Vous</b> gagnez <span style="color:var(--vert);font-weight:700">+3</span> votes (triple 3)</div>
+      </div>
+      <p class="small muted" style="margin-top:1.5mm">Les 3 dernières actions, la plus récente en haut. Gains en <code>color.feedback.gain</code>, pertes en <code>color.feedback.loss</code>.</p>
+    </div>
+    <div>
+      <h2>Retours visuels</h2>
+      <div class="canvas"><span class="float" style="color:var(--vert)">+2 ★</span><span class="float" style="color:#BA1A1A">−3 ♥</span><span class="float" style="color:var(--or)">+1 €</span></div>
+      <p class="small muted" style="margin-top:1.5mm">Chiffre flottant au-dessus de la carte concernée : montée de 24 + fondu en <code>motion.duration.long</code>, toujours avec le signe.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Design system · King of Republic</span><span>p. 10</span></div>
+</section>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Legacy colors, to be removed once every screen uses the design system -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="card_background">#FFbbbbbb</color>
@@ -9,4 +10,62 @@
 
     <color name="card_ia_border">#FFAA0000</color>
     <color name="card_player_border">#FF0000AA</color>
+
+    <!--
+        Design system: base palette (primitive tokens, docs/design-system.pdf page 3).
+        Named by hue and level, never by usage: layouts must not reference them directly,
+        only through the theme roles.
+    -->
+
+    <!-- Bleu République: human player, primary actions -->
+    <color name="palette_bleu_900">#FF00154F</color>
+    <color name="palette_bleu_700">#FF002395</color>
+    <color name="palette_bleu_600">#FF1F3A9E</color>
+    <color name="palette_bleu_200">#FFB5C4FF</color>
+    <color name="palette_bleu_100">#FFDCE3FA</color>
+
+    <!-- Rouge Marianne: bots, attacks, popularity loss -->
+    <color name="palette_rouge_900">#FF410007</color>
+    <color name="palette_rouge_800">#FF92101F</color>
+    <color name="palette_rouge_700">#FFB81D2C</color>
+    <color name="palette_rouge_500">#FFED2939</color>
+    <color name="palette_rouge_200">#FFFFB3B4</color>
+    <color name="palette_rouge_100">#FFFBDCDF</color>
+
+    <!-- Or Élysée: the Élysée, money, locked dice -->
+    <color name="palette_or_900">#FF2B2000</color>
+    <color name="palette_or_800">#FF5A4600</color>
+    <color name="palette_or_700">#FF8C6D0E</color>
+    <color name="palette_or_500">#FFC9A227</color>
+    <color name="palette_or_300">#FFE6C55A</color>
+    <color name="palette_or_100">#FFF6ECC9</color>
+
+    <!-- Neutrals: text, backgrounds, borders -->
+    <color name="palette_gris_abysse">#FF0D0E12</color>
+    <color name="palette_gris_nuit">#FF121318</color>
+    <color name="palette_gris_encre">#FF1A1C22</color>
+    <color name="palette_gris_graphite">#FF1E2027</color>
+    <color name="palette_gris_ardoise">#FF2A2C33</color>
+    <color name="palette_gris_anthracite">#FF34363E</color>
+    <color name="palette_gris_700">#FF44474F</color>
+    <color name="palette_gris_500">#FF75777F</color>
+    <color name="palette_gris_400">#FF8F909A</color>
+    <color name="palette_gris_300">#FFC5C6D0</color>
+    <color name="palette_gris_200">#FFE2E3EA</color>
+    <color name="palette_gris_150">#FFE8E9EF</color>
+    <color name="palette_gris_100">#FFEEEFF4</color>
+    <color name="palette_gris_50">#FFF5F5F8</color>
+    <color name="palette_gris_brume">#FFE3E2E9</color>
+    <color name="palette_gris_papier">#FFFBF9F4</color>
+    <color name="palette_gris_ivoire">#FFFFFDF5</color>
+    <color name="palette_blanc">#FFFFFFFF</color>
+
+    <!-- Feedback -->
+    <color name="palette_vert_700">#FF1E7D46</color>
+    <color name="palette_vert_300">#FF7FD99A</color>
+    <color name="palette_erreur_900">#FF410002</color>
+    <color name="palette_erreur_800">#FF93000A</color>
+    <color name="palette_erreur_700">#FFBA1A1A</color>
+    <color name="palette_erreur_200">#FFFFB4AB</color>
+    <color name="palette_erreur_100">#FFFFDAD6</color>
 </resources>
