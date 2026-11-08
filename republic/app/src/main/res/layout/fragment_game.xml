@@ -836,4 +836,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Development shortcuts; removal is tracked separately. -->
+    <LinearLayout
+        android:id="@+id/game_sound_test_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_s"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/game_sound_test_win"
+            style="@style/Widget.Republic.Button.Tonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/game_sound_test_win" />
+
+        <Button
+            android:id="@+id/game_sound_test_lose"
+            style="@style/Widget.Republic.Button.Tonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:text="@string/game_sound_test_lose" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

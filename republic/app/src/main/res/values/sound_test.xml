@@ -1,0 +1,3 @@
+<resources>
+    <bool name="show_sound_test_controls">false</bool>
+</resources>

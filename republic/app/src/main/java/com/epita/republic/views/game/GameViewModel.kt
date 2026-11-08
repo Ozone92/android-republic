@@ -18,6 +18,7 @@ import com.epita.republic.repository.Player
 import com.epita.republic.repository.PowerCard
 import com.epita.republic.R
 import kotlin.random.Random
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -361,11 +362,26 @@ class GameViewModel : ViewModel() {
         return playersOrder.toTypedArray()
     }
 
+    // Development shortcut; removal is tracked separately.
+    fun finishForSoundTest(win: Boolean) {
+        gameLoopJob.cancel()
+        val human = players.first { !it.isBot }
+        if (win) {
+            human.vote = POINT_FOR_VICTORY
+        } else {
+            human.popularity = 0
+            deadPlayers.add(human)
+        }
+        currentPhase.value = GamePhase.GAME_FINISH
+    }
+
+    private val gameLoopJob: Job
+
     // GAME LOOP
     init {
         powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
         publishPowerShop()
-        viewModelScope.launch {
+        gameLoopJob = viewModelScope.launch {
             while (!gameFinish()) {
                 Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")
                 val player = players[currentPlayerTurnIndex.value!!]
