@@ -30,4 +30,6 @@
     <dimen name="elevation_level1">1dp</dimen>
     <dimen name="elevation_level3">6dp</dimen>
     <dimen name="elevation_level4">8dp</dimen>
+    <dimen name="size_game_portrait_width">64dp</dimen>
+    <dimen name="size_game_portrait_height">76dp</dimen>
 </resources>

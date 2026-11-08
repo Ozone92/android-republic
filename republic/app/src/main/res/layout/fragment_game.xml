@@ -35,19 +35,20 @@
 
             <ImageView
                 android:id="@+id/game_middle_player_image"
-                android:layout_width="@dimen/size_avatar"
-                android:layout_height="@dimen/size_avatar"
+                android:layout_width="@dimen/size_game_portrait_width"
+                android:layout_height="@dimen/size_game_portrait_height"
                 android:layout_marginStart="@dimen/space_s"
                 android:layout_marginEnd="@dimen/space_s"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/game_middle_player_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_middle_player_name_text" />
 
             <TextView
                 android:id="@+id/game_middle_player_name_text"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="PLAYER1"
@@ -69,6 +70,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_popularity_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -80,6 +82,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_vote_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -91,6 +94,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_influence_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -102,6 +106,7 @@
 
             <TextView
                 android:id="@+id/game_middle_player_money_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -142,6 +147,7 @@
 
             <TextView
                 android:id="@+id/game_player1_name_text"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="PLAYER1"
@@ -168,6 +174,7 @@
 
             <TextView
                 android:id="@+id/game_player1_popularity_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -179,6 +186,7 @@
 
             <TextView
                 android:id="@+id/game_player1_vote_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -190,6 +198,7 @@
 
             <TextView
                 android:id="@+id/game_player1_influence_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -201,6 +210,7 @@
 
             <TextView
                 android:id="@+id/game_player1_money_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -213,16 +223,16 @@
 
             <ImageView
                 android:id="@+id/game_player1_image"
-                android:layout_width="@dimen/size_avatar"
-                android:layout_height="@dimen/size_avatar"
+                android:layout_width="@dimen/size_game_portrait_width"
+                android:layout_height="@dimen/size_game_portrait_height"
                 android:layout_marginStart="@dimen/space_s"
                 android:layout_marginEnd="@dimen/space_s"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/game_player1_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_player1_name_text" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -245,16 +255,16 @@
 
             <ImageView
                 android:id="@+id/game_player2_image"
-                android:layout_width="@dimen/size_avatar"
-                android:layout_height="@dimen/size_avatar"
+                android:layout_width="@dimen/size_game_portrait_width"
+                android:layout_height="@dimen/size_game_portrait_height"
                 android:layout_marginStart="@dimen/space_s"
                 android:layout_marginEnd="@dimen/space_s"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/game_player2_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_player2_name_text" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/game_player2_barrier"
@@ -267,6 +277,7 @@
 
             <TextView
                 android:id="@+id/game_player2_popularity_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -278,6 +289,7 @@
 
             <TextView
                 android:id="@+id/game_player2_vote_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -289,6 +301,7 @@
 
             <TextView
                 android:id="@+id/game_player2_influence_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -300,6 +313,7 @@
 
             <TextView
                 android:id="@+id/game_player2_money_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -312,6 +326,7 @@
 
             <TextView
                 android:id="@+id/game_player2_name_text"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="PLAYER1"
@@ -357,19 +372,20 @@
 
             <ImageView
                 android:id="@+id/game_player3_image"
-                android:layout_width="@dimen/size_avatar"
-                android:layout_height="@dimen/size_avatar"
+                android:layout_width="@dimen/size_game_portrait_width"
+                android:layout_height="@dimen/size_game_portrait_height"
                 android:layout_marginStart="@dimen/space_s"
                 android:layout_marginEnd="@dimen/space_s"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/game_player3_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_player3_name_text" />
 
             <TextView
                 android:id="@+id/game_player3_name_text"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="PLAYER1"
@@ -405,6 +421,7 @@
 
             <TextView
                 android:id="@+id/game_player3_popularity_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -416,6 +433,7 @@
 
             <TextView
                 android:id="@+id/game_player3_vote_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -427,6 +445,7 @@
 
             <TextView
                 android:id="@+id/game_player3_influence_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -438,6 +457,7 @@
 
             <TextView
                 android:id="@+id/game_player3_money_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -469,19 +489,20 @@
 
             <ImageView
                 android:id="@+id/game_player4_image"
-                android:layout_width="@dimen/size_avatar"
-                android:layout_height="@dimen/size_avatar"
+                android:layout_width="@dimen/size_game_portrait_width"
+                android:layout_height="@dimen/size_game_portrait_height"
                 android:layout_marginStart="@dimen/space_s"
                 android:layout_marginEnd="@dimen/space_s"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/hollande_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/game_player4_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_player4_name_text" />
 
             <TextView
                 android:id="@+id/game_player4_name_text"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="PLAYER1"
@@ -517,6 +538,7 @@
 
             <TextView
                 android:id="@+id/game_player4_popularity_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -528,6 +550,7 @@
 
             <TextView
                 android:id="@+id/game_player4_vote_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -539,6 +562,7 @@
 
             <TextView
                 android:id="@+id/game_player4_influence_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
@@ -550,6 +574,7 @@
 
             <TextView
                 android:id="@+id/game_player4_money_text"
+                android:includeFontPadding="false"
                 android:layout_width="@dimen/size_stat_column"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_s"
