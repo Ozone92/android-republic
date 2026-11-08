@@ -7,6 +7,8 @@ import com.epita.republic.repository.EndingPlayerInfo
 import com.epita.republic.views.game.POINT_FOR_VICTORY
 
 class EndingViewModel: ViewModel() {
+    var resultSoundPlayed = false
+
     val winnerPlayer: MutableLiveData<EndingPlayerInfo?> = MutableLiveData(null)
     val playersLost: MutableLiveData<Array<EndingPlayerInfo>> = MutableLiveData(arrayOf())
 

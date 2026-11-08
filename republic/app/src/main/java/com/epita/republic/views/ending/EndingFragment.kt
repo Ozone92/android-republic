@@ -1,6 +1,8 @@
 package com.epita.republic.views.ending
 
 import android.os.Bundle
+import com.epita.republic.audio.GameSound
+import com.epita.republic.audio.GameSoundPlayer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -77,5 +79,11 @@ class EndingFragment : Fragment() {
         }
 
         endingViewModel.parseResult(args.result)
+        if (!endingViewModel.resultSoundPlayed && savedInstanceState == null) {
+            val humanWon = endingViewModel.winnerPlayer.value?.isBot == false
+            GameSoundPlayer(requireContext(), viewLifecycleOwner)
+                .play(if (humanWon) GameSound.WIN else GameSound.LOSE)
+            endingViewModel.resultSoundPlayed = true
+        }
     }
 }

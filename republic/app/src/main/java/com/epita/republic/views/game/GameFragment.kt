@@ -1,6 +1,9 @@
 package com.epita.republic.views.game
 
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
+import com.epita.republic.audio.GameSoundPlayer
+import kotlinx.coroutines.launch
 import android.content.res.ColorStateList
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
@@ -43,6 +46,10 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val soundPlayer = GameSoundPlayer(requireContext(), viewLifecycleOwner)
+        viewLifecycleOwner.lifecycleScope.launch {
+            gameViewModel.sounds.collect { soundPlayer.play(it) }
+        }
         view.findViewById<Button>(R.id.game_power_shop_btn).setOnClickListener {
             if (childFragmentManager.findFragmentByTag(PowerShopDialogFragment.TAG) == null) {
                 PowerShopDialogFragment().show(childFragmentManager, PowerShopDialogFragment.TAG)
