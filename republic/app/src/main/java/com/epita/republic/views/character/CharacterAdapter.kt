@@ -15,6 +15,7 @@ class CharacterAdapter(
 ) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val card: View = view.findViewById(R.id.character_card)
         val image: ImageView = view.findViewById(R.id.character_image)
         val name: TextView = view.findViewById(R.id.character_name)
     }
@@ -36,10 +37,10 @@ class CharacterAdapter(
         val character = characters[position]
 
         holder.image.setImageResource(character.defaultImageRes)
-        holder.image.contentDescription = character.name
+        holder.card.contentDescription = character.name
         holder.name.text = character.name
 
-        holder.image.setOnClickListener {
+        holder.card.setOnClickListener {
             onCharacterClick(character)
         }
     }
