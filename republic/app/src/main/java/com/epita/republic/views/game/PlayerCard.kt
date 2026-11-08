@@ -46,6 +46,11 @@ class PlayerCard(
         }
     }
 
+    fun setOnPortraitClick(onClick: (PlayerCard) -> Unit) {
+        imageView.isFocusable = true
+        imageView.setOnClickListener { onClick(this) }
+    }
+
     fun setVisibility(visibility: Int) {
         cardView.visibility = visibility
     }
@@ -88,6 +93,9 @@ class PlayerCard(
                 }
             }
 
+            imageView.contentDescription = context.getString(
+                R.string.player_details_open, playerIndex + 1
+            )
             nameTextView.text = context.getString(R.string.game_player_card_name, playerIndex + 1)
             influenceTextView.text =
                 context.getString(R.string.game_player_card_influence_value, player!!.influence)
