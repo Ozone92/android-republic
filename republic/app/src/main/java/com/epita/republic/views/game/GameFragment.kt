@@ -125,6 +125,15 @@ class GameFragment : Fragment() {
             view.findViewById(R.id.game_middle_player_vote_text),
             isMiddle = true
         )
+        (playerCards.toList() + middleCard).forEach { card ->
+            card.setOnPortraitClick { clickedCard ->
+                val character = clickedCard.getCharacter() ?: return@setOnPortraitClick
+                if (childFragmentManager.findFragmentByTag(PlayerDetailsDialogFragment.TAG) == null) {
+                    PlayerDetailsDialogFragment.newInstance(clickedCard.getIndex(), character)
+                        .show(childFragmentManager, PlayerDetailsDialogFragment.TAG)
+                }
+            }
+        }
         renderPlayers()
         renderTurnPhase()
         gameViewModel.currentPlayer.observe(viewLifecycleOwner) { renderPlayers() }

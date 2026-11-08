@@ -102,4 +102,10 @@
     <string name="game_player_card_vote_value">%1$d/20</string>
     <string name="game_player_card_influence_value">%1$d/10</string>
     <string name="game_player_card_popularity_value">%1$d/%2$d</string>
+    <string name="player_details_open">Show player %1$d details</string>
+    <string name="player_details_title">PLAYER %1$d · %2$s</string>
+    <string name="player_details_powers">Power cards</string>
+    <string name="player_details_influence">Influence cards</string>
+    <string name="player_details_empty">No cards yet</string>
+    <string name="player_details_close">Close</string>
 </resources>
