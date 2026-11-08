@@ -1,6 +1,9 @@
 package com.epita.republic.views.game
 
 import android.util.Log
+import com.epita.republic.audio.GameSound
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,6 +46,9 @@ data class PowerShopState(
 )
 
 class GameViewModel : ViewModel() {
+    private val soundEvents = Channel<GameSound>(Channel.BUFFERED)
+    val sounds = soundEvents.receiveAsFlow()
+
     private val gameLogic = GameLogic()
     private val influenceLogic = InfluenceLogic()
     val signalController = SignalController()
@@ -116,6 +122,7 @@ class GameViewModel : ViewModel() {
         if (player.money < card.cost) return
         player.money -= card.cost
         player.powerCards.add(card)
+        soundEvents.trySend(GameSound.BUY_CARD)
         powerShopSlots[slotIndex] = drawPowerCard()
         publishPowerShop()
         currentPlayer.value = player
@@ -151,6 +158,7 @@ class GameViewModel : ViewModel() {
         if (rerollLeft.value!! > 0 && numberOfReroll > 0) {
             val currentRoll = dices.value!!
             val newDices = gameLogic.rollDice(numberOfReroll)
+            soundEvents.trySend(GameSound.DICE_ROLL)
 
             var i = 0;
             for (diceIndex in (0..5)) {
@@ -245,6 +253,11 @@ class GameViewModel : ViewModel() {
     }
 
     fun damageFromInside(damageCount: Int) {
+        if (damageCount > 0 && players.any {
+                it.playerIndex != currentPlayer.value!!.playerIndex && it.isAlive()
+            }) {
+            soundEvents.trySend(GameSound.DAMAGE)
+        }
         // Damage to everyone outside == all player except myself
         for (player in players) {
             if (player.playerIndex != currentPlayer.value!!.playerIndex) {
@@ -264,6 +277,7 @@ class GameViewModel : ViewModel() {
     suspend fun damageFromOutside(damageCount: Int) {
         val playerInCity = inCity.value
         if (playerInCity != null) {
+            if (damageCount > 0 && playerInCity.isAlive()) soundEvents.trySend(GameSound.DAMAGE)
             Log.d(
                 "GAME",
                 "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) ${playerInCity}"
