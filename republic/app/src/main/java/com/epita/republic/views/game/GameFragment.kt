@@ -190,7 +190,10 @@ class GameFragment : Fragment() {
         val diceConfirmBtn: Button = view.findViewById(R.id.game_dice_confirm)
         diceConfirmBtn.setOnClickListener { gameViewModel.signalController.sendNotify() }
 
-        gameViewModel.currentPlayerTurnIndex.observe(this.viewLifecycleOwner) { renderTurnPhase() }
+        gameViewModel.currentPlayerTurnIndex.observe(viewLifecycleOwner) {
+            renderTurnPhase()
+            renderPlayers()
+        }
         gameViewModel.inCity.observe(this.viewLifecycleOwner) { renderPlayers() }
         gameViewModel.dices.observe(this.viewLifecycleOwner) { newDices ->
             renderDice(diceButtons, newDices)
@@ -267,15 +270,17 @@ class GameFragment : Fragment() {
 
     fun renderPlayers() {
         middleCard.setVisibility(View.INVISIBLE)
+        val activePlayerIndex = gameViewModel.currentPlayerTurnIndex.value
         for (playerCard in playerCards) {
             val player = playerCard.getPlayer()!!
+            val isActive = playerCard.getIndex() == activePlayerIndex
             if (player == gameViewModel.inCity.value) {
-                middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getCharacter())
+                middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getCharacter(), isActive)
                 middleCard.setVisibility(View.VISIBLE)
                 playerCard.setAway(true)
             } else {
                 playerCard.setAway(false)
-                playerCard.render()
+                playerCard.render(isActive)
             }
         }
     }
