@@ -72,18 +72,21 @@ class PlayerCard(
         cardView.visibility = View.VISIBLE
     }
 
-    fun render() {
+    fun render(isActive: Boolean) {
         if (player != null) {
             if (isMiddle) {
-                // The Élysée slot keeps its gold look, whoever sits in it
                 cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, R.attr.colorElyseeContainer))
-                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorElysee)
-                cardView.strokeWidth = context.resources.getDimensionPixelSize(R.dimen.border_emphasis)
-            } else if (player!!.isBot) {
-                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorPlayerBot)
-            } else {
-                cardView.strokeColor = MaterialColors.getColor(cardView, R.attr.colorPlayerHuman)
             }
+            val borderColor = when {
+                isActive -> R.attr.colorPlayerHuman
+                isMiddle -> R.attr.colorElysee
+                player!!.isBot -> R.attr.colorPlayerBot
+                else -> com.google.android.material.R.attr.colorOutlineVariant
+            }
+            cardView.strokeColor = MaterialColors.getColor(cardView, borderColor)
+            cardView.strokeWidth = context.resources.getDimensionPixelSize(
+                if (isActive || isMiddle) R.dimen.border_emphasis else R.dimen.border_default
+            )
 
             playerCharacter?.let {
                 if (isMiddle) {
@@ -129,10 +132,10 @@ class PlayerCard(
         return playerCharacter
     }
 
-    fun changePlayer(newPlayer: Player, newIndex: Int, newCharacter: Character?) {
+    fun changePlayer(newPlayer: Player, newIndex: Int, newCharacter: Character?, isActive: Boolean) {
         player = newPlayer
         playerIndex = newIndex
         playerCharacter = newCharacter
-        render()
+        render(isActive)
     }
 }
