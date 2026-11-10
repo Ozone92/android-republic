@@ -93,10 +93,10 @@ class PlayerCard(
                 }
             }
 
-            imageView.contentDescription = context.getString(
-                R.string.player_details_open, playerIndex + 1
-            )
-            nameTextView.text = context.getString(R.string.game_player_card_name, playerIndex + 1)
+            val botName = if (player!!.isBot) playerCharacter?.name else null
+            val playerName = botName ?: context.getString(R.string.game_player_card_name, playerIndex + 1)
+            imageView.contentDescription = context.getString(R.string.player_details_open, playerName)
+            nameTextView.text = playerName
             influenceTextView.text =
                 context.getString(R.string.game_player_card_influence_value, player!!.influence)
             popularityTextView.text = context.getString(

@@ -281,9 +281,15 @@ class GameFragment : Fragment() {
     }
 
     fun renderTurnPhase() {
+        val playerIndex = gameViewModel.currentPlayerTurnIndex.value!!
+        val playerName = if (playerIndex == 0) {
+            getString(R.string.game_player_card_name, playerIndex + 1)
+        } else {
+            characters[playerIndex].name
+        }
         turnPhaseTextView.text = getString(
             R.string.game_phase_text,
-            gameViewModel.currentPlayerTurnIndex.value!! + 1,
+            playerName,
             gameViewModel.currentPhase.value.toString()
         )
     }
