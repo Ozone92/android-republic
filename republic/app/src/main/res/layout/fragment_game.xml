@@ -6,13 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".views.game.GameFragment">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.epita.republic.views.common.HemicycleBackgroundView
+        android:id="@+id/game_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background"
-        android:contentDescription="@null"
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
