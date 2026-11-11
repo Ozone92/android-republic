@@ -36,6 +36,7 @@ const val POINT_FOR_VICTORY = 20
 const val POINT_CITY_TURN = 2
 const val POINT_CITY_ENTER = 1
 const val BOT_SLEEP_ACTION = 3L
+const val BOT_REROLL_DELAY_MS = 1000L
 const val POWER_SHOP_REROLL_COST = 2
 
 data class PowerShopState(
@@ -116,9 +117,13 @@ class GameViewModel : ViewModel() {
 
     fun buyPowerCard(slotIndex: Int) {
         if (!canUsePowerShop()) return
+        val player = currentPlayer.value ?: return
+        purchasePowerCard(player, slotIndex)
+    }
+
+    private fun purchasePowerCard(player: Player, slotIndex: Int) {
         if (slotIndex !in powerShopSlots.indices) return
         val card = powerShopSlots[slotIndex] ?: return
-        val player = currentPlayer.value ?: return
         if (player.money < card.cost) return
         player.money -= card.cost
         player.powerCards.add(card)
@@ -129,6 +134,7 @@ class GameViewModel : ViewModel() {
     }
 
     fun diceButtonClick(index: Int) {
+        if (currentPlayer.value!!.isBot) return
         if (currentPhase.value!! == GamePhase.DICE) {
             if (lockedDiceIndexes.contains(index)) {
                 // Dice Unlock
@@ -301,6 +307,27 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    private suspend fun botRollDice(bot: Player) {
+        while (rerollLeft.value!! > 0) {
+            delay(BOT_REROLL_DELAY_MS)
+            val canHeal = bot != inCity.value && bot.popularity < bot.maxPopularity
+            val toLock = gameLogic.chooseBotLockedDice(dices.value!!, canHeal)
+            lockedDiceIndexes.clear()
+            lockedDiceIndexes.addAll(toLock)
+            if (toLock.size == dices.value!!.size) break
+            rollDice()
+        }
+        dices.value = dices.value
+    }
+
+    private fun botBuyPowerCard(bot: Player) {
+        val slotIndex = powerShopSlots.indices
+            .filter { index -> powerShopSlots[index]?.let { it.cost <= bot.money } == true }
+            .maxByOrNull { index -> powerShopSlots[index]!!.cost }
+            ?: return
+        purchasePowerCard(bot, slotIndex)
+    }
+
     suspend fun influencePhase(step: InfluenceStep) {
         availableInfluenceCards.value = influenceLogic.getCards(step)
         waitForInput()
@@ -392,6 +419,9 @@ class GameViewModel : ViewModel() {
                     lockedDiceIndexes.clear()
                     rollDice()
                     currentPhase.value = GamePhase.DICE
+                    if (player.isBot) {
+                        botRollDice(player)
+                    }
                     waitForInput()
                     val oldInfluence = player.influence
                     handleDiceResult()
@@ -407,6 +437,9 @@ class GameViewModel : ViewModel() {
                     }
 
                     currentPhase.value = GamePhase.SHOP
+                    if (player.isBot) {
+                        botBuyPowerCard(player)
+                    }
                     // waitForInput() TODO Add shop view
 
                     endTurn()
