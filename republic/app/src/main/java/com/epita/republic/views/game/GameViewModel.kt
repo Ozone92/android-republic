@@ -20,6 +20,7 @@ import com.epita.republic.repository.PowerCard
 import com.epita.republic.repository.PowerEffect
 import com.epita.republic.R
 import kotlin.random.Random
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -185,6 +186,17 @@ class GameViewModel : ViewModel() {
         powerShopSlots[slotIndex] = drawPowerCard()
         publishPowerShop()
         currentPlayer.value = player
+        // A card can win the game (enough votes, or every opponent knocked out): end it right away.
+        endGameIfOver()
+    }
+
+    /** Stops the game loop and shows the results if the game is over. Safe to call more than once. */
+    private fun endGameIfOver(): Boolean {
+        if (currentPhase.value == GamePhase.GAME_FINISH) return true
+        if (!gameFinish()) return false
+        gameLoopJob?.cancel()
+        currentPhase.value = GamePhase.GAME_FINISH
+        return true
     }
 
     /** Records players killed outside of dice damage (e.g. by a power card). */
@@ -457,11 +469,13 @@ class GameViewModel : ViewModel() {
         return playersOrder.toTypedArray()
     }
 
+    private var gameLoopJob: Job? = null
+
     // GAME LOOP
     init {
         powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
         publishPowerShop()
-        viewModelScope.launch {
+        gameLoopJob = viewModelScope.launch {
             while (!gameFinish()) {
                 Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")
                 val player = players[currentPlayerTurnIndex.value!!]
@@ -506,6 +520,8 @@ class GameViewModel : ViewModel() {
                     currentPhase.value = GamePhase.SHOP
                     if (player.isBot) {
                         botBuyPowerCard(player)
+                        // The bot's card may have ended the game; stop before ending its turn.
+                        if (currentPhase.value == GamePhase.GAME_FINISH) return@launch
                     }
                     // waitForInput() TODO Add shop view
 
@@ -515,7 +531,7 @@ class GameViewModel : ViewModel() {
                 currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
             }
 
-            currentPhase.value = (GamePhase.GAME_FINISH)
+            endGameIfOver()
         }
     }
 }

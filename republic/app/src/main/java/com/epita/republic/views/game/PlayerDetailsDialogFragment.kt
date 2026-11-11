@@ -1,6 +1,7 @@
 package com.epita.republic.views.game
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -44,7 +45,15 @@ class PlayerDetailsDialogFragment : DialogFragment() {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(16), 0, 0, 0)
         }
-        content.addView(details, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        // Only the card list scrolls; its height is capped so it always fits on the (landscape) screen.
+        val detailsScroll = MaxHeightScrollView(
+            context, (resources.displayMetrics.heightPixels * DETAILS_MAX_HEIGHT_RATIO).toInt()
+        ).apply {
+            isVerticalScrollBarEnabled = true
+            isScrollbarFadingEnabled = false
+            addView(details)
+        }
+        content.addView(detailsScroll, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
 
         fun label(text: CharSequence, heading: Boolean = false, target: LinearLayout = details) {
             target.addView(TextView(context).apply {
@@ -86,7 +95,7 @@ class PlayerDetailsDialogFragment : DialogFragment() {
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(getString(R.string.player_details_title, playerIndex + 1, character.name))
-            .setView(ScrollView(context).apply { addView(content) })
+            .setView(content)
             .setPositiveButton(R.string.player_details_close, null)
             .create()
     }
@@ -99,8 +108,20 @@ class PlayerDetailsDialogFragment : DialogFragment() {
         )
     }
 
+    /** A ScrollView that never grows taller than [maxHeight] pixels. */
+    private class MaxHeightScrollView(context: Context, private val maxHeight: Int) : ScrollView(context) {
+        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+            val size = MeasureSpec.getSize(heightMeasureSpec)
+            val cap = if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.UNSPECIFIED) maxHeight
+                else minOf(size, maxHeight)
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(cap, MeasureSpec.AT_MOST))
+        }
+    }
+
     companion object {
         const val TAG = "PlayerDetailsDialog"
+        // Share of the screen height the card list may use; the rest is for the title and the button.
+        private const val DETAILS_MAX_HEIGHT_RATIO = 0.5f
         private const val ARG_PLAYER = "player_index"
         private const val ARG_CHARACTER = "character"
 
