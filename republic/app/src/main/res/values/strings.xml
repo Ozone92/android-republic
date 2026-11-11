@@ -108,6 +108,4 @@
     <string name="player_details_influence">Influence cards</string>
     <string name="player_details_empty">No cards yet</string>
     <string name="player_details_close">Close</string>
-    <string name="game_sound_test_win">TEST WIN</string>
-    <string name="game_sound_test_lose">TEST LOSE</string>
 </resources>
