@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.epita.republic.R
+import com.epita.republic.domain.POWER_SHOP_REROLL_COST
 import com.epita.republic.repository.PowerCardType
 
 class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
@@ -56,10 +57,10 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
                 card?.let { descriptions[index].text = getString(it.descriptionRes, it.descriptionArg) }
                 types[index].visibility = if (card == null) View.GONE else View.VISIBLE
                 card?.let {
-                    val isKeep = it.type == PowerCardType.KEEP
-                    types[index].setText(if (isKeep) R.string.power_type_keep else R.string.power_type_discard)
+                    val isPower = it.type == PowerCardType.POWER
+                    types[index].setText(if (isPower) R.string.power_type_power else R.string.power_type_action)
                     types[index].setBackgroundResource(
-                        if (isKeep) R.drawable.bg_power_type_keep else R.drawable.bg_power_type_discard
+                        if (isPower) R.drawable.bg_power_type_power else R.drawable.bg_power_type_action
                     )
                 }
                 buttons[index].text = if (card != null) {

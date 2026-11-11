@@ -16,6 +16,7 @@
     <string name="game_player_card_away">IN THE ÉLYSÉE</string>
     <string name="game_reroll_text">REROLL (%d left)</string>
     <string name="game_validate_dice">CONFIRM</string>
+    <string name="game_end_turn">END TURN</string>
     <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>
     <string name="game_stay_btn_text">STAY</string>
     <string name="game_leave_btn_text">LEAVE</string>
@@ -67,8 +68,8 @@
     <string name="power_shop_buy">Buy</string>
     <string name="power_shop_buy_cost">Buy (%1$d money)</string>
 
-    <string name="power_shop_allowed">Your turn: purchases available</string>
-    <string name="power_shop_blocked">Opponent’s turn: purchases unavailable</string>
+    <string name="power_shop_allowed">Buy step: purchases available</string>
+    <string name="power_shop_blocked">Purchases are only available on your turn, after the dice</string>
 
 
     <string name="power_name_heal">Emergency Care</string>
@@ -88,8 +89,8 @@
     <string name="power_name_bonus_heal">Public Image</string>
     <string name="power_description_bonus_heal">+%1$d popularity whenever you heal from your dice.</string>
 
-    <string name="power_type_keep">KEEP</string>
-    <string name="power_type_discard">DISCARD</string>
+    <string name="power_type_power">POWER</string>
+    <string name="power_type_action">ACTION</string>
     <string name="power_shop_reroll">Reroll (%1$d money)</string>
     <string name="power_shop_empty">No card available</string>
     <string name="power_shop_counts">Deck: %1$d · Discard: %2$d · Your Money: %3$d</string>

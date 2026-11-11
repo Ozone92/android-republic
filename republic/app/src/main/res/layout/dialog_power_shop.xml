@@ -64,8 +64,8 @@
                             android:paddingVertical="2dp"
                             android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="@color/palette_blanc"
-                            tools:background="@drawable/bg_power_type_discard"
-                            tools:text="@string/power_type_discard" />
+                            tools:background="@drawable/bg_power_type_action"
+                            tools:text="@string/power_type_action" />
                     </LinearLayout>
                     <TextView
                         android:id="@+id/power_description_1"
@@ -115,8 +115,8 @@
                             android:paddingVertical="2dp"
                             android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="@color/palette_blanc"
-                            tools:background="@drawable/bg_power_type_discard"
-                            tools:text="@string/power_type_discard" />
+                            tools:background="@drawable/bg_power_type_action"
+                            tools:text="@string/power_type_action" />
                     </LinearLayout>
                     <TextView
                         android:id="@+id/power_description_2"
@@ -166,8 +166,8 @@
                             android:paddingVertical="2dp"
                             android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="@color/palette_blanc"
-                            tools:background="@drawable/bg_power_type_discard"
-                            tools:text="@string/power_type_discard" />
+                            tools:background="@drawable/bg_power_type_action"
+                            tools:text="@string/power_type_action" />
                     </LinearLayout>
                     <TextView
                         android:id="@+id/power_description_3"

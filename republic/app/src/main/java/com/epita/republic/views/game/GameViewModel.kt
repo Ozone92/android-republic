@@ -8,19 +8,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epita.republic.domain.BotShopAction
 import com.epita.republic.domain.DiceFace
 import com.epita.republic.domain.GameLogic
 import com.epita.republic.domain.InfluenceLogic
 import com.epita.republic.domain.InfluenceStep
 import com.epita.republic.domain.PowerLogic
+import com.epita.republic.domain.PowerShop
 import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.InfluenceCard
 import com.epita.republic.repository.Player
 import com.epita.republic.repository.PowerCard
 import com.epita.republic.repository.PowerEffect
 import com.epita.republic.R
-import kotlin.random.Random
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -40,7 +40,7 @@ const val POINT_CITY_TURN = 2
 const val POINT_CITY_ENTER = 1
 const val BOT_SLEEP_ACTION = 3L
 const val BOT_REROLL_DELAY_MS = 1000L
-const val POWER_SHOP_REROLL_COST = 2
+const val BOT_SHOP_DELAY_MS = 1000L
 
 data class PowerShopState(
     val slots: List<PowerCard?>,
@@ -70,89 +70,76 @@ class GameViewModel : ViewModel() {
     val deadPlayers = mutableSetOf<Player>()
     val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
 
-    private val powerDeck = mutableListOf(
-        PowerCard(
-            "power_1",
-            cost = 3,
-            effect = PowerEffect.Heal(2)
-        ),
-        PowerCard(
-            "power_2",
-            cost = 2,
-            effect = PowerEffect.GainMoney(3)
-        ),
-        PowerCard(
-            "power_3",
-            cost = 4,
-            effect = PowerEffect.GainVote(2)
-        ),
-        PowerCard(
-            "power_4",
-            cost = 2,
-            effect = PowerEffect.DamageOthers(1)
-        ),
-        PowerCard(
-            "power_5",
-            cost = 6,
-            effect = PowerEffect.BonusDamage(1)
-        ),
-        PowerCard(
-            "power_6",
-            cost = 5,
-            effect = PowerEffect.ExtraReroll(1)
-        ),
-        PowerCard(
-            "power_7",
-            cost = 4,
-            effect = PowerEffect.BonusMoney(1)
-        ),
-        PowerCard(
-            "power_8",
-            cost = 4,
-            effect = PowerEffect.BonusHeal(1)
+    private val shop = PowerShop(
+        listOf(
+            PowerCard(
+                "power_1",
+                cost = 3,
+                effect = PowerEffect.Heal(2)
+            ),
+            PowerCard(
+                "power_2",
+                cost = 2,
+                effect = PowerEffect.GainMoney(3)
+            ),
+            PowerCard(
+                "power_3",
+                cost = 4,
+                effect = PowerEffect.GainVote(2)
+            ),
+            PowerCard(
+                "power_4",
+                cost = 2,
+                effect = PowerEffect.DamageOthers(1)
+            ),
+            PowerCard(
+                "power_5",
+                cost = 6,
+                effect = PowerEffect.BonusDamage(1)
+            ),
+            PowerCard(
+                "power_6",
+                cost = 5,
+                effect = PowerEffect.ExtraReroll(1)
+            ),
+            PowerCard(
+                "power_7",
+                cost = 4,
+                effect = PowerEffect.BonusMoney(1)
+            ),
+            PowerCard(
+                "power_8",
+                cost = 4,
+                effect = PowerEffect.BonusHeal(1)
+            )
         )
     )
-    private val powerDiscard = mutableListOf<PowerCard>()
-    private val powerShopSlots = MutableList<PowerCard?>(3) { null }
     private val _powerShop = MutableLiveData<PowerShopState>()
     val powerShop: LiveData<PowerShopState> = _powerShop
 
-    private fun drawPowerCard(): PowerCard? {
-        if (powerDeck.isEmpty()) {
-            powerDeck.addAll(powerDiscard)
-            powerDiscard.clear()
-        }
-        if (powerDeck.isEmpty()) return null
-        return powerDeck.removeAt(Random.nextInt(powerDeck.size))
-    }
-
     fun canUsePowerShop(): Boolean {
         val player = currentPlayer.value ?: return false
-        return !player.isBot && player.isAlive() &&
-            currentPhase.value != GamePhase.GAME_FINISH
+        return !player.isBot && player.isAlive() && currentPhase.value == GamePhase.SHOP
     }
-
-    private fun canRerollPowerShop(player: Player): Boolean =
-        player.money >= POWER_SHOP_REROLL_COST && (powerDeck.isNotEmpty() || powerDiscard.isNotEmpty())
 
     private fun publishPowerShop() {
         _powerShop.value = PowerShopState(
-            powerShopSlots.toList(), powerDeck.size,
-            powerDiscard.size, players[0].powerCards.size
+            shop.visibleCards, shop.deckSize,
+            shop.discardSize, players[0].powerCards.size
         )
     }
 
     fun rerollPowerShop() {
         if (!canUsePowerShop()) return
         val player = currentPlayer.value ?: return
-        if (!canRerollPowerShop(player)) return
-        player.money -= POWER_SHOP_REROLL_COST
-        // Reveal the new cards before discarding the old ones, so they cannot be redrawn right away.
-        val oldCards = powerShopSlots.filterNotNull()
-        powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
-        powerDiscard.addAll(oldCards)
+        rerollPowerShop(player)
+    }
+
+    private fun rerollPowerShop(player: Player): Boolean {
+        if (!shop.reroll(player)) return false
         publishPowerShop()
         currentPlayer.value = player
+        return true
     }
 
     fun buyPowerCard(slotIndex: Int) {
@@ -161,19 +148,11 @@ class GameViewModel : ViewModel() {
         purchasePowerCard(player, slotIndex)
     }
 
-    private fun purchasePowerCard(player: Player, slotIndex: Int) {
-        if (slotIndex !in powerShopSlots.indices) return
-        val card = powerShopSlots[slotIndex] ?: return
-        if (player.money < card.cost) return
-        player.money -= card.cost
+    private fun purchasePowerCard(player: Player, slotIndex: Int): Boolean {
+        val card = shop.buy(player, slotIndex) ?: return false
         soundEvents.trySend(GameSound.BUY_CARD)
-        if (powerLogic.isKept(card)) {
+        if (powerLogic.isPower(card)) {
             player.powerCards.add(card)
-            // Extra rerolls count right away if the dice are still being rolled this turn.
-            val effect = card.effect
-            if (effect is PowerEffect.ExtraReroll && currentPhase.value == GamePhase.DICE) {
-                rerollLeft.value = rerollLeft.value!! + effect.amount
-            }
         } else {
             // A bought one-time card is used up: it never returns to the deck or the discard pile.
             val othersAlive = players.count { it !== player && it.isAlive() }
@@ -183,29 +162,21 @@ class GameViewModel : ViewModel() {
             }
             registerDeaths()
         }
-        powerShopSlots[slotIndex] = drawPowerCard()
         publishPowerShop()
         currentPlayer.value = player
-        // A card can win the game (enough votes, or every opponent knocked out): end it right away.
-        endGameIfOver()
-    }
-
-    /** Stops the game loop and shows the results if the game is over. Safe to call more than once. */
-    private fun endGameIfOver(): Boolean {
-        if (currentPhase.value == GamePhase.GAME_FINISH) return true
-        if (!gameFinish()) return false
-        gameLoopJob?.cancel()
-        currentPhase.value = GamePhase.GAME_FINISH
         return true
     }
 
-    /** Records players killed outside of dice damage (e.g. by a power card). */
+    /** Records newly eliminated players: they leave the City and discard their cards (rules p.6). */
     private fun registerDeaths() {
+        var anyDeath = false
         for (player in players) {
-            if (!player.isAlive() && deadPlayers.add(player) && inCity.value == player) {
-                inCity.value = null
-            }
+            if (player.isAlive() || !deadPlayers.add(player)) continue
+            anyDeath = true
+            if (inCity.value == player) inCity.value = null
+            powerLogic.discardEliminatedPlayer(player, shop)
         }
+        if (anyDeath) publishPowerShop()
     }
 
     fun diceButtonClick(index: Int) {
@@ -224,15 +195,7 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    private fun gameFinish(): Boolean {
-        if (currentPlayer.value!!.hasWin()) {
-            return true
-        }
-
-        val playerAlive = players.count { p -> p.isAlive() }
-
-        return playerAlive <= 1
-    }
+    private fun gameFinish(): Boolean = gameLogic.isGameOver(players)
 
     fun rollDice() {
         val numberOfReroll = 6 - lockedDiceIndexes.size
@@ -354,11 +317,9 @@ class GameViewModel : ViewModel() {
                 )
                 player.popularity -= damageCount
                 Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
-                if (!player.isAlive()) {
-                    deadPlayers.add(player)
-                }
             }
         }
+        registerDeaths()
     }
 
     suspend fun damageFromOutside(damageCount: Int) {
@@ -373,8 +334,7 @@ class GameViewModel : ViewModel() {
             Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity}")
 
             if (!playerInCity.isAlive()) {
-                inCity.value = null
-                deadPlayers.add(playerInCity)
+                registerDeaths()
             } else {
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
@@ -401,12 +361,20 @@ class GameViewModel : ViewModel() {
         dices.value = dices.value
     }
 
-    private fun botBuyPowerCard(bot: Player) {
-        val slotIndex = powerShopSlots.indices
-            .filter { index -> powerShopSlots[index]?.let { it.cost <= bot.money } == true }
-            .maxByOrNull { index -> powerShopSlots[index]!!.cost }
-            ?: return
-        purchasePowerCard(bot, slotIndex)
+    /** Bot buy step: like the rules allow (p.7), it keeps buying or rerolling while it can. */
+    private suspend fun botShop(bot: Player) {
+        while (true) {
+            val action = powerLogic.chooseBotShopAction(bot, shop)
+            if (action == BotShopAction.Stop) break
+            // Pause so the human can follow each purchase.
+            delay(BOT_SHOP_DELAY_MS)
+            val acted = when (action) {
+                is BotShopAction.Buy -> purchasePowerCard(bot, action.slotIndex)
+                BotShopAction.Reroll -> rerollPowerShop(bot)
+                BotShopAction.Stop -> false
+            }
+            if (!acted) break
+        }
     }
 
     suspend fun influencePhase(step: InfluenceStep) {
@@ -437,7 +405,8 @@ class GameViewModel : ViewModel() {
         currentPlayer.value!!.vote += POINT_CITY_ENTER
     }
 
-    fun endTurn() {
+    /** Step 3 of a turn: take the City if nobody holds it. */
+    private fun enterCityIfEmpty() {
         if (inCity.value == null) {
             enterCity()
         }
@@ -469,13 +438,10 @@ class GameViewModel : ViewModel() {
         return playersOrder.toTypedArray()
     }
 
-    private var gameLoopJob: Job? = null
-
     // GAME LOOP
     init {
-        powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
         publishPowerShop()
-        gameLoopJob = viewModelScope.launch {
+        viewModelScope.launch {
             while (!gameFinish()) {
                 Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")
                 val player = players[currentPlayerTurnIndex.value!!]
@@ -517,21 +483,24 @@ class GameViewModel : ViewModel() {
                         influencePhase(newInfluenceStep)
                     }
 
+                    // 3. Enter the City
+                    enterCityIfEmpty()
+
+                    // 4. Buy power cards. The human ends this step with the Confirm button;
+                    // it is skipped when they cannot afford any card or a reroll.
                     currentPhase.value = GamePhase.SHOP
                     if (player.isBot) {
-                        botBuyPowerCard(player)
-                        // The bot's card may have ended the game; stop before ending its turn.
-                        if (currentPhase.value == GamePhase.GAME_FINISH) return@launch
+                        botShop(player)
+                    } else if (shop.canAct(player)) {
+                        waitForInput()
                     }
-                    // waitForInput() TODO Add shop view
-
-                    endTurn()
                 }
 
                 currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
             }
 
-            endGameIfOver()
+            // The game only ends here, at the end of a turn (rules p.7).
+            currentPhase.value = GamePhase.GAME_FINISH
         }
     }
 }

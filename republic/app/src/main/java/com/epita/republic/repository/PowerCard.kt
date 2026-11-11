@@ -4,8 +4,8 @@ import androidx.annotation.StringRes
 import com.epita.republic.R
 
 enum class PowerCardType {
-    KEEP,
-    DISCARD
+    POWER,
+    ACTION
 }
 
 sealed class PowerEffect(
@@ -14,38 +14,38 @@ sealed class PowerEffect(
     @param:StringRes val nameRes: Int,
     @param:StringRes val descriptionRes: Int
 ) {
-    // One-shot effects (DISCARD cards)
+    // One-shot effects (ACTION cards)
     class Heal(amount: Int) : PowerEffect(
-        amount, PowerCardType.DISCARD, R.string.power_name_heal, R.string.power_description_heal
+        amount, PowerCardType.ACTION, R.string.power_name_heal, R.string.power_description_heal
     )
 
     class GainMoney(amount: Int) : PowerEffect(
-        amount, PowerCardType.DISCARD, R.string.power_name_gain_money, R.string.power_description_gain_money
+        amount, PowerCardType.ACTION, R.string.power_name_gain_money, R.string.power_description_gain_money
     )
 
     class GainVote(amount: Int) : PowerEffect(
-        amount, PowerCardType.DISCARD, R.string.power_name_gain_vote, R.string.power_description_gain_vote
+        amount, PowerCardType.ACTION, R.string.power_name_gain_vote, R.string.power_description_gain_vote
     )
 
     class DamageOthers(amount: Int) : PowerEffect(
-        amount, PowerCardType.DISCARD, R.string.power_name_damage_others, R.string.power_description_damage_others
+        amount, PowerCardType.ACTION, R.string.power_name_damage_others, R.string.power_description_damage_others
     )
 
-    // Permanent effects (KEEP cards)
+    // Permanent effects (POWER cards)
     class BonusDamage(amount: Int) : PowerEffect(
-        amount, PowerCardType.KEEP, R.string.power_name_bonus_damage, R.string.power_description_bonus_damage
+        amount, PowerCardType.POWER, R.string.power_name_bonus_damage, R.string.power_description_bonus_damage
     )
 
     class BonusHeal(amount: Int) : PowerEffect(
-        amount, PowerCardType.KEEP, R.string.power_name_bonus_heal, R.string.power_description_bonus_heal
+        amount, PowerCardType.POWER, R.string.power_name_bonus_heal, R.string.power_description_bonus_heal
     )
 
     class BonusMoney(amount: Int) : PowerEffect(
-        amount, PowerCardType.KEEP, R.string.power_name_bonus_money, R.string.power_description_bonus_money
+        amount, PowerCardType.POWER, R.string.power_name_bonus_money, R.string.power_description_bonus_money
     )
 
     class ExtraReroll(amount: Int) : PowerEffect(
-        amount, PowerCardType.KEEP, R.string.power_name_extra_reroll, R.string.power_description_extra_reroll
+        amount, PowerCardType.POWER, R.string.power_name_extra_reroll, R.string.power_description_extra_reroll
     )
 }
 

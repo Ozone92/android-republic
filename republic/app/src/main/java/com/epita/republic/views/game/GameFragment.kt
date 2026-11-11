@@ -177,7 +177,10 @@ class GameFragment : Fragment() {
         }
 
         val diceConfirmBtn: Button = view.findViewById(R.id.game_dice_confirm)
-        diceConfirmBtn.setOnClickListener { gameViewModel.signalController.sendNotify() }
+        diceConfirmBtn.setOnClickListener {
+            diceConfirmBtn.isEnabled = false
+            gameViewModel.signalController.sendNotify()
+        }
 
         gameViewModel.currentPlayerTurnIndex.observe(viewLifecycleOwner) {
             renderTurnPhase()
@@ -220,8 +223,17 @@ class GameFragment : Fragment() {
                 GamePhase.DICE, GamePhase.IMPROVE_DICE -> {
                     diceRerollBtn.isEnabled = isPlayerTurn
                     diceConfirmBtn.isEnabled = isPlayerTurn
+                    diceConfirmBtn.setText(R.string.game_validate_dice)
 
                     renderDicesColor(diceButtons)
+                    diceView.visibility = View.VISIBLE
+                }
+
+                GamePhase.SHOP -> {
+                    // Buy step: the dice stay visible, and Confirm ends the turn.
+                    diceRerollBtn.isEnabled = false
+                    diceConfirmBtn.isEnabled = isPlayerTurn
+                    diceConfirmBtn.setText(R.string.game_end_turn)
                     diceView.visibility = View.VISIBLE
                 }
 
@@ -242,8 +254,6 @@ class GameFragment : Fragment() {
                 GamePhase.INFLUENCE -> {
                     influenceView.visibility = View.VISIBLE
                 }
-
-                GamePhase.SHOP -> {} // TODO()
             }
         }
     }
