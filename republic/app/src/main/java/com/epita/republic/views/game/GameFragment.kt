@@ -46,17 +46,6 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Development shortcuts, debug builds only. Removal is tracked separately.
-        val soundTestControls = view.findViewById<View>(R.id.game_sound_test_controls)
-        if (resources.getBoolean(R.bool.show_sound_test_controls)) {
-            soundTestControls.visibility = View.VISIBLE
-            view.findViewById<Button>(R.id.game_sound_test_win).setOnClickListener {
-                gameViewModel.finishForSoundTest(win = true)
-            }
-            view.findViewById<Button>(R.id.game_sound_test_lose).setOnClickListener {
-                gameViewModel.finishForSoundTest(win = false)
-            }
-        }
         val soundPlayer = GameSoundPlayer(requireContext(), viewLifecycleOwner)
         viewLifecycleOwner.lifecycleScope.launch {
             gameViewModel.sounds.collect { soundPlayer.play(it) }
