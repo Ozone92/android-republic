@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.epita.republic.R
+import com.epita.republic.repository.PowerCardType
 
 class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
     private val gameViewModel: GameViewModel by viewModels(
@@ -23,6 +24,11 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
             view.findViewById<TextView>(R.id.power_name_1),
             view.findViewById<TextView>(R.id.power_name_2),
             view.findViewById<TextView>(R.id.power_name_3)
+        )
+        val types = listOf(
+            view.findViewById<TextView>(R.id.power_type_1),
+            view.findViewById<TextView>(R.id.power_type_2),
+            view.findViewById<TextView>(R.id.power_type_3)
         )
         val descriptions = listOf(
             view.findViewById<TextView>(R.id.power_description_1),
@@ -47,6 +53,15 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
                 val card = state.slots[index]
                 names[index].setText(card?.nameRes ?: R.string.power_shop_empty)
                 descriptions[index].visibility = if (card == null) View.GONE else View.VISIBLE
+                card?.let { descriptions[index].text = getString(it.descriptionRes, it.descriptionArg) }
+                types[index].visibility = if (card == null) View.GONE else View.VISIBLE
+                card?.let {
+                    val isKeep = it.type == PowerCardType.KEEP
+                    types[index].setText(if (isKeep) R.string.power_type_keep else R.string.power_type_discard)
+                    types[index].setBackgroundResource(
+                        if (isKeep) R.drawable.bg_power_type_keep else R.drawable.bg_power_type_discard
+                    )
+                }
                 buttons[index].text = if (card != null) {
                     getString(R.string.power_shop_buy_cost, card.cost)
                 } else {
@@ -54,8 +69,8 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
                 }
                 buttons[index].isEnabled = canAct && card != null && money >= card.cost
             }
-            reroll.isEnabled = canAct && money >= POWER_SHOP_REROLL_COST && (state.slots.any { it != null } ||
-                state.deckCount > 0 || state.discardCount > 0)
+            reroll.isEnabled = canAct && money >= POWER_SHOP_REROLL_COST &&
+                (state.deckCount > 0 || state.discardCount > 0)
         }
 
         gameViewModel.powerShop.observe(viewLifecycleOwner) { renderShop() }

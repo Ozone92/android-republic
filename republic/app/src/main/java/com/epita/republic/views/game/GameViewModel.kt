@@ -12,11 +12,11 @@ import com.epita.republic.domain.DiceFace
 import com.epita.republic.domain.GameLogic
 import com.epita.republic.domain.InfluenceLogic
 import com.epita.republic.domain.InfluenceStep
+import com.epita.republic.domain.PowerLogic
 import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.InfluenceCard
 import com.epita.republic.repository.Player
 import com.epita.republic.repository.PowerCard
-import com.epita.republic.repository.PowerCardType
 import com.epita.republic.repository.PowerEffect
 import com.epita.republic.R
 import kotlin.random.Random
@@ -54,6 +54,7 @@ class GameViewModel : ViewModel() {
 
     private val gameLogic = GameLogic()
     private val influenceLogic = InfluenceLogic()
+    private val powerLogic = PowerLogic()
     val signalController = SignalController()
     val players: Array<Player> =
         Array(4) { i -> return@Array Player(playerIndex = i, isBot = i > 0) }
@@ -71,59 +72,43 @@ class GameViewModel : ViewModel() {
     private val powerDeck = mutableListOf(
         PowerCard(
             "power_1",
-            R.string.power_placeholder_1,
             cost = 3,
-            PowerCardType.DISCARD,
-            PowerEffect.Heal(2)
+            effect = PowerEffect.Heal(2)
         ),
         PowerCard(
             "power_2",
-            R.string.power_placeholder_2,
             cost = 2,
-            PowerCardType.DISCARD,
-            PowerEffect.GainMoney(3)
+            effect = PowerEffect.GainMoney(3)
         ),
         PowerCard(
             "power_3",
-            R.string.power_placeholder_3,
             cost = 4,
-            PowerCardType.DISCARD,
-            PowerEffect.GainVote(2)
+            effect = PowerEffect.GainVote(2)
         ),
         PowerCard(
             "power_4",
-            R.string.power_placeholder_4,
             cost = 2,
-            PowerCardType.DISCARD,
-            PowerEffect.DamageOthers(1)
+            effect = PowerEffect.DamageOthers(1)
         ),
         PowerCard(
             "power_5",
-            R.string.power_placeholder_5,
             cost = 6,
-            PowerCardType.KEEP,
-            PowerEffect.BonusDamage(1)
+            effect = PowerEffect.BonusDamage(1)
         ),
         PowerCard(
             "power_6",
-            R.string.power_placeholder_6,
             cost = 5,
-            PowerCardType.KEEP,
-            PowerEffect.ExtraReroll(1)
+            effect = PowerEffect.ExtraReroll(1)
         ),
         PowerCard(
             "power_7",
-            R.string.power_placeholder_7,
             cost = 4,
-            PowerCardType.KEEP,
-            PowerEffect.BonusMoney(1)
+            effect = PowerEffect.BonusMoney(1)
         ),
         PowerCard(
             "power_8",
-            R.string.power_placeholder_8,
             cost = 4,
-            PowerCardType.KEEP,
-            PowerEffect.BonusHeal(1)
+            effect = PowerEffect.BonusHeal(1)
         )
     )
     private val powerDiscard = mutableListOf<PowerCard>()
@@ -146,6 +131,9 @@ class GameViewModel : ViewModel() {
             currentPhase.value != GamePhase.GAME_FINISH
     }
 
+    private fun canRerollPowerShop(player: Player): Boolean =
+        player.money >= POWER_SHOP_REROLL_COST && (powerDeck.isNotEmpty() || powerDiscard.isNotEmpty())
+
     private fun publishPowerShop() {
         _powerShop.value = PowerShopState(
             powerShopSlots.toList(), powerDeck.size,
@@ -156,12 +144,12 @@ class GameViewModel : ViewModel() {
     fun rerollPowerShop() {
         if (!canUsePowerShop()) return
         val player = currentPlayer.value ?: return
-        if (player.money < POWER_SHOP_REROLL_COST) return
-        if (powerShopSlots.all { it == null } && powerDeck.isEmpty() && powerDiscard.isEmpty()) return
+        if (!canRerollPowerShop(player)) return
         player.money -= POWER_SHOP_REROLL_COST
-        powerDiscard.addAll(powerShopSlots.filterNotNull())
-        powerShopSlots.indices.forEach { powerShopSlots[it] = null }
+        // Reveal the new cards before discarding the old ones, so they cannot be redrawn right away.
+        val oldCards = powerShopSlots.filterNotNull()
         powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
+        powerDiscard.addAll(oldCards)
         publishPowerShop()
         currentPlayer.value = player
     }
@@ -173,11 +161,30 @@ class GameViewModel : ViewModel() {
         val player = currentPlayer.value ?: return
         if (player.money < card.cost) return
         player.money -= card.cost
-        player.powerCards.add(card)
         soundEvents.trySend(GameSound.BUY_CARD)
+        if (powerLogic.isKept(card)) {
+            player.powerCards.add(card)
+        } else {
+            // A bought one-time card is used up: it never returns to the deck or the discard pile.
+            val othersAlive = players.count { it !== player && it.isAlive() }
+            powerLogic.applyOnBuy(card, player, players)
+            if (card.effect is PowerEffect.DamageOthers && othersAlive > 0) {
+                soundEvents.trySend(GameSound.DAMAGE)
+            }
+            registerDeaths()
+        }
         powerShopSlots[slotIndex] = drawPowerCard()
         publishPowerShop()
         currentPlayer.value = player
+    }
+
+    /** Records players killed outside of dice damage (e.g. by a power card). */
+    private fun registerDeaths() {
+        for (player in players) {
+            if (!player.isAlive() && deadPlayers.add(player) && inCity.value == player) {
+                inCity.value = null
+            }
+        }
     }
 
     fun diceButtonClick(index: Int) {
@@ -276,6 +283,12 @@ class GameViewModel : ViewModel() {
         if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.FAR)) {
             damageCount *= 2
         }
+
+        // Power card bonuses only apply when the matching face was rolled.
+        val rollingPlayer = currentPlayer.value!!
+        if (healthCount > 0) healthCount += powerLogic.bonusHeal(rollingPlayer)
+        if (moneyCount > 0) moneyCount += powerLogic.bonusMoney(rollingPlayer)
+        if (damageCount > 0) damageCount += powerLogic.bonusDamage(rollingPlayer)
 
         Log.d("GAME", "Score Gain: ${scoreGain} | Influence Gain: ${influenceGain}")
 
@@ -450,11 +463,9 @@ class GameViewModel : ViewModel() {
                         player.popularity += 1
                     }
 
-                    if (player.influenceCards.contains(InfluenceCard.UNDECIDED)) {
-                        rerollLeft.value = 4
-                    } else {
-                        rerollLeft.value = 3
-                    }
+                    val baseRerolls =
+                        if (player.influenceCards.contains(InfluenceCard.UNDECIDED)) 4 else 3
+                    rerollLeft.value = baseRerolls + powerLogic.extraRerolls(player)
 
                     lockedDiceIndexes.clear()
                     rollDice()

@@ -70,19 +70,29 @@
     <string name="power_shop_allowed">Your turn: purchases available</string>
     <string name="power_shop_blocked">Opponent’s turn: purchases unavailable</string>
 
-    <string name="power_placeholder_1">Power 1</string>
-    <string name="power_placeholder_2">Power 2</string>
-    <string name="power_placeholder_3">Power 3</string>
-    <string name="power_placeholder_4">Power 4</string>
-    <string name="power_placeholder_5">Power 5</string>
-    <string name="power_placeholder_6">Power 6</string>
-    <string name="power_placeholder_7">Power 7</string>
-    <string name="power_placeholder_8">Power 8</string>
 
+    <string name="power_name_heal">Emergency Care</string>
+    <string name="power_description_heal">Heal %1$d popularity.</string>
+    <string name="power_name_gain_money">Campaign Donation</string>
+    <string name="power_description_gain_money">Gain %1$d money.</string>
+    <string name="power_name_gain_vote">Rally</string>
+    <string name="power_description_gain_vote">Votes +%1$d.</string>
+    <string name="power_name_damage_others">Scandal</string>
+    <string name="power_description_damage_others">Deal %1$d damage to every other player.</string>
+    <string name="power_name_bonus_damage">Smear Campaign</string>
+    <string name="power_description_bonus_damage">+%1$d damage whenever you deal damage.</string>
+    <string name="power_name_extra_reroll">Second Thoughts</string>
+    <string name="power_description_extra_reroll">+%1$d dice reroll each turn.</string>
+    <string name="power_name_bonus_money">Fundraiser</string>
+    <string name="power_description_bonus_money">+%1$d money whenever you gain money from your dice.</string>
+    <string name="power_name_bonus_heal">Public Image</string>
+    <string name="power_description_bonus_heal">+%1$d popularity whenever you heal from your dice.</string>
+
+    <string name="power_type_keep">KEEP</string>
+    <string name="power_type_discard">DISCARD</string>
     <string name="power_shop_reroll">Reroll (%1$d money)</string>
     <string name="power_shop_empty">No card available</string>
     <string name="power_shop_counts">Deck: %1$d · Discard: %2$d · Your Money: %3$d</string>
-    <string name="power_placeholder_description">Power description coming soon</string>
 
     <string name="power_shop_placeholder_message">Card %1$d: purchase not implemented yet</string>
     <string name="dice_face_one">One vote</string>
