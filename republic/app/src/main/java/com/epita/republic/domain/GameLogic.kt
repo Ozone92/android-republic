@@ -17,4 +17,18 @@ class GameLogic {
         return null
     }
 
+    fun chooseBotLockedDice(dices: Array<DiceFace>, canHeal: Boolean): Set<Int> {
+        val numberFaces = listOf(DiceFace.ONE, DiceFace.TWO, DiceFace.THREE)
+        val targetNumber = numberFaces
+            .filter { face -> dices.count { it == face } >= 2 }
+            .maxWithOrNull(compareBy({ face -> dices.count { it == face } }, { it.ordinal }))
+
+        return dices.indices.filter { index ->
+            when (dices[index]) {
+                DiceFace.DAMAGE, DiceFace.MONEY -> true
+                DiceFace.HEAL -> canHeal
+                else -> dices[index] == targetNumber
+            }
+        }.toSet()
+    }
 }

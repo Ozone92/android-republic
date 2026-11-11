@@ -20,7 +20,6 @@ import com.epita.republic.repository.PowerCard
 import com.epita.republic.repository.PowerEffect
 import com.epita.republic.R
 import kotlin.random.Random
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -39,6 +38,7 @@ const val POINT_FOR_VICTORY = 20
 const val POINT_CITY_TURN = 2
 const val POINT_CITY_ENTER = 1
 const val BOT_SLEEP_ACTION = 3L
+const val BOT_REROLL_DELAY_MS = 1000L
 const val POWER_SHOP_REROLL_COST = 2
 
 data class PowerShopState(
@@ -156,9 +156,13 @@ class GameViewModel : ViewModel() {
 
     fun buyPowerCard(slotIndex: Int) {
         if (!canUsePowerShop()) return
+        val player = currentPlayer.value ?: return
+        purchasePowerCard(player, slotIndex)
+    }
+
+    private fun purchasePowerCard(player: Player, slotIndex: Int) {
         if (slotIndex !in powerShopSlots.indices) return
         val card = powerShopSlots[slotIndex] ?: return
-        val player = currentPlayer.value ?: return
         if (player.money < card.cost) return
         player.money -= card.cost
         soundEvents.trySend(GameSound.BUY_CARD)
@@ -188,6 +192,7 @@ class GameViewModel : ViewModel() {
     }
 
     fun diceButtonClick(index: Int) {
+        if (currentPlayer.value!!.isBot) return
         if (currentPhase.value!! == GamePhase.DICE) {
             if (lockedDiceIndexes.contains(index)) {
                 // Dice Unlock
@@ -352,7 +357,7 @@ class GameViewModel : ViewModel() {
 
             if (!playerInCity.isAlive()) {
                 inCity.value = null
-                deadPlayers.add(currentPlayer.value!!)
+                deadPlayers.add(playerInCity)
             } else {
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
@@ -364,6 +369,27 @@ class GameViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    private suspend fun botRollDice(bot: Player) {
+        while (rerollLeft.value!! > 0) {
+            delay(BOT_REROLL_DELAY_MS)
+            val canHeal = bot != inCity.value && bot.popularity < bot.maxPopularity
+            val toLock = gameLogic.chooseBotLockedDice(dices.value!!, canHeal)
+            lockedDiceIndexes.clear()
+            lockedDiceIndexes.addAll(toLock)
+            if (toLock.size == dices.value!!.size) break
+            rollDice()
+        }
+        dices.value = dices.value
+    }
+
+    private fun botBuyPowerCard(bot: Player) {
+        val slotIndex = powerShopSlots.indices
+            .filter { index -> powerShopSlots[index]?.let { it.cost <= bot.money } == true }
+            .maxByOrNull { index -> powerShopSlots[index]!!.cost }
+            ?: return
+        purchasePowerCard(bot, slotIndex)
     }
 
     suspend fun influencePhase(step: InfluenceStep) {
@@ -426,26 +452,11 @@ class GameViewModel : ViewModel() {
         return playersOrder.toTypedArray()
     }
 
-    // Development shortcut; removal is tracked separately.
-    fun finishForSoundTest(win: Boolean) {
-        gameLoopJob.cancel()
-        val human = players.first { !it.isBot }
-        if (win) {
-            human.vote = POINT_FOR_VICTORY
-        } else {
-            human.popularity = 0
-            deadPlayers.add(human)
-        }
-        currentPhase.value = GamePhase.GAME_FINISH
-    }
-
-    private val gameLoopJob: Job
-
     // GAME LOOP
     init {
         powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
         publishPowerShop()
-        gameLoopJob = viewModelScope.launch {
+        viewModelScope.launch {
             while (!gameFinish()) {
                 Log.d("GAME", "START PLAYER ${currentPlayerTurnIndex.value} TURN")
                 val player = players[currentPlayerTurnIndex.value!!]
@@ -470,6 +481,9 @@ class GameViewModel : ViewModel() {
                     lockedDiceIndexes.clear()
                     rollDice()
                     currentPhase.value = GamePhase.DICE
+                    if (player.isBot) {
+                        botRollDice(player)
+                    }
                     waitForInput()
                     val oldInfluence = player.influence
                     handleDiceResult()
@@ -485,6 +499,9 @@ class GameViewModel : ViewModel() {
                     }
 
                     currentPhase.value = GamePhase.SHOP
+                    if (player.isBot) {
+                        botBuyPowerCard(player)
+                    }
                     // waitForInput() TODO Add shop view
 
                     endTurn()

@@ -4,13 +4,8 @@ import com.epita.republic.repository.InfluenceCard
 import com.epita.republic.repository.Player
 
 class InfluenceLogic {
-    companion object {
-        private val influenceCardsTaken: Map<InfluenceStep, MutableSet<InfluenceCard>> = mapOf(
-            Pair(InfluenceStep.FIRST, mutableSetOf()),
-            Pair(InfluenceStep.SECOND, mutableSetOf()),
-            Pair(InfluenceStep.THIRD, mutableSetOf())
-        )
-    }
+    private val influenceCardsTaken: Map<InfluenceStep, MutableSet<InfluenceCard>> =
+        InfluenceStep.entries.associateWith { mutableSetOf() }
 
     fun remainingCardsCount(step: InfluenceStep): Int {
         return getForStep(step).size - influenceCardsTaken[step]!!.size
