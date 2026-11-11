@@ -168,6 +168,11 @@ class GameViewModel : ViewModel() {
         soundEvents.trySend(GameSound.BUY_CARD)
         if (powerLogic.isKept(card)) {
             player.powerCards.add(card)
+            // Extra rerolls count right away if the dice are still being rolled this turn.
+            val effect = card.effect
+            if (effect is PowerEffect.ExtraReroll && currentPhase.value == GamePhase.DICE) {
+                rerollLeft.value = rerollLeft.value!! + effect.amount
+            }
         } else {
             // A bought one-time card is used up: it never returns to the deck or the discard pile.
             val othersAlive = players.count { it !== player && it.isAlive() }
