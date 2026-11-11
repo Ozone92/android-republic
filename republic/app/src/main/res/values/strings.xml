@@ -77,6 +77,7 @@
     <string name="power_placeholder_5">Power 5</string>
     <string name="power_placeholder_6">Power 6</string>
     <string name="power_placeholder_7">Power 7</string>
+    <string name="power_placeholder_8">Power 8</string>
 
     <string name="power_shop_reroll">Reroll (%1$d money)</string>
     <string name="power_shop_empty">No card available</string>

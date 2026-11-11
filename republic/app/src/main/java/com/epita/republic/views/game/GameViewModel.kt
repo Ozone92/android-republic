@@ -16,6 +16,8 @@ import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.InfluenceCard
 import com.epita.republic.repository.Player
 import com.epita.republic.repository.PowerCard
+import com.epita.republic.repository.PowerCardType
+import com.epita.republic.repository.PowerEffect
 import com.epita.republic.R
 import kotlin.random.Random
 import kotlinx.coroutines.Job
@@ -67,13 +69,62 @@ class GameViewModel : ViewModel() {
     val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
 
     private val powerDeck = mutableListOf(
-        PowerCard("power_1", R.string.power_placeholder_1, cost = 0),
-        PowerCard("power_2", R.string.power_placeholder_2, cost = 0),
-        PowerCard("power_3", R.string.power_placeholder_3, cost = 0),
-        PowerCard("power_4", R.string.power_placeholder_4, cost = 0),
-        PowerCard("power_5", R.string.power_placeholder_5, cost = 0),
-        PowerCard("power_6", R.string.power_placeholder_6, cost = 0),
-        PowerCard("power_7", R.string.power_placeholder_7, cost = 0)
+        PowerCard(
+            "power_1",
+            R.string.power_placeholder_1,
+            cost = 3,
+            PowerCardType.DISCARD,
+            PowerEffect.Heal(2)
+        ),
+        PowerCard(
+            "power_2",
+            R.string.power_placeholder_2,
+            cost = 2,
+            PowerCardType.DISCARD,
+            PowerEffect.GainMoney(3)
+        ),
+        PowerCard(
+            "power_3",
+            R.string.power_placeholder_3,
+            cost = 4,
+            PowerCardType.DISCARD,
+            PowerEffect.GainVote(2)
+        ),
+        PowerCard(
+            "power_4",
+            R.string.power_placeholder_4,
+            cost = 2,
+            PowerCardType.DISCARD,
+            PowerEffect.DamageOthers(1)
+        ),
+        PowerCard(
+            "power_5",
+            R.string.power_placeholder_5,
+            cost = 6,
+            PowerCardType.KEEP,
+            PowerEffect.BonusDamage(1)
+        ),
+        PowerCard(
+            "power_6",
+            R.string.power_placeholder_6,
+            cost = 5,
+            PowerCardType.KEEP,
+            PowerEffect.ExtraReroll(1)
+        ),
+        PowerCard(
+            "power_7",
+            R.string.power_placeholder_7,
+            cost = 4,
+            PowerCardType.KEEP,
+            PowerEffect.BonusMoney(1)
+        ),
+        PowerCard(
+            "power_8",
+            R.string.power_placeholder_8,
+            cost = 4,
+            PowerCardType.KEEP,
+            PowerEffect.BonusHeal(1)
+        )
     )
     private val powerDiscard = mutableListOf<PowerCard>()
     private val powerShopSlots = MutableList<PowerCard?>(3) { null }
