@@ -5,7 +5,6 @@
 
     <string name="game_name">KING OF REPUBLIC</string>
     <string name="home_play">PLAY</string>
-    <string name="home_quit">QUIT</string>
 
     <string name="game_phase_text">%1$s: %2$s</string>
     <string name="game_player_card_name">PLAYER %d</string>
