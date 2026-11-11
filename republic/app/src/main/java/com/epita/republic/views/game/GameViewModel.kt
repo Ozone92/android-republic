@@ -287,7 +287,7 @@ class GameViewModel : ViewModel() {
 
             if (!playerInCity.isAlive()) {
                 inCity.value = null
-                deadPlayers.add(currentPlayer.value!!)
+                deadPlayers.add(playerInCity)
             } else {
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
