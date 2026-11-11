@@ -81,8 +81,10 @@ class EndingFragment : Fragment() {
         endingViewModel.parseResult(args.result)
         if (!endingViewModel.resultSoundPlayed && savedInstanceState == null) {
             val humanWon = endingViewModel.winnerPlayer.value?.isBot == false
+            val humanCharacter = args.result.firstOrNull { !it.isBot }?.character
+            val voiceRes = if (humanWon) humanCharacter?.winVoiceRes else humanCharacter?.loseVoiceRes
             GameSoundPlayer(requireContext(), viewLifecycleOwner)
-                .play(if (humanWon) GameSound.WIN else GameSound.LOSE)
+                .play(if (humanWon) GameSound.WIN else GameSound.LOSE, voiceRes)
             endingViewModel.resultSoundPlayed = true
         }
     }
