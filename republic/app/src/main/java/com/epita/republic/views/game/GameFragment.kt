@@ -1,6 +1,11 @@
 package com.epita.republic.views.game
 
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
+import android.view.Gravity
+import android.view.animation.DecelerateInterpolator
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
 import com.epita.republic.audio.GameSoundPlayer
 import kotlinx.coroutines.launch
@@ -38,6 +43,7 @@ class GameFragment : Fragment() {
     lateinit var playerCards: Array<PlayerCard>
     lateinit var middleCard: PlayerCard
     lateinit var turnPhaseTextView: TextView
+    private var shownDiceFaces: Array<DiceFace>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -318,6 +324,9 @@ class GameFragment : Fragment() {
     }
 
     fun renderDice(buttons: Array<Button>, diceFaces: Array<DiceFace>) {
+        val previousFaces = shownDiceFaces
+        val rolled = previousFaces == null || !previousFaces.contentEquals(diceFaces)
+        shownDiceFaces = diceFaces.copyOf()
         for ((index, button) in buttons.withIndex()) {
             val face = diceFaces[index]
             val iconRes = when (face) {
@@ -342,7 +351,40 @@ class GameFragment : Fragment() {
                 })
             }
         }
+        if (rolled && previousFaces != null) {
+            buttons.withIndex()
+                .filter { (index, _) -> !gameViewModel.lockedDiceIndexes.contains(index) }
+                .forEach { (index, button) -> animateRoll(button, index) }
+        }
         renderDicesColor(buttons)
+    }
+
+    private fun animateRoll(button: Button, index: Int) {
+        button.animate().cancel()
+        button.rotation = 0f
+        button.scaleX = DICE_ROLL_START_SCALE
+        button.scaleY = DICE_ROLL_START_SCALE
+        button.animate()
+            .rotation(360f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setStartDelay(index * DICE_ROLL_STAGGER_MS)
+            .setDuration(DICE_ROLL_DURATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .withEndAction { button.rotation = 0f }
+            .start()
+    }
+
+    private fun lockBadge(): Drawable {
+        val icon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_lock)!!
+        val size = resources.getDimensionPixelSize(R.dimen.size_dice_lock)
+        val inset = resources.getDimensionPixelSize(R.dimen.space_s)
+        return LayerDrawable(arrayOf(icon)).apply {
+            setLayerSize(0, size, size)
+            setLayerGravity(0, Gravity.TOP or Gravity.END)
+            setLayerInsetTop(0, inset)
+            setLayerInsetEnd(0, inset / 2)
+        }
     }
 
     fun renderDicesColor(diceButtons: Array<Button>) {
@@ -359,9 +401,25 @@ class GameFragment : Fragment() {
                     if (locked) R.dimen.border_emphasis else R.dimen.border_dice
                 )
             }
+            if (locked && button.foreground == null) {
+                button.foreground = lockBadge()
+            } else if (!locked) {
+                button.foreground = null
+            }
+            val lift = if (locked) -resources.getDimension(R.dimen.size_dice_lift) else 0f
+            if (button.translationY != lift) {
+                button.animate().translationY(lift).setDuration(DICE_LIFT_DURATION_MS).start()
+            }
             ViewCompat.setStateDescription(button, getString(
                 if (locked) R.string.dice_locked else R.string.dice_unlocked
             ))
         }
+    }
+
+    companion object {
+        private const val DICE_ROLL_START_SCALE = 0.7f
+        private const val DICE_ROLL_STAGGER_MS = 40L
+        private const val DICE_ROLL_DURATION_MS = 380L
+        private const val DICE_LIFT_DURATION_MS = 150L
     }
 }
