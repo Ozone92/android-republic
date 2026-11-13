@@ -32,6 +32,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.views.ending.EndingFragmentParameter
+import com.epita.republic.views.help.HowToPlayDialogFragment
 
 class GameFragment : Fragment() {
     val gameViewModel: GameViewModel by viewModels()
@@ -89,6 +90,11 @@ class GameFragment : Fragment() {
 
 
         turnPhaseTextView = view.findViewById(R.id.game_phase_text)
+
+        view.findViewById<View>(R.id.game_help_btn).setOnClickListener {
+            HowToPlayDialogFragment.show(childFragmentManager)
+        }
+        HowToPlayDialogFragment.showOnce(requireContext(), childFragmentManager)
 
         playerCards = arrayOf(
             PlayerCard(

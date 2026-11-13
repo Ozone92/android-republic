@@ -854,4 +854,18 @@
         app:layout_constraintStart_toStartOf="@id/game_middle_player_card"
         app:layout_constraintTop_toTopOf="@id/game_middle_player_card" />
 
+    <ImageButton
+        android:id="@+id/game_help_btn"
+        android:layout_width="@dimen/size_touch_target"
+        android:layout_height="@dimen/size_touch_target"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginEnd="@dimen/space_s"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/help_open"
+        android:padding="@dimen/space_sm"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_help"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

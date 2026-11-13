@@ -127,4 +127,19 @@
     <string name="stat_gain">+%1$d</string>
     <string name="stat_loss">−%1$d</string>
     <string name="game_elysee_label">ÉLYSÉE</string>
+    <string name="help_open">Comment jouer</string>
+    <string name="help_previous">Précédent</string>
+    <string name="help_next">Suivant</string>
+    <string name="help_done">C\'est parti !</string>
+    <string name="help_page">%1$d / %2$d</string>
+    <string name="help_goal_title">Le but</string>
+    <string name="help_goal_body">Devenez président ! Soyez le premier candidat à atteindre 20 votes, ou le dernier à garder de la popularité.\n\nChaque candidat commence avec 10 de popularité. À 0, il est éliminé.</string>
+    <string name="help_dice_title">Les dés</string>
+    <string name="help_dice_body">À votre tour, vous lancez 6 dés. Touchez les dés à garder, puis relancez les autres : vous avez 2 relances. Validez pour appliquer le résultat :\n\n• 3 dés identiques ou plus (1, 2 ou 3) : autant de votes que le chiffre, +1 par dé en plus\n• Argent : +1 € par dé\n• Popularité : +1 par dé, sauf à l\'Élysée\n• Dégât : 1 point de popularité en moins chez vos adversaires</string>
+    <string name="help_elysee_title">L\'Élysée</string>
+    <string name="help_elysee_body">Si l\'Élysée est vide à la fin de votre tour, vous y entrez et gagnez 1 vote, puis 2 votes au début de chacun de vos tours.\n\nMais à l\'Élysée, vos dégâts touchent tous les autres candidats, tous leurs dégâts vous visent et vous ne pouvez pas vous soigner. Quand on vous attaque, vous pouvez partir : l\'attaquant prend alors votre place.</string>
+    <string name="help_influence_title">L\'influence</string>
+    <string name="help_influence_body">Trois 1 rapportent 2 d\'influence, trois 2 en rapportent 1.\n\nÀ 3, 6 et 10 d\'influence, vous choisissez une carte d\'influence : un bonus immédiat ou permanent pour le reste de la partie.</string>
+    <string name="help_shop_title">La boutique</string>
+    <string name="help_shop_body">Votre argent sert à acheter des cartes pouvoir avec le bouton Pouvoirs, pendant votre tour. Trois cartes sont proposées ; si aucune ne vous plaît, renouvelez l\'offre pour 2 €.</string>
 </resources>

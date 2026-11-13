@@ -34,4 +34,5 @@
     <dimen name="elevation_level4">8dp</dimen>
     <dimen name="size_game_portrait_width">64dp</dimen>
     <dimen name="size_game_portrait_height">76dp</dimen>
+    <dimen name="size_dialog_max_width">560dp</dimen>
 </resources>
