@@ -149,4 +149,19 @@
     <string name="hint_no_reroll">Plus de relance : Validez pour appliquer vos dés</string>
     <string name="hint_improve">Touchez le dé dont l\'effet sera doublé, puis Validez</string>
     <string name="hint_bot_dice">%1$s choisit les dés à garder…</string>
+    <string name="summary_line">%1$s : %2$s</string>
+    <string name="summary_you">Vous</string>
+    <string name="summary_you_target">vous</string>
+    <string name="summary_popularity">+%1$d popularité</string>
+    <string name="summary_money">+%1$d €</string>
+    <string name="summary_influence">+%1$d influence</string>
+    <string name="summary_nothing">aucun effet</string>
+    <plurals name="summary_votes">
+        <item quantity="one">+%1$d vote</item>
+        <item quantity="other">+%1$d votes</item>
+    </plurals>
+    <plurals name="summary_damage">
+        <item quantity="one">%1$d dégât à %2$s</item>
+        <item quantity="other">%1$d dégâts à %2$s</item>
+    </plurals>
 </resources>

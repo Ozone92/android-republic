@@ -82,6 +82,9 @@ class GameFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             gameViewModel.sounds.collect { soundPlayer.play(it) }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            gameViewModel.turnSummaries.collect { showTurnSummary(it) }
+        }
         view.findViewById<Button>(R.id.game_power_shop_btn).setOnClickListener {
             if (childFragmentManager.findFragmentByTag(PowerShopDialogFragment.TAG) == null) {
                 PowerShopDialogFragment().show(childFragmentManager, PowerShopDialogFragment.TAG)
@@ -338,6 +341,50 @@ class GameFragment : Fragment() {
         }
     }
 
+    private fun showTurnSummary(summary: TurnSummary) {
+        val banner = view?.findViewById<TextView>(R.id.game_turn_summary) ?: return
+        banner.text = summaryText(summary)
+        banner.removeCallbacks(hideTurnSummary)
+        banner.animate().cancel()
+        if (banner.visibility != View.VISIBLE) {
+            banner.alpha = 0f
+            banner.visibility = View.VISIBLE
+        }
+        banner.animate().alpha(1f).setDuration(SUMMARY_FADE_MS).start()
+        banner.postDelayed(hideTurnSummary, SUMMARY_DURATION_MS)
+    }
+
+    private val hideTurnSummary = Runnable {
+        val banner = view?.findViewById<TextView>(R.id.game_turn_summary) ?: return@Runnable
+        banner.animate()
+            .alpha(0f)
+            .setDuration(SUMMARY_FADE_MS)
+            .withEndAction { banner.visibility = View.GONE }
+            .start()
+    }
+
+    private fun summaryText(summary: TurnSummary): String {
+        fun nameOf(index: Int, asTarget: Boolean = false): String = when {
+            index != 0 -> getString(characters[index].displayName)
+            asTarget -> getString(R.string.summary_you_target)
+            else -> getString(R.string.summary_you)
+        }
+
+        val parts = mutableListOf<String>()
+        if (summary.voteGain > 0) {
+            parts += resources.getQuantityString(R.plurals.summary_votes, summary.voteGain, summary.voteGain)
+        }
+        if (summary.popularityGain > 0) parts += getString(R.string.summary_popularity, summary.popularityGain)
+        if (summary.moneyGain > 0) parts += getString(R.string.summary_money, summary.moneyGain)
+        if (summary.influenceGain > 0) parts += getString(R.string.summary_influence, summary.influenceGain)
+        if (summary.damagedPlayerIndexes.isNotEmpty()) {
+            val targets = summary.damagedPlayerIndexes.joinToString(", ") { nameOf(it, asTarget = true) }
+            parts += resources.getQuantityString(R.plurals.summary_damage, summary.damage, summary.damage, targets)
+        }
+        val effects = if (parts.isEmpty()) getString(R.string.summary_nothing) else parts.joinToString(", ")
+        return getString(R.string.summary_line, nameOf(summary.playerIndex), effects)
+    }
+
     private fun renderDiceHint() {
         val hint = view?.findViewById<TextView>(R.id.game_dice_hint) ?: return
         val player = gameViewModel.currentPlayer.value ?: return
@@ -456,5 +503,7 @@ class GameFragment : Fragment() {
         private const val DICE_ROLL_STAGGER_MS = 40L
         private const val DICE_ROLL_DURATION_MS = 380L
         private const val DICE_LIFT_DURATION_MS = 150L
+        private const val SUMMARY_FADE_MS = 200L
+        private const val SUMMARY_DURATION_MS = 3500L
     }
 }
