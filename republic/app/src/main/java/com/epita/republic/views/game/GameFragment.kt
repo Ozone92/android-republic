@@ -32,6 +32,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.views.ending.EndingFragmentParameter
+import com.epita.republic.views.help.HowToPlayDialogFragment
 
 class GameFragment : Fragment() {
     val gameViewModel: GameViewModel by viewModels()
@@ -81,6 +82,9 @@ class GameFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             gameViewModel.sounds.collect { soundPlayer.play(it) }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            gameViewModel.turnSummaries.collect { showTurnSummary(it) }
+        }
         view.findViewById<Button>(R.id.game_power_shop_btn).setOnClickListener {
             if (childFragmentManager.findFragmentByTag(PowerShopDialogFragment.TAG) == null) {
                 PowerShopDialogFragment().show(childFragmentManager, PowerShopDialogFragment.TAG)
@@ -89,6 +93,11 @@ class GameFragment : Fragment() {
 
 
         turnPhaseTextView = view.findViewById(R.id.game_phase_text)
+
+        view.findViewById<View>(R.id.game_help_btn).setOnClickListener {
+            HowToPlayDialogFragment.show(childFragmentManager)
+        }
+        HowToPlayDialogFragment.showOnce(requireContext(), childFragmentManager)
 
         playerCards = arrayOf(
             PlayerCard(
@@ -198,6 +207,7 @@ class GameFragment : Fragment() {
             diceButton.setOnClickListener {
                 gameViewModel.diceButtonClick(index)
                 renderDicesColor(diceButtons)
+                renderDiceHint()
             }
         }
 
@@ -205,6 +215,7 @@ class GameFragment : Fragment() {
         diceRerollBtn.setOnClickListener { gameViewModel.rollDice() }
         gameViewModel.rerollLeft.observe(this.viewLifecycleOwner) { rerollLeft ->
             diceRerollBtn.text = getString(R.string.game_reroll_text, rerollLeft)
+            renderDiceHint()
         }
 
         val diceConfirmBtn: Button = view.findViewById(R.id.game_dice_confirm)
@@ -217,6 +228,7 @@ class GameFragment : Fragment() {
         gameViewModel.inCity.observe(this.viewLifecycleOwner) { renderPlayers() }
         gameViewModel.dices.observe(this.viewLifecycleOwner) { newDices ->
             renderDice(diceButtons, newDices)
+            renderDiceHint()
         }
 
         val stayBtn: Button = view.findViewById(R.id.game_stay_btn)
@@ -242,6 +254,7 @@ class GameFragment : Fragment() {
             Log.d("GAME", newPhase.name)
             renderTurnPhase()
             renderPlayers()
+            renderDiceHint()
             val isPlayerTurn = !gameViewModel.currentPlayer.value!!.isBot
 
             diceView.visibility = View.INVISIBLE
@@ -325,6 +338,70 @@ class GameFragment : Fragment() {
                 if (isHumanTurn) getString(R.string.turn_shop_you) else getString(R.string.turn_shop_bot, name)
             GamePhase.ASK_LEAVE -> getString(R.string.turn_ask_leave)
             GamePhase.GAME_FINISH -> getString(R.string.turn_game_finish)
+        }
+    }
+
+    private fun showTurnSummary(summary: TurnSummary) {
+        val banner = view?.findViewById<TextView>(R.id.game_turn_summary) ?: return
+        banner.text = summaryText(summary)
+        banner.removeCallbacks(hideTurnSummary)
+        banner.animate().cancel()
+        if (banner.visibility != View.VISIBLE) {
+            banner.alpha = 0f
+            banner.visibility = View.VISIBLE
+        }
+        banner.animate().alpha(1f).setDuration(SUMMARY_FADE_MS).start()
+        banner.postDelayed(hideTurnSummary, SUMMARY_DURATION_MS)
+    }
+
+    private val hideTurnSummary = Runnable {
+        val banner = view?.findViewById<TextView>(R.id.game_turn_summary) ?: return@Runnable
+        banner.animate()
+            .alpha(0f)
+            .setDuration(SUMMARY_FADE_MS)
+            .withEndAction { banner.visibility = View.GONE }
+            .start()
+    }
+
+    private fun summaryText(summary: TurnSummary): String {
+        fun nameOf(index: Int, asTarget: Boolean = false): String = when {
+            index != 0 -> getString(characters[index].displayName)
+            asTarget -> getString(R.string.summary_you_target)
+            else -> getString(R.string.summary_you)
+        }
+
+        val parts = mutableListOf<String>()
+        if (summary.voteGain > 0) {
+            parts += resources.getQuantityString(R.plurals.summary_votes, summary.voteGain, summary.voteGain)
+        }
+        if (summary.popularityGain > 0) parts += getString(R.string.summary_popularity, summary.popularityGain)
+        if (summary.moneyGain > 0) parts += getString(R.string.summary_money, summary.moneyGain)
+        if (summary.influenceGain > 0) parts += getString(R.string.summary_influence, summary.influenceGain)
+        if (summary.damagedPlayerIndexes.isNotEmpty()) {
+            val targets = summary.damagedPlayerIndexes.joinToString(", ") { nameOf(it, asTarget = true) }
+            parts += resources.getQuantityString(R.plurals.summary_damage, summary.damage, summary.damage, targets)
+        }
+        val effects = if (parts.isEmpty()) getString(R.string.summary_nothing) else parts.joinToString(", ")
+        return getString(R.string.summary_line, nameOf(summary.playerIndex), effects)
+    }
+
+    private fun renderDiceHint() {
+        val hint = view?.findViewById<TextView>(R.id.game_dice_hint) ?: return
+        val player = gameViewModel.currentPlayer.value ?: return
+        val dice = gameViewModel.dices.value ?: return
+        val hasTriple = listOf(DiceFace.ONE, DiceFace.TWO, DiceFace.THREE)
+            .any { face -> dice.count { it == face } >= 3 }
+        hint.text = when {
+            player.isBot -> getString(
+                R.string.hint_bot_dice,
+                getString(characters[gameViewModel.currentPlayerTurnIndex.value!!].displayName)
+            )
+            gameViewModel.currentPhase.value == GamePhase.IMPROVE_DICE -> getString(R.string.hint_improve)
+            (gameViewModel.rerollLeft.value ?: 0) == 0 -> getString(R.string.hint_no_reroll)
+            hasTriple -> getString(R.string.hint_triple)
+            player == gameViewModel.inCity.value -> getString(R.string.hint_elysee)
+            gameViewModel.lockedDiceIndexes.isEmpty() -> getString(R.string.hint_keep_dice)
+            else -> getString(R.string.hint_reroll_or_confirm)
         }
     }
 
@@ -426,5 +503,7 @@ class GameFragment : Fragment() {
         private const val DICE_ROLL_STAGGER_MS = 40L
         private const val DICE_ROLL_DURATION_MS = 380L
         private const val DICE_LIFT_DURATION_MS = 150L
+        private const val SUMMARY_FADE_MS = 200L
+        private const val SUMMARY_DURATION_MS = 3500L
     }
 }

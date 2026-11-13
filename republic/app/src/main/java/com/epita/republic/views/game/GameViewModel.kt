@@ -46,9 +46,21 @@ data class PowerShopState(
     val ownedCount: Int
 )
 
+data class TurnSummary(
+    val playerIndex: Int,
+    val voteGain: Int,
+    val popularityGain: Int,
+    val moneyGain: Int,
+    val influenceGain: Int,
+    val damagedPlayerIndexes: List<Int>,
+    val damage: Int
+)
+
 class GameViewModel : ViewModel() {
     private val soundEvents = Channel<GameSound>(Channel.BUFFERED)
     val sounds = soundEvents.receiveAsFlow()
+    private val turnSummaryEvents = Channel<TurnSummary>(Channel.BUFFERED)
+    val turnSummaries = turnSummaryEvents.receiveAsFlow()
 
     private val gameLogic = GameLogic()
     private val influenceLogic = InfluenceLogic()
@@ -372,6 +384,22 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    private fun summarizeTurn(player: Player, before: List<IntArray>): TurnSummary {
+        val own = before[player.playerIndex]
+        val damaged = players.filter {
+            it.playerIndex != player.playerIndex && it.popularity < before[it.playerIndex][1]
+        }
+        return TurnSummary(
+            playerIndex = player.playerIndex,
+            voteGain = player.vote - own[0],
+            popularityGain = player.popularity - own[1],
+            moneyGain = player.money - own[2],
+            influenceGain = player.influence - own[3],
+            damagedPlayerIndexes = damaged.map { it.playerIndex },
+            damage = damaged.maxOfOrNull { before[it.playerIndex][1] - it.popularity } ?: 0
+        )
+    }
+
     fun getWinningPlayerOrder(): Array<Player> {
         val playersOrder =
             mutableListOf(
@@ -424,7 +452,9 @@ class GameViewModel : ViewModel() {
                     }
                     waitForInput()
                     val oldInfluence = player.influence
+                    val statsBefore = players.map { intArrayOf(it.vote, it.popularity, it.money, it.influence) }
                     handleDiceResult()
+                    turnSummaryEvents.trySend(summarizeTurn(player, statsBefore))
 
                     val newInfluenceStep =
                         gameLogic.hasReachInfluenceStep(oldInfluence, player.influence)

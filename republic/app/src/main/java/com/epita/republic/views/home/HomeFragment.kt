@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.epita.republic.R
+import com.epita.republic.views.help.HowToPlayDialogFragment
 
 
 class HomeFragment : Fragment() {
@@ -21,6 +22,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.findViewById<Button>(R.id.home_help_btn).setOnClickListener {
+            HowToPlayDialogFragment.show(childFragmentManager)
+        }
 
         view.findViewById<Button>(R.id.home_play_btn).setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_characterFragment)
