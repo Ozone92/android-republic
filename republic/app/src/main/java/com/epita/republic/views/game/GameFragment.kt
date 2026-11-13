@@ -99,64 +99,15 @@ class GameFragment : Fragment() {
         }
         HowToPlayDialogFragment.showOnce(requireContext(), childFragmentManager)
 
-        playerCards = arrayOf(
+        playerCards = Array(4) { index ->
             PlayerCard(
                 requireContext(),
-                0,
-                gameViewModel.players[0],
-                characters[0],
-                view.findViewById(R.id.game_player1_card),
-                view.findViewById(R.id.game_player1_image),
-                view.findViewById(R.id.game_player1_name_text),
-                view.findViewById(R.id.game_player1_influence_text),
-                view.findViewById(R.id.game_player1_popularity_text),
-                view.findViewById(R.id.game_player1_money_text),
-                view.findViewById(R.id.game_player1_vote_text),
-                awayTextView = view.findViewById(R.id.game_player1_away_text),
-            ),
-            PlayerCard(
-                requireContext(),
-                1,
-                gameViewModel.players[1],
-                characters[1],
-                view.findViewById(R.id.game_player2_card),
-                view.findViewById(R.id.game_player2_image),
-                view.findViewById(R.id.game_player2_name_text),
-                view.findViewById(R.id.game_player2_influence_text),
-                view.findViewById(R.id.game_player2_popularity_text),
-                view.findViewById(R.id.game_player2_money_text),
-                view.findViewById(R.id.game_player2_vote_text),
-                awayTextView = view.findViewById(R.id.game_player2_away_text),
-            ),
-            PlayerCard(
-                requireContext(),
-                2,
-                gameViewModel.players[2],
-                characters[2],
-                view.findViewById(R.id.game_player3_card),
-                view.findViewById(R.id.game_player3_image),
-                view.findViewById(R.id.game_player3_name_text),
-                view.findViewById(R.id.game_player3_influence_text),
-                view.findViewById(R.id.game_player3_popularity_text),
-                view.findViewById(R.id.game_player3_money_text),
-                view.findViewById(R.id.game_player3_vote_text),
-                awayTextView = view.findViewById(R.id.game_player3_away_text),
-            ),
-            PlayerCard(
-                requireContext(),
-                3,
-                gameViewModel.players[3],
-                characters[3],
-                view.findViewById(R.id.game_player4_card),
-                view.findViewById(R.id.game_player4_image),
-                view.findViewById(R.id.game_player4_name_text),
-                view.findViewById(R.id.game_player4_influence_text),
-                view.findViewById(R.id.game_player4_popularity_text),
-                view.findViewById(R.id.game_player4_money_text),
-                view.findViewById(R.id.game_player4_vote_text),
-                awayTextView = view.findViewById(R.id.game_player4_away_text),
-            ),
-        )
+                index,
+                gameViewModel.players[index],
+                characters[index],
+                view.findViewById(playerCardIds[index])
+            )
+        }
 
         middleCard = PlayerCard(
             requireContext(),
@@ -164,12 +115,6 @@ class GameFragment : Fragment() {
             null,
             null,
             view.findViewById(R.id.game_middle_player_card),
-            view.findViewById(R.id.game_middle_player_image),
-            view.findViewById(R.id.game_middle_player_name_text),
-            view.findViewById(R.id.game_middle_player_influence_text),
-            view.findViewById(R.id.game_middle_player_popularity_text),
-            view.findViewById(R.id.game_middle_player_money_text),
-            view.findViewById(R.id.game_middle_player_vote_text),
             isMiddle = true
         )
         (playerCards.toList() + middleCard).forEach { card ->
@@ -499,6 +444,12 @@ class GameFragment : Fragment() {
     }
 
     companion object {
+        private val playerCardIds = intArrayOf(
+            R.id.game_player1_card,
+            R.id.game_player2_card,
+            R.id.game_player3_card,
+            R.id.game_player4_card
+        )
         private const val DICE_ROLL_START_SCALE = 0.7f
         private const val DICE_ROLL_STAGGER_MS = 40L
         private const val DICE_ROLL_DURATION_MS = 380L

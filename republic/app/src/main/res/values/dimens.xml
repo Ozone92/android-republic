@@ -35,4 +35,10 @@
     <dimen name="size_game_portrait_width">64dp</dimen>
     <dimen name="size_game_portrait_height">76dp</dimen>
     <dimen name="size_dialog_max_width">560dp</dimen>
+    <dimen name="size_player_ring">52dp</dimen>
+    <dimen name="size_player_ring_thickness">4dp</dimen>
+    <dimen name="size_player_portrait">44dp</dimen>
+    <dimen name="size_vote_bar">64dp</dimen>
+    <dimen name="size_vote_bar_thickness">6dp</dimen>
+    <dimen name="size_player_name_max">104dp</dimen>
 </resources>
