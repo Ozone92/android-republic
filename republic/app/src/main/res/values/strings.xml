@@ -1,70 +1,78 @@
 <resources>
-    <string name="app_name">republic</string>
+    <string name="app_name">King of Republic</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="game_name">KING OF REPUBLIC</string>
-    <string name="home_play">PLAY</string>
+    <string name="home_play">JOUER</string>
 
-    <string name="game_phase_text">%1$s: %2$s</string>
-    <string name="game_player_card_name">PLAYER %d</string>
-    <string name="game_player_card_influence">INFLUENCE: %d/10</string>
-    <string name="game_player_card_vote">VOTE: %d/20</string>
-    <string name="game_player_card_money">MONEY: %d</string>
-    <string name="game_player_card_popularity">POPULARITY: %1$d/%2$d</string>
-    <string name="game_player_card_away">IN THE ÉLYSÉE</string>
-    <string name="game_reroll_text">REROLL (%d left)</string>
-    <string name="game_validate_dice">CONFIRM</string>
-    <string name="game_stay_leave_question">You got attacked and lose popularity. Did you want to stay?</string>
-    <string name="game_stay_btn_text">STAY</string>
-    <string name="game_leave_btn_text">LEAVE</string>
+    <string name="turn_dice_you">À vous : lancez les dés</string>
+    <string name="turn_dice_bot">%1$s lance les dés…</string>
+    <string name="turn_improve_you">Choisissez le dé à doubler</string>
+    <string name="turn_improve_bot">%1$s choisit un dé à doubler…</string>
+    <string name="turn_influence_you">Choisissez une carte d\'influence</string>
+    <string name="turn_influence_bot">%1$s choisit une carte d\'influence…</string>
+    <string name="turn_shop_you">À vous : passez au magasin</string>
+    <string name="turn_shop_bot">%1$s passe au magasin…</string>
+    <string name="turn_ask_leave">Vous êtes attaqué : restez-vous à l\'Élysée ?</string>
+    <string name="turn_game_finish">Fin de la partie</string>
+    <string name="game_player_card_influence">Influence : %d/10</string>
+    <string name="game_player_card_vote">Votes : %d/20</string>
+    <string name="game_player_card_money">Argent : %d</string>
+    <string name="game_player_card_popularity">Popularité : %1$d/%2$d</string>
+    <string name="game_player_card_away">À L\'ÉLYSÉE</string>
+    <string name="game_reroll_text">RELANCER (%d)</string>
+    <string name="game_validate_dice">VALIDER</string>
+    <string name="game_stay_leave_question">Vous avez été attaqué et perdez de la popularité. Restez-vous à l\'Élysée ?</string>
+    <string name="game_stay_btn_text">RESTER</string>
+    <string name="game_leave_btn_text">PARTIR</string>
 
 
-    <string name="wickedness_card_title">Vous avez atteint un pallier d\'influence. Choisissez une carte !</string>
+    <string name="wickedness_card_title">Vous avez atteint un palier d\'influence. Choisissez une carte !</string>
     <!-- Wickedness tiles strings -->
-    <string name="wickedness_step1_1_title">Levee de fond</string>
-    <string name="wickedness_step1_1_description">Au debut de votre tour, recevez 1 ARGENT</string>
+    <string name="wickedness_step1_1_title">Levée de fonds</string>
+    <string name="wickedness_step1_1_description">Au début de votre tour, recevez 1 ARGENT</string>
 
     <string name="wickedness_step1_2_title">Populaire</string>
-    <string name="wickedness_step1_2_description">Au debut de votre tour, recuperez 1 POPULARITE</string>
+    <string name="wickedness_step1_2_description">Au début de votre tour, récupérez 1 POPULARITÉ</string>
 
     <string name="wickedness_step1_3_title">Ami des petits gens</string>
-    <string name="wickedness_step1_3_description">Gagnez 1 VOTE supplementaire lorsque vous obtenez au moins 3 faces UN</string>
+    <string name="wickedness_step1_3_description">Gagnez 1 VOTE supplémentaire lorsque vous obtenez au moins 3 faces UN</string>
 
-    <string name="wickedness_step1_4_title">Indecis</string>
-    <string name="wickedness_step1_4_description">Gagnez un lance supplementaire a chaque tour</string>
+    <string name="wickedness_step1_4_title">Indécis</string>
+    <string name="wickedness_step1_4_description">Gagnez un lancer supplémentaire à chaque tour</string>
 
-    <string name="wickedness_step2_1_title">Soutien de la societe civile</string>
-    <string name="wickedness_step2_1_description">Gagnez 2 POPULARITE maximum et recuperez toute votre POPULARITE quand vous gagnez cette tuile</string>
+    <string name="wickedness_step2_1_title">Soutien de la société civile</string>
+    <string name="wickedness_step2_1_description">Gagnez 2 POPULARITÉ maximum et récupérez toute votre POPULARITÉ quand vous gagnez cette tuile</string>
 
-    <string name="wickedness_step2_2_title">Corruption des medias</string>
+    <string name="wickedness_step2_2_title">Corruption des médias</string>
     <string name="wickedness_step2_2_description">Tous les autres candidats perdent 4 VOTE</string>
 
-    <string name="wickedness_step2_3_title">Amie des lobby</string>
+    <string name="wickedness_step2_3_title">Amie des lobbies</string>
     <string name="wickedness_step2_3_description">Le prix des cartes dans le magasin diminue de 1 ARGENT pour vous</string>
 
     <string name="wickedness_step2_4_title">Efficace</string>
-    <string name="wickedness_step2_4_description">Doublez l\'effet d\'un de au choix</string>
+    <string name="wickedness_step2_4_description">Doublez l\'effet d\'un dé au choix</string>
 
-    <string name="wickedness_step3_1_title">Primaire reussite</string>
-    <string name="wickedness_step3_1_description">Double l\'effet des faces ARGENT et POPULARITE</string>
+    <string name="wickedness_step3_1_title">Primaire réussie</string>
+    <string name="wickedness_step3_1_description">Double l\'effet des faces ARGENT et POPULARITÉ</string>
 
-    <string name="wickedness_step3_2_title">Derive vers l\'extreme</string>
-    <string name="wickedness_step3_2_description">Double l\'effet des faces DEGAT</string>
+    <string name="wickedness_step3_2_title">Dérive vers l\'extrême</string>
+    <string name="wickedness_step3_2_description">Double l\'effet des faces DÉGÂT</string>
 
     <!-- Ending Fragment Text -->
     <string name="ending_score_win">Victoire par le vote</string>
-    <string name="ending_last_alive_win">Victoire par la credibilite</string>
-    <string name="ending_no_win">Impopularite totale\nPas de gagnant !</string>
-    <string name="ending_lost_alive">Defaite electorale</string>
+    <string name="ending_last_alive_win">Victoire par la crédibilité</string>
+    <string name="ending_no_win">Impopularité totale\nPas de gagnant !</string>
+    <string name="ending_lost_alive">Défaite électorale</string>
     <string name="ending_lost_dead">Devenu impopulaire</string>
     <string name="ending_menu_button">MENU</string>
     <string name="ending_play_again_button">RELANCER</string>
-    <string name="power_shop_title">Power Cards</string>
-    <string name="power_shop_open">Powers</string>
-    <string name="power_shop_close">Close</string>
-    <string name="power_shop_buy">Buy</string>
-    <string name="power_shop_buy_cost">Buy (%1$d money)</string>
+    <string name="power_shop_title">Cartes pouvoir</string>
+    <string name="power_shop_open">Pouvoirs · %1$d €</string>
+    <string name="power_shop_close">Fermer</string>
+    <string name="power_shop_buy">Acheter</string>
+    <string name="power_shop_buy_cost">Acheter (%1$d €)</string>
 
     <string name="power_shop_allowed">Your turn: purchases available</string>
     <string name="power_shop_blocked">Opponent’s turn: purchases unavailable</string>
@@ -77,23 +85,23 @@
     <string name="power_placeholder_6">Power 6</string>
     <string name="power_placeholder_7">Power 7</string>
 
-    <string name="power_shop_reroll">Reroll (%1$d money)</string>
-    <string name="power_shop_empty">No card available</string>
-    <string name="power_shop_counts">Deck: %1$d · Discard: %2$d · Your Money: %3$d</string>
+    <string name="power_shop_reroll">Renouveler (%1$d €)</string>
+    <string name="power_shop_empty">Aucune carte disponible</string>
+    <string name="power_shop_counts">Pioche : %1$d · Défausse : %2$d · Votre argent : %3$d €</string>
     <string name="power_placeholder_description">Power description coming soon</string>
 
-    <string name="power_shop_placeholder_message">Card %1$d: purchase not implemented yet</string>
-    <string name="dice_face_one">One vote</string>
-    <string name="dice_face_two">Two votes</string>
-    <string name="dice_face_three">Three votes</string>
-    <string name="dice_face_money">Money</string>
-    <string name="dice_face_damage">Damage</string>
-    <string name="dice_face_health">Health</string>
-    <string name="dice_locked">Locked</string>
-    <string name="dice_unlocked">Unlocked</string>
-    <string name="dice_legend_open">Show dice values</string>
-    <string name="dice_legend_title">Dice values</string>
-    <string name="dice_legend_close">Close</string>
+    <string name="power_shop_placeholder_message">Carte %1$d : achat pas encore disponible</string>
+    <string name="dice_face_one">Un vote</string>
+    <string name="dice_face_two">Deux votes</string>
+    <string name="dice_face_three">Trois votes</string>
+    <string name="dice_face_money">Argent</string>
+    <string name="dice_face_damage">Dégât</string>
+    <string name="dice_face_health">Popularité</string>
+    <string name="dice_locked">Bloqué</string>
+    <string name="dice_unlocked">Libre</string>
+    <string name="dice_legend_open">Voir les faces des dés</string>
+    <string name="dice_legend_title">Faces des dés</string>
+    <string name="dice_legend_close">Fermer</string>
     <string name="dice_value_one">1</string>
     <string name="dice_value_two">2</string>
     <string name="dice_value_three">3</string>
@@ -101,10 +109,22 @@
     <string name="game_player_card_vote_value">%1$d/20</string>
     <string name="game_player_card_influence_value">%1$d/10</string>
     <string name="game_player_card_popularity_value">%1$d/%2$d</string>
-    <string name="player_details_open">Show details for %1$s</string>
-    <string name="player_details_title">PLAYER %1$d · %2$s</string>
-    <string name="player_details_powers">Power cards</string>
-    <string name="player_details_influence">Influence cards</string>
-    <string name="player_details_empty">No cards yet</string>
-    <string name="player_details_close">Close</string>
+    <string name="player_details_open">Voir le détail de %1$s</string>
+    <string name="player_details_powers">Cartes pouvoir</string>
+    <string name="player_details_influence">Cartes d\'influence</string>
+    <string name="player_details_empty">Aucune carte pour l\'instant</string>
+    <string name="player_details_close">Fermer</string>
+    <string name="character_melanchon">Mélenchon</string>
+    <string name="character_obono">Obono</string>
+    <string name="character_macron">Macron</string>
+    <string name="character_pecresse">Pécresse</string>
+    <string name="character_hollande">Hollande</string>
+    <string name="character_lepen">Le Pen</string>
+    <string name="character_durif">Durif</string>
+    <string name="character_lassalle">Lassalle</string>
+    <string name="character_royal">Royal</string>
+    <string name="game_player_you">%1$s · Vous</string>
+    <string name="stat_gain">+%1$d</string>
+    <string name="stat_loss">−%1$d</string>
+    <string name="game_elysee_label">ÉLYSÉE</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.epita.republic.views.ending
 
+import com.epita.republic.views.common.playerName
 import android.os.Bundle
 import com.epita.republic.audio.GameSound
 import com.epita.republic.audio.GameSoundPlayer
@@ -62,7 +63,7 @@ class EndingFragment : Fragment() {
                 }
 
                 winnerImageView.setImageResource(winner.character.centerImageRes)
-                winnerNameText.text = getString(R.string.game_player_card_name, winner.playerIndex + 1)
+                winnerNameText.text = playerName(requireContext(), winner.character, winner.isBot)
                 winnerVictoryText.text = getString(winner.endPlayerState.text)
             }
         }

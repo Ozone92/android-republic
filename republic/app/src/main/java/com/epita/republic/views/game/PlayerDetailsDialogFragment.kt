@@ -1,5 +1,6 @@
 package com.epita.republic.views.game
 
+import com.epita.republic.views.common.playerName
 import android.app.Dialog
 import android.os.Bundle
 import android.view.ViewGroup
@@ -32,7 +33,7 @@ class PlayerDetailsDialogFragment : DialogFragment() {
         }
         val portrait = ImageView(context).apply {
             scaleType = ImageView.ScaleType.FIT_CENTER
-            contentDescription = character.name
+            contentDescription = getString(character.displayName)
         }
         content.addView(portrait, LinearLayout.LayoutParams(dp(96), dp(120)))
         val stats = LinearLayout(context).apply {
@@ -85,7 +86,7 @@ class PlayerDetailsDialogFragment : DialogFragment() {
         gameViewModel.powerShop.observe(this) { render() }
 
         return MaterialAlertDialogBuilder(context)
-            .setTitle(getString(R.string.player_details_title, playerIndex + 1, character.name))
+            .setTitle(playerName(context, character, isBot = playerIndex != 0))
             .setView(ScrollView(context).apply { addView(content) })
             .setPositiveButton(R.string.player_details_close, null)
             .create()

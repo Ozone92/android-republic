@@ -37,8 +37,9 @@ class CharacterAdapter(
         val character = characters[position]
 
         holder.image.setImageResource(character.defaultImageRes)
-        holder.card.contentDescription = character.name
-        holder.name.text = character.name
+        val name = holder.itemView.context.getString(character.displayName)
+        holder.card.contentDescription = name
+        holder.name.text = name
 
         holder.card.setOnClickListener {
             onCharacterClick(character)

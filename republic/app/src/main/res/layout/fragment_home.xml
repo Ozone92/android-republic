@@ -6,14 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".views.home.HomeFragment">
 
-    <ImageView
-        android:id="@+id/home_background_img"
+    <com.epita.republic.views.common.HemicycleBackgroundView
+        android:id="@+id/home_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="@null"
         android:importantForAccessibility="no"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

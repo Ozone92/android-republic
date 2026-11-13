@@ -14,6 +14,8 @@
     <dimen name="size_button_wide">160dp</dimen>
     <dimen name="size_dice">56dp</dimen>
     <dimen name="size_dice_icon">36dp</dimen>
+    <dimen name="size_dice_lock">14dp</dimen>
+    <dimen name="size_dice_lift">6dp</dimen>
     <dimen name="size_player_card">156dp</dimen>
     <dimen name="size_avatar">40dp</dimen>
     <dimen name="size_stat_icon">14dp</dimen>

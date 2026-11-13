@@ -9,6 +9,7 @@
     <attr name="colorPlayerBot" format="color" />
     <attr name="colorElysee" format="color" />
     <attr name="colorElyseeContainer" format="color" />
+    <attr name="colorOnElysee" format="color" />
     <attr name="colorDiceFace" format="color" />
     <attr name="colorDiceLocked" format="color" />
     <attr name="colorStatVote" format="color" />
@@ -21,4 +22,8 @@
     <!-- Game-specific text styles, used with ?attr/textAppearancePhase -->
     <attr name="textAppearancePhase" format="reference" />
     <attr name="textAppearanceStat" format="reference" />
+
+    <declare-styleable name="HemicycleBackgroundView">
+        <attr name="ambient" format="boolean" />
+    </declare-styleable>
 </resources>

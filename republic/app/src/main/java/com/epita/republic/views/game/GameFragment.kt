@@ -1,6 +1,11 @@
 package com.epita.republic.views.game
 
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
+import android.view.Gravity
+import android.view.animation.DecelerateInterpolator
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
 import com.epita.republic.audio.GameSoundPlayer
 import kotlinx.coroutines.launch
@@ -8,6 +13,9 @@ import android.content.res.ColorStateList
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -35,6 +43,7 @@ class GameFragment : Fragment() {
     lateinit var playerCards: Array<PlayerCard>
     lateinit var middleCard: PlayerCard
     lateinit var turnPhaseTextView: TextView
+    private var shownDiceFaces: Array<DiceFace>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +51,28 @@ class GameFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_game, container, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setSystemBarsHidden(true)
+    }
+
+    override fun onPause() {
+        setSystemBarsHidden(false)
+        super.onPause()
+    }
+
+    private fun setSystemBarsHidden(hidden: Boolean) {
+        val window = requireActivity().window
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+        if (hidden) {
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.hide(WindowInsetsCompat.Type.statusBars())
+        } else {
+            controller.show(WindowInsetsCompat.Type.statusBars())
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -258,7 +289,11 @@ class GameFragment : Fragment() {
     }
 
     fun renderPlayers() {
+        view?.findViewById<Button>(R.id.game_power_shop_btn)?.text =
+            getString(R.string.power_shop_open, gameViewModel.players[0].money)
         middleCard.setVisibility(View.INVISIBLE)
+        val elyseeLabel = view?.findViewById<View>(R.id.game_elysee_label)
+        elyseeLabel?.visibility = View.INVISIBLE
         val activePlayerIndex = gameViewModel.currentPlayerTurnIndex.value
         for (playerCard in playerCards) {
             val player = playerCard.getPlayer()!!
@@ -266,6 +301,7 @@ class GameFragment : Fragment() {
             if (player == gameViewModel.inCity.value) {
                 middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getCharacter(), isActive)
                 middleCard.setVisibility(View.VISIBLE)
+                elyseeLabel?.visibility = View.VISIBLE
                 playerCard.setAway(true)
             } else {
                 playerCard.setAway(false)
@@ -276,19 +312,26 @@ class GameFragment : Fragment() {
 
     fun renderTurnPhase() {
         val playerIndex = gameViewModel.currentPlayerTurnIndex.value!!
-        val playerName = if (playerIndex == 0) {
-            getString(R.string.game_player_card_name, playerIndex + 1)
-        } else {
-            characters[playerIndex].name
+        val name = getString(characters[playerIndex].displayName)
+        val isHumanTurn = playerIndex == 0
+        turnPhaseTextView.text = when (gameViewModel.currentPhase.value!!) {
+            GamePhase.DICE ->
+                if (isHumanTurn) getString(R.string.turn_dice_you) else getString(R.string.turn_dice_bot, name)
+            GamePhase.IMPROVE_DICE ->
+                if (isHumanTurn) getString(R.string.turn_improve_you) else getString(R.string.turn_improve_bot, name)
+            GamePhase.INFLUENCE ->
+                if (isHumanTurn) getString(R.string.turn_influence_you) else getString(R.string.turn_influence_bot, name)
+            GamePhase.SHOP ->
+                if (isHumanTurn) getString(R.string.turn_shop_you) else getString(R.string.turn_shop_bot, name)
+            GamePhase.ASK_LEAVE -> getString(R.string.turn_ask_leave)
+            GamePhase.GAME_FINISH -> getString(R.string.turn_game_finish)
         }
-        turnPhaseTextView.text = getString(
-            R.string.game_phase_text,
-            playerName,
-            gameViewModel.currentPhase.value.toString()
-        )
     }
 
     fun renderDice(buttons: Array<Button>, diceFaces: Array<DiceFace>) {
+        val previousFaces = shownDiceFaces
+        val rolled = previousFaces == null || !previousFaces.contentEquals(diceFaces)
+        shownDiceFaces = diceFaces.copyOf()
         for ((index, button) in buttons.withIndex()) {
             val face = diceFaces[index]
             val iconRes = when (face) {
@@ -313,7 +356,40 @@ class GameFragment : Fragment() {
                 })
             }
         }
+        if (rolled && previousFaces != null) {
+            buttons.withIndex()
+                .filter { (index, _) -> !gameViewModel.lockedDiceIndexes.contains(index) }
+                .forEach { (index, button) -> animateRoll(button, index) }
+        }
         renderDicesColor(buttons)
+    }
+
+    private fun animateRoll(button: Button, index: Int) {
+        button.animate().cancel()
+        button.rotation = 0f
+        button.scaleX = DICE_ROLL_START_SCALE
+        button.scaleY = DICE_ROLL_START_SCALE
+        button.animate()
+            .rotation(360f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setStartDelay(index * DICE_ROLL_STAGGER_MS)
+            .setDuration(DICE_ROLL_DURATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .withEndAction { button.rotation = 0f }
+            .start()
+    }
+
+    private fun lockBadge(): Drawable {
+        val icon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_lock)!!
+        val size = resources.getDimensionPixelSize(R.dimen.size_dice_lock)
+        val inset = resources.getDimensionPixelSize(R.dimen.space_s)
+        return LayerDrawable(arrayOf(icon)).apply {
+            setLayerSize(0, size, size)
+            setLayerGravity(0, Gravity.TOP or Gravity.END)
+            setLayerInsetTop(0, inset)
+            setLayerInsetEnd(0, inset / 2)
+        }
     }
 
     fun renderDicesColor(diceButtons: Array<Button>) {
@@ -330,9 +406,25 @@ class GameFragment : Fragment() {
                     if (locked) R.dimen.border_emphasis else R.dimen.border_dice
                 )
             }
+            if (locked && button.foreground == null) {
+                button.foreground = lockBadge()
+            } else if (!locked) {
+                button.foreground = null
+            }
+            val lift = if (locked) -resources.getDimension(R.dimen.size_dice_lift) else 0f
+            if (button.translationY != lift) {
+                button.animate().translationY(lift).setDuration(DICE_LIFT_DURATION_MS).start()
+            }
             ViewCompat.setStateDescription(button, getString(
                 if (locked) R.string.dice_locked else R.string.dice_unlocked
             ))
         }
+    }
+
+    companion object {
+        private const val DICE_ROLL_START_SCALE = 0.7f
+        private const val DICE_ROLL_STAGGER_MS = 40L
+        private const val DICE_ROLL_DURATION_MS = 380L
+        private const val DICE_LIFT_DURATION_MS = 150L
     }
 }
