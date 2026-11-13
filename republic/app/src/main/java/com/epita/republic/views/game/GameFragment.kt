@@ -1,5 +1,6 @@
 package com.epita.republic.views.game
 
+import com.epita.republic.views.common.playerName
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.epita.republic.audio.GameSoundPlayer
@@ -276,11 +277,7 @@ class GameFragment : Fragment() {
 
     fun renderTurnPhase() {
         val playerIndex = gameViewModel.currentPlayerTurnIndex.value!!
-        val playerName = if (playerIndex == 0) {
-            getString(R.string.game_player_card_name, playerIndex + 1)
-        } else {
-            characters[playerIndex].name
-        }
+        val playerName = playerName(requireContext(), characters[playerIndex], isBot = playerIndex != 0)
         turnPhaseTextView.text = getString(
             R.string.game_phase_text,
             playerName,

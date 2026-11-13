@@ -1,5 +1,6 @@
 package com.epita.republic.views.game
 
+import com.epita.republic.views.common.playerName
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
@@ -96,8 +97,7 @@ class PlayerCard(
                 }
             }
 
-            val botName = if (player!!.isBot) playerCharacter?.name else null
-            val playerName = botName ?: context.getString(R.string.game_player_card_name, playerIndex + 1)
+            val playerName = playerCharacter?.let { playerName(context, it, player!!.isBot) } ?: ""
             imageView.contentDescription = context.getString(R.string.player_details_open, playerName)
             nameTextView.text = playerName
             influenceTextView.text =
