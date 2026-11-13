@@ -124,4 +124,6 @@
     <string name="character_lassalle">Lassalle</string>
     <string name="character_royal">Royal</string>
     <string name="game_player_you">%1$s · Vous</string>
+    <string name="stat_gain">+%1$d</string>
+    <string name="stat_loss">−%1$d</string>
 </resources>
