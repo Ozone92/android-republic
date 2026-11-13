@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.epita.republic.R
-import kotlin.system.exitProcess
 
 
 class HomeFragment : Fragment() {
@@ -22,10 +21,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        view.findViewById<Button>(R.id.home_quit_btn).setOnClickListener {
-            exitProcess(0)
-        }
 
         view.findViewById<Button>(R.id.home_play_btn).setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_characterFragment)
