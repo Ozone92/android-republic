@@ -20,7 +20,7 @@
     <string name="game_player_card_vote">Votes : %d/20</string>
     <string name="game_player_card_money">Argent : %d</string>
     <string name="game_player_card_popularity">Popularité : %1$d/%2$d</string>
-    <string name="game_player_card_away">À L\'ÉLYSÉE</string>
+    <string name="game_player_card_away">À l\'Élysée</string>
     <string name="game_reroll_text">RELANCER (%d)</string>
     <string name="game_validate_dice">VALIDER</string>
     <string name="game_stay_leave_question">Vous avez été attaqué et perdez de la popularité. Restez-vous à l\'Élysée ?</string>

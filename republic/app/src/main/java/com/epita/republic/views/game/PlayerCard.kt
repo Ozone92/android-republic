@@ -2,6 +2,8 @@ package com.epita.republic.views.game
 
 import com.epita.republic.views.common.playerName
 import android.content.Context
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
 import android.view.Gravity
 import android.view.View
@@ -9,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.ColorUtils
 import com.epita.republic.R
 import com.epita.republic.domain.Character
 import com.epita.republic.repository.Player
@@ -43,6 +44,7 @@ class PlayerCard(
     private var shownPlayer: Player? = null
     private var shownStats: IntArray? = null
     private var shownImageRes = 0
+    private val grayscale = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
 
     init {
         val iconSize = context.resources.getDimensionPixelSize(R.dimen.size_stat_icon)
@@ -57,6 +59,11 @@ class PlayerCard(
             label.setCompoundDrawablesRelative(icon, null, null, null)
             label.compoundDrawablePadding = iconPadding
             label.gravity = Gravity.CENTER_VERTICAL
+        }
+        AppCompatResources.getDrawable(context, R.drawable.ic_crown)?.mutate()?.let { crown ->
+            crown.setBounds(0, 0, iconSize, iconSize)
+            crown.setTint(MaterialColors.getColor(cardView, R.attr.colorOnElysee))
+            awayTextView.setCompoundDrawablesRelative(crown, null, null, null)
         }
         if (isMiddle) {
             content.setPaddingRelative(
@@ -76,23 +83,24 @@ class PlayerCard(
         cardView.visibility = visibility
     }
 
-    // While the player sits in the Élysée, the seat stays in place as a dashed placeholder
     fun setAway(away: Boolean) {
-        val contentVisibility = if (away) View.INVISIBLE else View.VISIBLE
+        val statsVisibility = if (away) View.INVISIBLE else View.VISIBLE
         listOf(
-            imageView, popularityRing, popularityTextView, voteProgress,
+            popularityRing, popularityTextView, voteProgress,
             voteTextView, moneyTextView, influenceTextView
-        ).forEach { it.visibility = contentVisibility }
-        youBadge.visibility = if (!away && player?.isBot == false) View.VISIBLE else View.GONE
+        ).forEach { it.visibility = statsVisibility }
         awayTextView.visibility = if (away) View.VISIBLE else View.GONE
+        youBadge.visibility = if (!away && player?.isBot == false) View.VISIBLE else View.GONE
         nameTextView.text = playerCharacter?.let { context.getString(it.displayName) } ?: ""
+        playerCharacter?.let { showPortrait(it.defaultImageRes) }
+        imageView.colorFilter = if (away) grayscale else null
 
         val surface = MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurfaceContainer)
-        cardView.setCardBackgroundColor(if (away) ColorUtils.setAlphaComponent(surface, 0xD9) else surface)
+        cardView.setCardBackgroundColor(surface)
+        cardView.alpha = if (away) AWAY_ALPHA else 1f
         cardView.cardElevation =
             if (away) 0f else context.resources.getDimension(R.dimen.elevation_level1)
         cardView.strokeWidth = 0
-        content.setBackgroundResource(if (away) R.drawable.bg_seat_away else 0)
         cardView.visibility = View.VISIBLE
     }
 
@@ -110,6 +118,8 @@ class PlayerCard(
         playerCharacter?.let {
             showPortrait(if (isMiddle) it.centerImageRes else it.defaultImageRes)
         }
+        imageView.colorFilter = null
+        cardView.alpha = 1f
 
         val name = playerCharacter?.let { playerName(context, it, current.isBot) } ?: ""
         imageView.contentDescription = context.getString(R.string.player_details_open, name)
@@ -223,5 +233,6 @@ class PlayerCard(
     companion object {
         private const val DELTA_HOLD_MS = 700L
         private const val DELTA_FADE_MS = 900L
+        private const val AWAY_ALPHA = 0.55f
     }
 }

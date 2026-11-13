@@ -26,6 +26,7 @@
     <dimen name="border_default">1dp</dimen>
     <dimen name="border_emphasis">3dp</dimen>
     <dimen name="border_dice">2dp</dimen>
+    <dimen name="border_arc">1.5dp</dimen>
 
     <!-- Elevation levels -->
     <dimen name="elevation_level0">0dp</dimen>

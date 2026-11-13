@@ -22,8 +22,4 @@
     <!-- Game-specific text styles, used with ?attr/textAppearancePhase -->
     <attr name="textAppearancePhase" format="reference" />
     <attr name="textAppearanceStat" format="reference" />
-
-    <declare-styleable name="HemicycleBackgroundView">
-        <attr name="ambient" format="boolean" />
-    </declare-styleable>
 </resources>

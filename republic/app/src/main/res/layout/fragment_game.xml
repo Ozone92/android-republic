@@ -6,9 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".views.game.GameFragment">
 
-    <com.epita.republic.views.common.HemicycleBackgroundView
+    <com.epita.republic.views.common.HemicycleArcsView
         android:id="@+id/game_background"
-        app:ambient="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
