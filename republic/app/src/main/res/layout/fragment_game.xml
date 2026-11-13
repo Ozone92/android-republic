@@ -602,9 +602,10 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/game_dice_actions_barrier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:barrierDirection="left"
+                app:barrierDirection="start"
                 app:constraint_referenced_ids="game_dice_reroll,game_dice_confirm" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -681,10 +682,23 @@
                 android:layout_width="@dimen/size_dice"
                 android:layout_height="@dimen/size_dice"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/game_dice_reroll"
+                app:layout_constraintEnd_toStartOf="@+id/game_power_shop_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/game_dice5_btn"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/game_power_shop_btn"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_s"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/game_dice_actions_barrier"
+                app:layout_constraintStart_toEndOf="@+id/game_dice6_btn"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/power_shop_open" />
 
             <Button
                 android:id="@+id/game_dice_reroll"
@@ -822,16 +836,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <Button
-        android:id="@+id/game_power_shop_btn"
-        style="@style/Widget.Republic.Button.Tonal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/space_sm"
-        android:layout_marginBottom="@dimen/space_sm"
-        android:text="@string/power_shop_open"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

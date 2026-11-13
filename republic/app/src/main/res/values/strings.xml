@@ -69,7 +69,7 @@
     <string name="ending_menu_button">MENU</string>
     <string name="ending_play_again_button">RELANCER</string>
     <string name="power_shop_title">Cartes pouvoir</string>
-    <string name="power_shop_open">Pouvoirs</string>
+    <string name="power_shop_open">Pouvoirs · %1$d €</string>
     <string name="power_shop_close">Fermer</string>
     <string name="power_shop_buy">Acheter</string>
     <string name="power_shop_buy_cost">Acheter (%1$d €)</string>

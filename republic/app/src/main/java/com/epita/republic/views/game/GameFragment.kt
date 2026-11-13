@@ -289,6 +289,8 @@ class GameFragment : Fragment() {
     }
 
     fun renderPlayers() {
+        view?.findViewById<Button>(R.id.game_power_shop_btn)?.text =
+            getString(R.string.power_shop_open, gameViewModel.players[0].money)
         middleCard.setVisibility(View.INVISIBLE)
         val activePlayerIndex = gameViewModel.currentPlayerTurnIndex.value
         for (playerCard in playerCards) {
