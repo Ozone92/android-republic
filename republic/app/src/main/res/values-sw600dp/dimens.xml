@@ -9,4 +9,8 @@
     <dimen name="size_stat_icon">18dp</dimen>
     <dimen name="size_game_portrait_width">80dp</dimen>
     <dimen name="size_game_portrait_height">100dp</dimen>
+    <dimen name="size_player_ring">68dp</dimen>
+    <dimen name="size_player_portrait">58dp</dimen>
+    <dimen name="size_vote_bar">96dp</dimen>
+    <dimen name="size_player_name_max">140dp</dimen>
 </resources>

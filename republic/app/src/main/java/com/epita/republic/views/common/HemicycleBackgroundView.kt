@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.ColorUtils
-import com.epita.republic.R
 import com.google.android.material.color.MaterialColors
 import kotlin.math.PI
 import kotlin.math.cos
@@ -25,25 +24,11 @@ class HemicycleBackgroundView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val ambient: Boolean = context.obtainStyledAttributes(
-        attrs, R.styleable.HemicycleBackgroundView, defStyleAttr, 0
-    ).let { array ->
-        val value = array.getBoolean(R.styleable.HemicycleBackgroundView_ambient, true)
-        array.recycle()
-        value
-    }
-
     private val backgroundColor = MaterialColors.getColor(
         context, android.R.attr.colorBackground, Color.WHITE
     )
     private val seatColor = MaterialColors.getColor(
-        context,
-        if (ambient) {
-            com.google.android.material.R.attr.colorOutlineVariant
-        } else {
-            com.google.android.material.R.attr.colorSurfaceContainerHigh
-        },
-        Color.LTGRAY
+        context, com.google.android.material.R.attr.colorOutlineVariant, Color.LTGRAY
     )
     private val leftColor = MaterialColors.getColor(
         context, com.google.android.material.R.attr.colorSecondary, Color.RED
@@ -77,7 +62,7 @@ class HemicycleBackgroundView @JvmOverloads constructor(
         val outerRadius = min(w * 0.47f, h * 0.9f)
         val innerRadius = outerRadius * INNER_RATIO
         val rowGap = (outerRadius - innerRadius) / (ROWS - 1)
-        seatRadius = rowGap * if (ambient) SEAT_RATIO else CALM_SEAT_RATIO
+        seatRadius = rowGap * SEAT_RATIO
 
         val xs = mutableListOf<Float>()
         val ys = mutableListOf<Float>()
@@ -120,7 +105,7 @@ class HemicycleBackgroundView @JvmOverloads constructor(
         canvas.drawColor(backgroundColor)
         if (seatX.isEmpty()) return
 
-        val animate = ambient && ValueAnimator.areAnimatorsEnabled()
+        val animate = ValueAnimator.areAnimatorsEnabled()
         val now = SystemClock.uptimeMillis()
 
         if (animate) {
@@ -161,7 +146,6 @@ class HemicycleBackgroundView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (!ambient) return super.onTouchEvent(event)
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                 val now = SystemClock.uptimeMillis()
@@ -190,7 +174,6 @@ class HemicycleBackgroundView @JvmOverloads constructor(
         private const val ROWS = 11
         private const val INNER_RATIO = 0.36f
         private const val SEAT_RATIO = 0.3f
-        private const val CALM_SEAT_RATIO = 0.22f
         private const val SIDE_THRESHOLD = 0.35f
         private const val SPAWN_INTERVAL_MS = 90L
         private const val LIT_DURATION_MS = 2600L

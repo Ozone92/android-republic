@@ -2,58 +2,80 @@ package com.epita.republic.views.game
 
 import com.epita.republic.views.common.playerName
 import android.content.Context
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Matrix
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.ColorUtils
+import androidx.appcompat.content.res.AppCompatResources
 import com.epita.republic.R
 import com.epita.republic.domain.Character
 import com.epita.republic.repository.Player
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlin.math.abs
+import kotlin.math.max
 
 class PlayerCard(
     private val context: Context,
     private var playerIndex: Int,
     private var player: Player?,
     private var playerCharacter: Character?,
-
     private val cardView: MaterialCardView,
-    private val imageView: ImageView,
-    private val nameTextView: TextView,
-    private val influenceTextView: TextView,
-    private val popularityTextView: TextView,
-    private val moneyTextView: TextView,
-    private val voteTextView: TextView,
-    private val awayTextView: TextView? = null,
-
     private val isMiddle: Boolean = false,
 ) {
+    private val content: ViewGroup = cardView.findViewById(R.id.player_content)
+    private val imageView: ImageView = cardView.findViewById(R.id.player_image)
+    private val popularityRing: CircularProgressIndicator = cardView.findViewById(R.id.player_popularity_ring)
+    private val nameTextView: TextView = cardView.findViewById(R.id.player_name_text)
+    private val voteProgress: LinearProgressIndicator = cardView.findViewById(R.id.player_vote_progress)
+    private val voteTextView: TextView = cardView.findViewById(R.id.player_vote_text)
+    private val popularityTextView: TextView = cardView.findViewById(R.id.player_popularity_text)
+    private val moneyTextView: TextView = cardView.findViewById(R.id.player_money_text)
+    private val influenceTextView: TextView = cardView.findViewById(R.id.player_influence_text)
+    private val awayTextView: TextView = cardView.findViewById(R.id.player_away_text)
+    private val youBadge: TextView = cardView.findViewById(R.id.player_you_badge)
+
     private var shownPlayer: Player? = null
     private var shownStats: IntArray? = null
+    private var shownImageRes = 0
+    private val grayscale = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
 
     init {
-        val iconSize = (18 * context.resources.displayMetrics.density).toInt()
-        val iconPadding = (4 * context.resources.displayMetrics.density).toInt()
+        val iconSize = context.resources.getDimensionPixelSize(R.dimen.size_stat_icon)
+        val iconPadding = context.resources.getDimensionPixelSize(R.dimen.space_xxs)
         listOf(
-            voteTextView to R.drawable.stat_vote,
             moneyTextView to R.drawable.dice_money,
             popularityTextView to R.drawable.stat_popularity,
             influenceTextView to R.drawable.stat_influence
         ).forEach { (label, resource) ->
-            val icon = androidx.appcompat.content.res.AppCompatResources
-                .getDrawable(context, resource)?.mutate()
+            val icon = AppCompatResources.getDrawable(context, resource)?.mutate()
             icon?.setBounds(0, 0, iconSize, iconSize)
             label.setCompoundDrawablesRelative(icon, null, null, null)
             label.compoundDrawablePadding = iconPadding
-            label.gravity = android.view.Gravity.CENTER_VERTICAL
+            label.gravity = Gravity.CENTER_VERTICAL
+        }
+        AppCompatResources.getDrawable(context, R.drawable.ic_crown)?.mutate()?.let { crown ->
+            crown.setBounds(0, 0, iconSize, iconSize)
+            crown.setTint(MaterialColors.getColor(cardView, R.attr.colorOnElysee))
+            awayTextView.setCompoundDrawablesRelative(crown, null, null, null)
+        }
+        if (isMiddle) {
+            content.setPaddingRelative(
+                content.paddingStart,
+                content.paddingTop + context.resources.getDimensionPixelSize(R.dimen.space_sm),
+                content.paddingEnd,
+                content.paddingBottom
+            )
         }
     }
 
     fun setOnPortraitClick(onClick: (PlayerCard) -> Unit) {
-        imageView.isFocusable = true
         imageView.setOnClickListener { onClick(this) }
     }
 
@@ -61,69 +83,81 @@ class PlayerCard(
         cardView.visibility = visibility
     }
 
-    // While the player sits in the Élysée, the seat stays in place as a dashed placeholder
     fun setAway(away: Boolean) {
-        val contentVisibility = if (away) View.INVISIBLE else View.VISIBLE
-        listOf(imageView, influenceTextView, popularityTextView, moneyTextView, voteTextView)
-            .forEach { it.visibility = contentVisibility }
-        awayTextView?.visibility = if (away) View.VISIBLE else View.GONE
+        val statsVisibility = if (away) View.INVISIBLE else View.VISIBLE
+        listOf(
+            popularityRing, popularityTextView, voteProgress,
+            voteTextView, moneyTextView, influenceTextView
+        ).forEach { it.visibility = statsVisibility }
+        awayTextView.visibility = if (away) View.VISIBLE else View.GONE
+        youBadge.visibility = if (!away && player?.isBot == false) View.VISIBLE else View.GONE
+        nameTextView.text = playerCharacter?.let { context.getString(it.displayName) } ?: ""
+        playerCharacter?.let { showPortrait(it.defaultImageRes) }
+        imageView.colorFilter = if (away) grayscale else null
 
         val surface = MaterialColors.getColor(cardView, com.google.android.material.R.attr.colorSurfaceContainer)
-        cardView.setCardBackgroundColor(if (away) ColorUtils.setAlphaComponent(surface, 0xD9) else surface)
+        cardView.setCardBackgroundColor(surface)
+        cardView.alpha = if (away) AWAY_ALPHA else 1f
         cardView.cardElevation =
             if (away) 0f else context.resources.getDimension(R.dimen.elevation_level1)
-        cardView.strokeWidth =
-            if (away) 0 else context.resources.getDimensionPixelSize(R.dimen.border_default)
-        cardView.getChildAt(0).setBackgroundResource(if (away) R.drawable.bg_seat_away else 0)
+        cardView.strokeWidth = 0
         cardView.visibility = View.VISIBLE
     }
 
     fun render(isActive: Boolean) {
-        if (player != null) {
-            if (isMiddle) {
-                cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, R.attr.colorElyseeContainer))
-            }
-            val borderColor = when {
-                isActive -> R.attr.colorPlayerHuman
-                isMiddle -> R.attr.colorElysee
-                player!!.isBot -> R.attr.colorPlayerBot
-                else -> com.google.android.material.R.attr.colorOutlineVariant
-            }
-            cardView.strokeColor = MaterialColors.getColor(cardView, borderColor)
-            cardView.strokeWidth = context.resources.getDimensionPixelSize(
-                if (isActive || isMiddle) R.dimen.border_emphasis else R.dimen.border_default
-            )
+        val current = player ?: return
+        val background = if (isMiddle) R.attr.colorElyseeContainer else com.google.android.material.R.attr.colorSurfaceContainer
+        cardView.setCardBackgroundColor(MaterialColors.getColor(cardView, background))
+        cardView.strokeColor = MaterialColors.getColor(cardView, androidx.appcompat.R.attr.colorPrimary)
+        cardView.strokeWidth =
+            if (isActive) context.resources.getDimensionPixelSize(R.dimen.border_emphasis) else 0
+        cardView.cardElevation = context.resources.getDimension(
+            if (isActive) R.dimen.elevation_level3 else R.dimen.elevation_level1
+        )
 
-            playerCharacter?.let {
-                if (isMiddle) {
-                    imageView.setImageResource(it.centerImageRes)
-                } else {
-                    imageView.setImageResource(it.defaultImageRes)
-                }
-            }
+        playerCharacter?.let {
+            showPortrait(if (isMiddle) it.centerImageRes else it.defaultImageRes)
+        }
+        imageView.colorFilter = null
+        cardView.alpha = 1f
 
-            val playerName = playerCharacter?.let { playerName(context, it, player!!.isBot) } ?: ""
-            imageView.contentDescription = context.getString(R.string.player_details_open, playerName)
-            nameTextView.text = playerName
-            influenceTextView.text =
-                context.getString(R.string.game_player_card_influence_value, player!!.influence)
-            popularityTextView.text = context.getString(
-                R.string.game_player_card_popularity_value,
-                player!!.popularity,
-                player!!.maxPopularity
-            )
-            influenceTextView.contentDescription = context.getString(
-                R.string.game_player_card_influence, player!!.influence
-            )
-            popularityTextView.contentDescription = context.getString(
-                R.string.game_player_card_popularity, player!!.popularity, player!!.maxPopularity
-            )
-            moneyTextView.text = context.getString(R.string.game_player_card_money_value, player!!.money)
-            voteTextView.text = context.getString(R.string.game_player_card_vote_value, player!!.vote)
-            moneyTextView.contentDescription = context.getString(R.string.game_player_card_money, player!!.money)
-            voteTextView.contentDescription = context.getString(R.string.game_player_card_vote, player!!.vote)
+        val name = playerCharacter?.let { playerName(context, it, current.isBot) } ?: ""
+        imageView.contentDescription = context.getString(R.string.player_details_open, name)
+        nameTextView.text = playerCharacter?.let { context.getString(it.displayName) } ?: ""
+        youBadge.visibility = if (current.isBot) View.GONE else View.VISIBLE
 
-            showStatChanges(player!!)
+        val animate = shownPlayer === current
+        popularityRing.setIndicatorColor(
+            MaterialColors.getColor(cardView, if (current.isBot) R.attr.colorPlayerBot else R.attr.colorPlayerHuman)
+        )
+        popularityRing.max = current.maxPopularity
+        popularityRing.setProgressCompat(current.popularity, animate)
+        voteProgress.setProgressCompat(current.vote, animate)
+
+        popularityTextView.text = context.getString(R.string.game_player_card_money_value, current.popularity)
+        voteTextView.text = context.getString(R.string.game_player_card_vote_value, current.vote)
+        moneyTextView.text = context.getString(R.string.game_player_card_money_value, current.money)
+        influenceTextView.text = context.getString(R.string.game_player_card_influence_value, current.influence)
+        popularityTextView.contentDescription = context.getString(
+            R.string.game_player_card_popularity, current.popularity, current.maxPopularity
+        )
+        voteTextView.contentDescription = context.getString(R.string.game_player_card_vote, current.vote)
+        moneyTextView.contentDescription = context.getString(R.string.game_player_card_money, current.money)
+        influenceTextView.contentDescription = context.getString(R.string.game_player_card_influence, current.influence)
+
+        showStatChanges(current)
+    }
+
+    private fun showPortrait(imageRes: Int) {
+        if (imageRes == shownImageRes) return
+        shownImageRes = imageRes
+        imageView.setImageResource(imageRes)
+        val drawable = imageView.drawable ?: return
+        val size = context.resources.getDimension(R.dimen.size_player_portrait)
+        val scale = max(size / drawable.intrinsicWidth, size / drawable.intrinsicHeight)
+        imageView.imageMatrix = Matrix().apply {
+            setScale(scale, scale)
+            postTranslate((size - drawable.intrinsicWidth * scale) / 2f, 0f)
         }
     }
 
@@ -199,5 +233,6 @@ class PlayerCard(
     companion object {
         private const val DELTA_HOLD_MS = 700L
         private const val DELTA_FADE_MS = 900L
+        private const val AWAY_ALPHA = 0.55f
     }
 }
