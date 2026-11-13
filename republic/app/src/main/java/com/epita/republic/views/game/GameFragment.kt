@@ -8,6 +8,9 @@ import android.content.res.ColorStateList
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,6 +45,28 @@ class GameFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_game, container, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setSystemBarsHidden(true)
+    }
+
+    override fun onPause() {
+        setSystemBarsHidden(false)
+        super.onPause()
+    }
+
+    private fun setSystemBarsHidden(hidden: Boolean) {
+        val window = requireActivity().window
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+        if (hidden) {
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.hide(WindowInsetsCompat.Type.statusBars())
+        } else {
+            controller.show(WindowInsetsCompat.Type.statusBars())
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
