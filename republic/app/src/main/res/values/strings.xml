@@ -6,7 +6,16 @@
     <string name="game_name">KING OF REPUBLIC</string>
     <string name="home_play">PLAY</string>
 
-    <string name="game_phase_text">%1$s: %2$s</string>
+    <string name="turn_dice_you">À vous : lancez les dés</string>
+    <string name="turn_dice_bot">%1$s lance les dés…</string>
+    <string name="turn_improve_you">Choisissez le dé à doubler</string>
+    <string name="turn_improve_bot">%1$s choisit un dé à doubler…</string>
+    <string name="turn_influence_you">Choisissez une carte d\'influence</string>
+    <string name="turn_influence_bot">%1$s choisit une carte d\'influence…</string>
+    <string name="turn_shop_you">À vous : passez au magasin</string>
+    <string name="turn_shop_bot">%1$s passe au magasin…</string>
+    <string name="turn_ask_leave">Vous êtes attaqué : restez-vous à l\'Élysée ?</string>
+    <string name="turn_game_finish">Fin de la partie</string>
     <string name="game_player_card_influence">INFLUENCE: %d/10</string>
     <string name="game_player_card_vote">VOTE: %d/20</string>
     <string name="game_player_card_money">MONEY: %d</string>

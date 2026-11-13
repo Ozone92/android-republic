@@ -1,6 +1,5 @@
 package com.epita.republic.views.game
 
-import com.epita.republic.views.common.playerName
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.epita.republic.audio.GameSoundPlayer
@@ -277,12 +276,20 @@ class GameFragment : Fragment() {
 
     fun renderTurnPhase() {
         val playerIndex = gameViewModel.currentPlayerTurnIndex.value!!
-        val playerName = playerName(requireContext(), characters[playerIndex], isBot = playerIndex != 0)
-        turnPhaseTextView.text = getString(
-            R.string.game_phase_text,
-            playerName,
-            gameViewModel.currentPhase.value.toString()
-        )
+        val name = getString(characters[playerIndex].displayName)
+        val isHumanTurn = playerIndex == 0
+        turnPhaseTextView.text = when (gameViewModel.currentPhase.value!!) {
+            GamePhase.DICE ->
+                if (isHumanTurn) getString(R.string.turn_dice_you) else getString(R.string.turn_dice_bot, name)
+            GamePhase.IMPROVE_DICE ->
+                if (isHumanTurn) getString(R.string.turn_improve_you) else getString(R.string.turn_improve_bot, name)
+            GamePhase.INFLUENCE ->
+                if (isHumanTurn) getString(R.string.turn_influence_you) else getString(R.string.turn_influence_bot, name)
+            GamePhase.SHOP ->
+                if (isHumanTurn) getString(R.string.turn_shop_you) else getString(R.string.turn_shop_bot, name)
+            GamePhase.ASK_LEAVE -> getString(R.string.turn_ask_leave)
+            GamePhase.GAME_FINISH -> getString(R.string.turn_game_finish)
+        }
     }
 
     fun renderDice(buttons: Array<Button>, diceFaces: Array<DiceFace>) {
