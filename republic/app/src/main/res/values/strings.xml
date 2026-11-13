@@ -126,4 +126,5 @@
     <string name="game_player_you">%1$s · Vous</string>
     <string name="stat_gain">+%1$d</string>
     <string name="stat_loss">−%1$d</string>
+    <string name="game_elysee_label">ÉLYSÉE</string>
 </resources>

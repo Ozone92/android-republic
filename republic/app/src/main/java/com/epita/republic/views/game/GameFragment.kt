@@ -292,6 +292,8 @@ class GameFragment : Fragment() {
         view?.findViewById<Button>(R.id.game_power_shop_btn)?.text =
             getString(R.string.power_shop_open, gameViewModel.players[0].money)
         middleCard.setVisibility(View.INVISIBLE)
+        val elyseeLabel = view?.findViewById<View>(R.id.game_elysee_label)
+        elyseeLabel?.visibility = View.INVISIBLE
         val activePlayerIndex = gameViewModel.currentPlayerTurnIndex.value
         for (playerCard in playerCards) {
             val player = playerCard.getPlayer()!!
@@ -299,6 +301,7 @@ class GameFragment : Fragment() {
             if (player == gameViewModel.inCity.value) {
                 middleCard.changePlayer(player, playerCard.getIndex(), playerCard.getCharacter(), isActive)
                 middleCard.setVisibility(View.VISIBLE)
+                elyseeLabel?.visibility = View.VISIBLE
                 playerCard.setAway(true)
             } else {
                 playerCard.setAway(false)

@@ -44,6 +44,7 @@
         <item name="colorPlayerBot">@color/palette_rouge_200</item>
         <item name="colorElysee">@color/palette_or_300</item>
         <item name="colorElyseeContainer">@color/palette_or_800</item>
+        <item name="colorOnElysee">@color/palette_or_900</item>
         <item name="colorDiceFace">@color/palette_gris_ardoise</item>
         <item name="colorDiceLocked">@color/palette_or_300</item>
         <item name="colorStatVote">@color/palette_bleu_200</item>

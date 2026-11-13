@@ -22,14 +22,15 @@
         style="@style/Widget.Republic.Card.Player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_s"
+        android:layout_marginTop="@dimen/space_m"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/game_player1_card">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/space_sm">
 
             <ImageView
                 android:id="@+id/game_middle_player_image"
@@ -836,5 +837,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/game_elysee_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_elysee_label"
+        android:elevation="@dimen/elevation_level3"
+        android:paddingHorizontal="@dimen/space_sm"
+        android:paddingVertical="@dimen/space_xxs"
+        android:text="@string/game_elysee_label"
+        android:textAppearance="?attr/textAppearanceLabelLarge"
+        android:textColor="?attr/colorOnElysee"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/game_middle_player_card"
+        app:layout_constraintEnd_toEndOf="@id/game_middle_player_card"
+        app:layout_constraintStart_toStartOf="@id/game_middle_player_card"
+        app:layout_constraintTop_toTopOf="@id/game_middle_player_card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
