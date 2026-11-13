@@ -602,6 +602,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/game_dice_hint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_m"
+                android:layout_marginTop="@dimen/space_s"
+                android:accessibilityLiveRegion="polite"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/hint_keep_dice" />
+
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/game_dice_actions_barrier"
                 android:layout_width="wrap_content"
@@ -619,7 +634,7 @@
                 android:contentDescription="@string/dice_legend_open"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/game_dice1_btn"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <com.google.android.material.button.MaterialButton
@@ -631,7 +646,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/game_dice2_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@id/game_dice_info"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/game_dice2_btn"
@@ -642,7 +657,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/game_dice3_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/game_dice1_btn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/game_dice3_btn"
@@ -653,7 +668,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/game_dice4_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/game_dice2_btn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/game_dice4_btn"
@@ -664,7 +679,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/game_dice5_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/game_dice3_btn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/game_dice5_btn"
@@ -675,7 +690,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/game_dice6_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/game_dice4_btn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/game_dice6_btn"
@@ -686,7 +701,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/game_power_shop_btn"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/game_dice5_btn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint" />
 
             <Button
                 android:id="@+id/game_power_shop_btn"
@@ -698,7 +713,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/game_dice_actions_barrier"
                 app:layout_constraintStart_toEndOf="@+id/game_dice6_btn"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint"
                 tools:text="@string/power_shop_open" />
 
             <Button
@@ -710,7 +725,7 @@
                 android:text="@string/game_reroll_text"
                 app:layout_constraintBottom_toTopOf="@+id/game_dice_confirm"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/game_dice_hint"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <Button

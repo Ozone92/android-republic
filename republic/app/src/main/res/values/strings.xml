@@ -142,4 +142,11 @@
     <string name="help_influence_body">Trois 1 rapportent 2 d\'influence, trois 2 en rapportent 1.\n\nÀ 3, 6 et 10 d\'influence, vous choisissez une carte d\'influence : un bonus immédiat ou permanent pour le reste de la partie.</string>
     <string name="help_shop_title">La boutique</string>
     <string name="help_shop_body">Votre argent sert à acheter des cartes pouvoir avec le bouton Pouvoirs, pendant votre tour. Trois cartes sont proposées ; si aucune ne vous plaît, renouvelez l\'offre pour 2 €.</string>
+    <string name="hint_keep_dice">Touchez les dés à garder, puis Relancer</string>
+    <string name="hint_reroll_or_confirm">Relancez les dés libres, ou Validez si le résultat vous convient</string>
+    <string name="hint_triple">3 dés identiques ou plus = des votes : gardez-les !</string>
+    <string name="hint_elysee">Vous êtes à l\'Élysée : vos dégâts touchent tous les autres</string>
+    <string name="hint_no_reroll">Plus de relance : Validez pour appliquer vos dés</string>
+    <string name="hint_improve">Touchez le dé dont l\'effet sera doublé, puis Validez</string>
+    <string name="hint_bot_dice">%1$s choisit les dés à garder…</string>
 </resources>

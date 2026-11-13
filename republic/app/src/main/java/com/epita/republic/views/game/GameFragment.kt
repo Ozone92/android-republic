@@ -204,6 +204,7 @@ class GameFragment : Fragment() {
             diceButton.setOnClickListener {
                 gameViewModel.diceButtonClick(index)
                 renderDicesColor(diceButtons)
+                renderDiceHint()
             }
         }
 
@@ -211,6 +212,7 @@ class GameFragment : Fragment() {
         diceRerollBtn.setOnClickListener { gameViewModel.rollDice() }
         gameViewModel.rerollLeft.observe(this.viewLifecycleOwner) { rerollLeft ->
             diceRerollBtn.text = getString(R.string.game_reroll_text, rerollLeft)
+            renderDiceHint()
         }
 
         val diceConfirmBtn: Button = view.findViewById(R.id.game_dice_confirm)
@@ -223,6 +225,7 @@ class GameFragment : Fragment() {
         gameViewModel.inCity.observe(this.viewLifecycleOwner) { renderPlayers() }
         gameViewModel.dices.observe(this.viewLifecycleOwner) { newDices ->
             renderDice(diceButtons, newDices)
+            renderDiceHint()
         }
 
         val stayBtn: Button = view.findViewById(R.id.game_stay_btn)
@@ -248,6 +251,7 @@ class GameFragment : Fragment() {
             Log.d("GAME", newPhase.name)
             renderTurnPhase()
             renderPlayers()
+            renderDiceHint()
             val isPlayerTurn = !gameViewModel.currentPlayer.value!!.isBot
 
             diceView.visibility = View.INVISIBLE
@@ -331,6 +335,26 @@ class GameFragment : Fragment() {
                 if (isHumanTurn) getString(R.string.turn_shop_you) else getString(R.string.turn_shop_bot, name)
             GamePhase.ASK_LEAVE -> getString(R.string.turn_ask_leave)
             GamePhase.GAME_FINISH -> getString(R.string.turn_game_finish)
+        }
+    }
+
+    private fun renderDiceHint() {
+        val hint = view?.findViewById<TextView>(R.id.game_dice_hint) ?: return
+        val player = gameViewModel.currentPlayer.value ?: return
+        val dice = gameViewModel.dices.value ?: return
+        val hasTriple = listOf(DiceFace.ONE, DiceFace.TWO, DiceFace.THREE)
+            .any { face -> dice.count { it == face } >= 3 }
+        hint.text = when {
+            player.isBot -> getString(
+                R.string.hint_bot_dice,
+                getString(characters[gameViewModel.currentPlayerTurnIndex.value!!].displayName)
+            )
+            gameViewModel.currentPhase.value == GamePhase.IMPROVE_DICE -> getString(R.string.hint_improve)
+            (gameViewModel.rerollLeft.value ?: 0) == 0 -> getString(R.string.hint_no_reroll)
+            hasTriple -> getString(R.string.hint_triple)
+            player == gameViewModel.inCity.value -> getString(R.string.hint_elysee)
+            gameViewModel.lockedDiceIndexes.isEmpty() -> getString(R.string.hint_keep_dice)
+            else -> getString(R.string.hint_reroll_or_confirm)
         }
     }
 
