@@ -46,7 +46,6 @@ class PlayerDetailsDialogFragment : DialogFragment() {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(16), 0, 0, 0)
         }
-        // Only the card list scrolls; its height is capped so it always fits on the (landscape) screen.
         val detailsScroll = MaxHeightScrollView(
             context, (resources.displayMetrics.heightPixels * DETAILS_MAX_HEIGHT_RATIO).toInt()
         ).apply {
@@ -109,7 +108,6 @@ class PlayerDetailsDialogFragment : DialogFragment() {
         )
     }
 
-    /** A ScrollView that never grows taller than [maxHeight] pixels. */
     private class MaxHeightScrollView(context: Context, private val maxHeight: Int) : ScrollView(context) {
         override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
             val size = MeasureSpec.getSize(heightMeasureSpec)
@@ -121,7 +119,6 @@ class PlayerDetailsDialogFragment : DialogFragment() {
 
     companion object {
         const val TAG = "PlayerDetailsDialog"
-        // Share of the screen height the card list may use; the rest is for the title and the button.
         private const val DETAILS_MAX_HEIGHT_RATIO = 0.5f
         private const val ARG_PLAYER = "player_index"
         private const val ARG_CHARACTER = "character"

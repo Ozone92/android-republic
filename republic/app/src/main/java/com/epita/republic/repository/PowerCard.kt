@@ -8,10 +8,6 @@ enum class PowerCardType {
     ACTION
 }
 
-/**
- * What a card does. The type and the description come from the effect, and the description is
- * filled with [descriptionArgs], so the text always matches the numbers used by the rules.
- */
 sealed class PowerEffect(
     val type: PowerCardType,
     @param:StringRes val descriptionRes: Int,
@@ -19,7 +15,7 @@ sealed class PowerEffect(
 ) {
     open val descriptionArgs: List<Int> get() = listOf(amount)
 
-    // One-shot effects (ACTION cards)
+    // ACTION cards
     class Heal(amount: Int) :
         PowerEffect(PowerCardType.ACTION, R.string.power_description_heal, amount)
 
@@ -58,7 +54,7 @@ sealed class PowerEffect(
         override val descriptionArgs get() = emptyList<Int>()
     }
 
-    // Permanent effects (POWER cards)
+    // POWER cards
     class BonusDamage(amount: Int) :
         PowerEffect(PowerCardType.POWER, R.string.power_description_bonus_damage, amount)
 

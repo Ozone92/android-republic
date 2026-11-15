@@ -3,7 +3,7 @@ package com.epita.republic.repository
 import com.epita.republic.R
 import com.epita.republic.repository.PowerEffect.*
 
-/** Every power card of the game (13 ACTION, 17 POWER). */
+/** Every power card */
 val POWER_CARDS: List<PowerCard> = listOf(
     // ACTION cards
     PowerCard("soins_urgence", R.string.power_name_soins_urgence, cost = 3, effect = Heal(2)),

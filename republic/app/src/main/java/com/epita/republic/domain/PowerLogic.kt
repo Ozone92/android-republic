@@ -16,12 +16,7 @@ sealed interface BotShopAction {
 const val BOT_MIN_MONEY_AFTER_REROLL = 3
 
 class PowerLogic {
-    /**
-     * Applies a purchase: the ACTION effect or the immediate part of a POWER card, plus the votes
-     * the buyer gets per purchase. Taking the Élysée and the extra turn are done by the game.
-     */
     fun applyOnBuy(card: PowerCard, buyer: Player, players: Array<Player>) {
-        // Only cards already owned count, so a new VotesOnBuy card does not reward itself.
         buyer.vote += sumOf<PowerEffect.VotesOnBuy>(buyer)
         val others = players.filter { it !== buyer && it.isAlive() }
         when (val effect = card.effect) {
@@ -47,32 +42,38 @@ class PowerLogic {
         }
     }
 
-    /** Removes popularity from [target] after its protections. Returns the popularity really lost. */
     fun inflictDamage(target: Player, amount: Int): Int {
-        if (amount <= 0 || !target.isAlive()) return 0
-        if (amount == 1 && owns<PowerEffect.IgnoreSmallDamage>(target)) return 0
+        if (amount <= 0 || !target.isAlive()) {
+            return 0
+        }
+        if (amount == 1 && owns<PowerEffect.IgnoreSmallDamage>(target)) {
+            return 0
+        }
         val before = target.popularity
         target.popularity -= amount
         val lost = before - target.popularity
-        if (lost >= 2) target.money += sumOf<PowerEffect.MoneyWhenHurt>(target)
+        if (lost >= 2) {
+            target.money += sumOf<PowerEffect.MoneyWhenHurt>(target)
+        }
         return lost
     }
 
     fun priceFor(player: Player, card: PowerCard): Int {
         var discount = sumOf<PowerEffect.CardDiscount>(player)
-        // Influence tile "Amie des lobbies": cards cost 1 less.
-        if (InfluenceCard.LOBBY in player.influenceCards) discount += 1
+        if (InfluenceCard.LOBBY in player.influenceCards)
+            discount += 1
         return max(0, card.cost - discount)
     }
 
     fun startOfTurnVotes(player: Player, inCity: Boolean): Int =
         if (inCity) sumOf<PowerEffect.CityStartVotes>(player) else 0
 
-    /** Extra votes from the final dice (three 1s or more, all six faces). */
     fun diceVotes(player: Player, faces: List<DiceFace>): Int {
         var votes = 0
-        if (faces.count { it == DiceFace.ONE } >= 3) votes += sumOf<PowerEffect.TripleOneBonus>(player)
-        if (DiceFace.entries.all { it in faces }) votes += sumOf<PowerEffect.AllFacesVotes>(player)
+        if (faces.count { it == DiceFace.ONE } >= 3)
+            votes += sumOf<PowerEffect.TripleOneBonus>(player)
+        if (DiceFace.entries.all { it in faces })
+            votes += sumOf<PowerEffect.AllFacesVotes>(player)
         return votes
     }
 
@@ -80,11 +81,14 @@ class PowerLogic {
         if (dealtDamage) 0 else sumOf<PowerEffect.PeacefulVotes>(player)
 
     fun applyEndOfTurn(player: Player, players: Array<Player>) {
-        if (player.money == 0) player.money += sumOf<PowerEffect.MoneyWhenBroke>(player)
+        if (player.money == 0) {
+            player.money += sumOf<PowerEffect.MoneyWhenBroke>(player)
+        }
         effects<PowerEffect.VotesPerMoney>(player).forEach { player.vote += player.money / it.amount }
-        // Last in votes, ties included.
         val isLast = players.none { it !== player && it.isAlive() && it.vote < player.vote }
-        if (isLast) player.vote += sumOf<PowerEffect.UnderdogVotes>(player)
+        if (isLast) {
+            player.vote += sumOf<PowerEffect.UnderdogVotes>(player)
+        }
     }
 
     fun votesForEliminations(player: Player, eliminatedCount: Int): Int =
@@ -105,12 +109,16 @@ class PowerLogic {
     fun extraRerolls(player: Player): Int = sumOf<PowerEffect.ExtraReroll>(player)
 
     fun chooseBotShopAction(bot: Player, shop: PowerShop): BotShopAction {
-        if (!bot.isAlive()) return BotShopAction.Stop
+        if (!bot.isAlive()) {
+            return BotShopAction.Stop
+        }
         val cards = shop.visibleCards
         val bestSlot = cards.indices
             .filter { shop.canBuy(bot, it) && isUsefulFor(cards[it]!!, bot) }
             .maxByOrNull { cards[it]!!.cost }
-        if (bestSlot != null) return BotShopAction.Buy(bestSlot)
+        if (bestSlot != null) {
+            return BotShopAction.Buy(bestSlot)
+        }
         if (shop.canReroll(bot) && bot.money - POWER_SHOP_REROLL_COST >= BOT_MIN_MONEY_AFTER_REROLL) {
             return BotShopAction.Reroll
         }
@@ -119,10 +127,8 @@ class PowerLogic {
 
     private fun isUsefulFor(card: PowerCard, bot: Player): Boolean = when (val effect = card.effect) {
         is PowerEffect.Heal -> bot.popularity < bot.maxPopularity
-        // Never pay to knock yourself out.
         is PowerEffect.VotesForPopularity -> bot.popularity > effect.popularityLoss
         is PowerEffect.DamageEveryone -> bot.popularity > effect.amount
-        // A bot that would leave the Élysée does not take it.
         is PowerEffect.TakeCity -> !bot.isBotGoOut()
         else -> true
     }

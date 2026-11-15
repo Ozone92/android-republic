@@ -219,7 +219,6 @@ class GameFragment : Fragment() {
                 }
 
                 GamePhase.SHOP -> {
-                    // Buy step: the dice stay visible, and Confirm ends the turn.
                     diceRerollBtn.isEnabled = false
                     diceConfirmBtn.isEnabled = isPlayerTurn
                     diceConfirmBtn.setText(R.string.game_end_turn)

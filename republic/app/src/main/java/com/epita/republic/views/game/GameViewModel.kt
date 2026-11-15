@@ -45,7 +45,6 @@ const val BOT_SHOP_DELAY_MS = 1000L
 
 data class PowerShopState(
     val slots: List<PowerCard?>,
-    /** What the human player pays for each slot. */
     val prices: List<Int?>,
     val deckCount: Int,
     val discardCount: Int,
@@ -86,7 +85,6 @@ class GameViewModel : ViewModel() {
     val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
 
     private val shop = PowerShop(POWER_CARDS, pricing = powerLogic::priceFor)
-    /** Player who plays again after this turn (ACTION card "Dissolution"). */
     private var extraTurnFor: Player? = null
     private val _powerShop = MutableLiveData<PowerShopState>()
     val powerShop: LiveData<PowerShopState> = _powerShop
@@ -111,7 +109,9 @@ class GameViewModel : ViewModel() {
     }
 
     private fun rerollPowerShop(player: Player): Boolean {
-        if (!shop.reroll(player)) return false
+        if (!shop.reroll(player)) {
+            return false
+        }
         publishPowerShop()
         currentPlayer.value = player
         return true
@@ -133,8 +133,9 @@ class GameViewModel : ViewModel() {
             is PowerEffect.ExtraTurn -> extraTurnFor = player
             else -> Unit
         }
-        // A bought ACTION card is used up: it never returns to the deck or the discard pile.
-        if (powerLogic.isPower(card)) player.powerCards.add(card)
+        if (powerLogic.isPower(card)) {
+            player.powerCards.add(card)
+        }
         if (players.any { it.popularity < popularityBefore[it.playerIndex] }) {
             soundEvents.trySend(GameSound.DAMAGE)
         }
@@ -144,16 +145,21 @@ class GameViewModel : ViewModel() {
         return true
     }
 
-    /** Records newly eliminated players: they leave the City and discard their cards (rules p.6). */
     private fun registerDeaths() {
         var eliminated = 0
         for (player in players) {
-            if (player.isAlive() || !deadPlayers.add(player)) continue
+            if (player.isAlive() || !deadPlayers.add(player)) {
+                continue
+            }
             eliminated++
-            if (inCity.value == player) inCity.value = null
+            if (inCity.value == player) {
+                inCity.value = null
+            }
             powerLogic.discardEliminatedPlayer(player, shop)
         }
-        if (eliminated == 0) return
+        if (eliminated == 0) {
+            return
+        }
         players.filter { it.isAlive() }.forEach { it.vote += powerLogic.votesForEliminations(it, eliminated) }
         publishPowerShop()
     }
@@ -223,7 +229,6 @@ class GameViewModel : ViewModel() {
             "GAME",
             "Dice Result ${oneCount} ONE | $twoCount TWO | ${threeCount} THREE | ${healthCount} HEAL | ${damageCount} DAMAGE | ${moneyCount} MONEY"
         )
-        // Each triple scores (rules p.5): six dice can give two of them.
         if (oneCount >= 3) {
             scoreGain += 1 + oneCount - 3
             influenceGain += 2
@@ -249,12 +254,17 @@ class GameViewModel : ViewModel() {
             damageCount *= 2
         }
 
-        // Power card bonuses only apply when the matching face was rolled.
         val rollingPlayer = currentPlayer.value!!
         scoreGain += powerLogic.diceVotes(rollingPlayer, rolledDices)
-        if (healthCount > 0) healthCount += powerLogic.bonusHeal(rollingPlayer)
-        if (moneyCount > 0) moneyCount += powerLogic.bonusMoney(rollingPlayer)
-        if (damageCount > 0) damageCount += powerLogic.bonusDamage(rollingPlayer)
+        if (healthCount > 0) {
+            healthCount += powerLogic.bonusHeal(rollingPlayer)
+        }
+        if (moneyCount > 0) {
+            moneyCount += powerLogic.bonusMoney(rollingPlayer)
+        }
+        if (damageCount > 0) {
+            damageCount += powerLogic.bonusDamage(rollingPlayer)
+        }
 
         Log.d("GAME", "Score Gain: ${scoreGain} | Influence Gain: ${influenceGain}")
 
@@ -275,7 +285,6 @@ class GameViewModel : ViewModel() {
         Log.d("GAME", "End handleDiceResult")
     }
 
-    /** Returns true if someone really lost popularity. */
     suspend fun onDamage(damageCount: Int): Boolean {
         return if (currentPlayer.value == inCity.value) {
             damageFromInside(damageCount)
@@ -298,7 +307,9 @@ class GameViewModel : ViewModel() {
                     "GAME",
                     "Inflict $damageCount damage to player ${player.playerIndex} (outside city) ${player}"
                 )
-                if (powerLogic.inflictDamage(player, damageCount) > 0) dealt = true
+                if (powerLogic.inflictDamage(player, damageCount) > 0) {
+                    dealt = true
+                }
                 Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
             }
         }
@@ -321,7 +332,6 @@ class GameViewModel : ViewModel() {
             if (!playerInCity.isAlive()) {
                 registerDeaths()
             } else if (lost > 0) {
-                // Only a player who really lost popularity may leave the Élysée (rules p.6).
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
                         inCity.value = null
@@ -348,19 +358,21 @@ class GameViewModel : ViewModel() {
         dices.value = dices.value
     }
 
-    /** Bot buy step: like the rules allow (p.7), it keeps buying or rerolling while it can. */
     private suspend fun botShop(bot: Player) {
         while (true) {
             val action = powerLogic.chooseBotShopAction(bot, shop)
-            if (action == BotShopAction.Stop) break
-            // Pause so the human can follow each purchase.
+            if (action == BotShopAction.Stop) {
+                break
+            }
             delay(BOT_SHOP_DELAY_MS)
             val acted = when (action) {
                 is BotShopAction.Buy -> purchasePowerCard(bot, action.slotIndex)
                 BotShopAction.Reroll -> rerollPowerShop(bot)
                 BotShopAction.Stop -> false
             }
-            if (!acted) break
+            if (!acted) {
+                break
+            }
         }
     }
 
@@ -378,7 +390,6 @@ class GameViewModel : ViewModel() {
         influenceLogic.removeCard(influenceStep, card)
         currentPlayer.value!!.influenceCards.add(card)
         influenceLogic.handleImmediateCards(currentPlayerTurnIndex.value!!, players, card)
-        // "Amie des lobbies" changes card prices.
         publishPowerShop()
 
         signalController.sendNotify()
@@ -394,7 +405,6 @@ class GameViewModel : ViewModel() {
         currentPlayer.value!!.vote += POINT_CITY_ENTER
     }
 
-    /** Step 3 of a turn: take the City if nobody holds it. */
     private fun enterCityIfEmpty() {
         if (inCity.value == null) {
             enterCity()
@@ -491,11 +501,8 @@ class GameViewModel : ViewModel() {
                         influencePhase(newInfluenceStep)
                     }
 
-                    // 3. Enter the City
                     enterCityIfEmpty()
 
-                    // 4. Buy power cards. The human ends this step with the Confirm button;
-                    // it is skipped when they cannot afford any card or a reroll.
                     currentPhase.value = GamePhase.SHOP
                     if (player.isBot) {
                         botShop(player)
@@ -503,7 +510,6 @@ class GameViewModel : ViewModel() {
                         waitForInput()
                     }
 
-                    // 5. End of the turn
                     if (player.isAlive()) {
                         powerLogic.applyEndOfTurn(player, players)
                         currentPlayer.value = player
@@ -517,7 +523,6 @@ class GameViewModel : ViewModel() {
                 }
             }
 
-            // The game only ends here, at the end of a turn (rules p.7).
             currentPhase.value = GamePhase.GAME_FINISH
         }
     }
