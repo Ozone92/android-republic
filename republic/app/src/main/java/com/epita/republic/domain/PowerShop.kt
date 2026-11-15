@@ -11,7 +11,11 @@ const val POWER_SHOP_SLOT_COUNT = 3
  * The power card market (rules p.7): three face-up cards, a deck and a discard pile.
  * A bought card leaves the market for good and is replaced by the next card of the deck.
  */
-class PowerShop(cards: List<PowerCard>, private val random: Random = Random.Default) {
+class PowerShop(
+    cards: List<PowerCard>,
+    private val random: Random = Random.Default,
+    private val pricing: (Player, PowerCard) -> Int = { _, card -> card.cost }
+) {
     private val deck = cards.toMutableList()
     private val discardPile = mutableListOf<PowerCard>()
     private val slots = MutableList<PowerCard?>(POWER_SHOP_SLOT_COUNT) { null }
@@ -24,16 +28,19 @@ class PowerShop(cards: List<PowerCard>, private val random: Random = Random.Defa
     val deckSize: Int get() = deck.size
     val discardSize: Int get() = discardPile.size
 
+    /** What [player] pays for [card], after their discounts. */
+    fun priceFor(player: Player, card: PowerCard): Int = pricing(player, card)
+
     fun canBuy(player: Player, slotIndex: Int): Boolean {
         val card = slots.getOrNull(slotIndex) ?: return false
-        return player.money >= card.cost
+        return player.money >= priceFor(player, card)
     }
 
     /** Pays for the card in [slotIndex] and refills the slot. Returns null if it cannot be bought. */
     fun buy(player: Player, slotIndex: Int): PowerCard? {
         if (!canBuy(player, slotIndex)) return null
         val card = slots[slotIndex]!!
-        player.money -= card.cost
+        player.money -= priceFor(player, card)
         slots[slotIndex] = draw()
         return card
     }

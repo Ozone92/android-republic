@@ -346,11 +346,11 @@ class GameFragment : Fragment() {
         val dice = gameViewModel.dices.value ?: return
         val hasTriple = listOf(DiceFace.ONE, DiceFace.TWO, DiceFace.THREE)
             .any { face -> dice.count { it == face } >= 3 }
+        val name = getString(characters[gameViewModel.currentPlayerTurnIndex.value!!].displayName)
         hint.text = when {
-            player.isBot -> getString(
-                R.string.hint_bot_dice,
-                getString(characters[gameViewModel.currentPlayerTurnIndex.value!!].displayName)
-            )
+            gameViewModel.currentPhase.value == GamePhase.SHOP ->
+                if (player.isBot) getString(R.string.turn_shop_bot, name) else getString(R.string.hint_shop)
+            player.isBot -> getString(R.string.hint_bot_dice, name)
             gameViewModel.currentPhase.value == GamePhase.IMPROVE_DICE -> getString(R.string.hint_improve)
             (gameViewModel.rerollLeft.value ?: 0) == 0 -> getString(R.string.hint_no_reroll)
             hasTriple -> getString(R.string.hint_triple)

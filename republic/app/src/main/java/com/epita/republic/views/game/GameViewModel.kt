@@ -17,6 +17,7 @@ import com.epita.republic.domain.PowerLogic
 import com.epita.republic.domain.PowerShop
 import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.InfluenceCard
+import com.epita.republic.repository.POWER_CARDS
 import com.epita.republic.repository.Player
 import com.epita.republic.repository.PowerCard
 import com.epita.republic.repository.PowerEffect
@@ -44,6 +45,8 @@ const val BOT_SHOP_DELAY_MS = 1000L
 
 data class PowerShopState(
     val slots: List<PowerCard?>,
+    /** What the human player pays for each slot. */
+    val prices: List<Int?>,
     val deckCount: Int,
     val discardCount: Int,
     val ownedCount: Int
@@ -82,50 +85,9 @@ class GameViewModel : ViewModel() {
     val deadPlayers = mutableSetOf<Player>()
     val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
 
-    private val shop = PowerShop(
-        listOf(
-            PowerCard(
-                "power_1",
-                cost = 3,
-                effect = PowerEffect.Heal(2)
-            ),
-            PowerCard(
-                "power_2",
-                cost = 2,
-                effect = PowerEffect.GainMoney(3)
-            ),
-            PowerCard(
-                "power_3",
-                cost = 4,
-                effect = PowerEffect.GainVote(2)
-            ),
-            PowerCard(
-                "power_4",
-                cost = 2,
-                effect = PowerEffect.DamageOthers(1)
-            ),
-            PowerCard(
-                "power_5",
-                cost = 6,
-                effect = PowerEffect.BonusDamage(1)
-            ),
-            PowerCard(
-                "power_6",
-                cost = 5,
-                effect = PowerEffect.ExtraReroll(1)
-            ),
-            PowerCard(
-                "power_7",
-                cost = 4,
-                effect = PowerEffect.BonusMoney(1)
-            ),
-            PowerCard(
-                "power_8",
-                cost = 4,
-                effect = PowerEffect.BonusHeal(1)
-            )
-        )
-    )
+    private val shop = PowerShop(POWER_CARDS, pricing = powerLogic::priceFor)
+    /** Player who plays again after this turn (ACTION card "Dissolution"). */
+    private var extraTurnFor: Player? = null
     private val _powerShop = MutableLiveData<PowerShopState>()
     val powerShop: LiveData<PowerShopState> = _powerShop
 
@@ -135,9 +97,10 @@ class GameViewModel : ViewModel() {
     }
 
     private fun publishPowerShop() {
+        val human = players[0]
         _powerShop.value = PowerShopState(
-            shop.visibleCards, shop.deckSize,
-            shop.discardSize, players[0].powerCards.size
+            shop.visibleCards, shop.visibleCards.map { card -> card?.let { shop.priceFor(human, it) } },
+            shop.deckSize, shop.discardSize, human.powerCards.size
         )
     }
 
@@ -163,17 +126,19 @@ class GameViewModel : ViewModel() {
     private fun purchasePowerCard(player: Player, slotIndex: Int): Boolean {
         val card = shop.buy(player, slotIndex) ?: return false
         soundEvents.trySend(GameSound.BUY_CARD)
-        if (powerLogic.isPower(card)) {
-            player.powerCards.add(card)
-        } else {
-            // A bought one-time card is used up: it never returns to the deck or the discard pile.
-            val othersAlive = players.count { it !== player && it.isAlive() }
-            powerLogic.applyOnBuy(card, player, players)
-            if (card.effect is PowerEffect.DamageOthers && othersAlive > 0) {
-                soundEvents.trySend(GameSound.DAMAGE)
-            }
-            registerDeaths()
+        val popularityBefore = players.map { it.popularity }
+        powerLogic.applyOnBuy(card, player, players)
+        when (card.effect) {
+            is PowerEffect.TakeCity -> inCity.value = player
+            is PowerEffect.ExtraTurn -> extraTurnFor = player
+            else -> Unit
         }
+        // A bought ACTION card is used up: it never returns to the deck or the discard pile.
+        if (powerLogic.isPower(card)) player.powerCards.add(card)
+        if (players.any { it.popularity < popularityBefore[it.playerIndex] }) {
+            soundEvents.trySend(GameSound.DAMAGE)
+        }
+        registerDeaths()
         publishPowerShop()
         currentPlayer.value = player
         return true
@@ -181,14 +146,16 @@ class GameViewModel : ViewModel() {
 
     /** Records newly eliminated players: they leave the City and discard their cards (rules p.6). */
     private fun registerDeaths() {
-        var anyDeath = false
+        var eliminated = 0
         for (player in players) {
             if (player.isAlive() || !deadPlayers.add(player)) continue
-            anyDeath = true
+            eliminated++
             if (inCity.value == player) inCity.value = null
             powerLogic.discardEliminatedPlayer(player, shop)
         }
-        if (anyDeath) publishPowerShop()
+        if (eliminated == 0) return
+        players.filter { it.isAlive() }.forEach { it.vote += powerLogic.votesForEliminations(it, eliminated) }
+        publishPowerShop()
     }
 
     fun diceButtonClick(index: Int) {
@@ -256,20 +223,21 @@ class GameViewModel : ViewModel() {
             "GAME",
             "Dice Result ${oneCount} ONE | $twoCount TWO | ${threeCount} THREE | ${healthCount} HEAL | ${damageCount} DAMAGE | ${moneyCount} MONEY"
         )
+        // Each triple scores (rules p.5): six dice can give two of them.
         if (oneCount >= 3) {
-            scoreGain = 1 + oneCount - 3
-            influenceGain = 2
+            scoreGain += 1 + oneCount - 3
+            influenceGain += 2
 
             if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.FRIEND)) {
                 scoreGain += 1
             }
         }
         if (twoCount >= 3) {
-            scoreGain = 2 + twoCount - 3
-            influenceGain = 1
+            scoreGain += 2 + twoCount - 3
+            influenceGain += 1
         }
         if (threeCount >= 3) {
-            scoreGain = 3 + threeCount - 3
+            scoreGain += 3 + threeCount - 3
         }
 
         if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.PRIMARY)) {
@@ -283,6 +251,7 @@ class GameViewModel : ViewModel() {
 
         // Power card bonuses only apply when the matching face was rolled.
         val rollingPlayer = currentPlayer.value!!
+        scoreGain += powerLogic.diceVotes(rollingPlayer, rolledDices)
         if (healthCount > 0) healthCount += powerLogic.bonusHeal(rollingPlayer)
         if (moneyCount > 0) moneyCount += powerLogic.bonusMoney(rollingPlayer)
         if (damageCount > 0) damageCount += powerLogic.bonusDamage(rollingPlayer)
@@ -299,55 +268,60 @@ class GameViewModel : ViewModel() {
         currentPlayer.value!!.vote += scoreGain
         currentPlayer.value!!.money += moneyCount
         currentPlayer.value = currentPlayer.value
-        if (damageCount > 0) {
-            onDamage(damageCount)
-        }
+        val dealtDamage = damageCount > 0 && onDamage(damageCount)
+        rollingPlayer.vote += powerLogic.peacefulVotes(rollingPlayer, dealtDamage)
+        currentPlayer.value = rollingPlayer
 
         Log.d("GAME", "End handleDiceResult")
     }
 
-    suspend fun onDamage(damageCount: Int) {
-        if (currentPlayer.value == inCity.value) {
+    /** Returns true if someone really lost popularity. */
+    suspend fun onDamage(damageCount: Int): Boolean {
+        return if (currentPlayer.value == inCity.value) {
             damageFromInside(damageCount)
         } else {
             damageFromOutside(damageCount)
         }
     }
 
-    fun damageFromInside(damageCount: Int) {
+    fun damageFromInside(damageCount: Int): Boolean {
         if (damageCount > 0 && players.any {
                 it.playerIndex != currentPlayer.value!!.playerIndex && it.isAlive()
             }) {
             soundEvents.trySend(GameSound.DAMAGE)
         }
         // Damage to everyone outside == all player except myself
+        var dealt = false
         for (player in players) {
             if (player.playerIndex != currentPlayer.value!!.playerIndex) {
                 Log.d(
                     "GAME",
                     "Inflict $damageCount damage to player ${player.playerIndex} (outside city) ${player}"
                 )
-                player.popularity -= damageCount
+                if (powerLogic.inflictDamage(player, damageCount) > 0) dealt = true
                 Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
             }
         }
         registerDeaths()
+        return dealt
     }
 
-    suspend fun damageFromOutside(damageCount: Int) {
+    suspend fun damageFromOutside(damageCount: Int): Boolean {
         val playerInCity = inCity.value
+        var lost = 0
         if (playerInCity != null) {
             if (damageCount > 0 && playerInCity.isAlive()) soundEvents.trySend(GameSound.DAMAGE)
             Log.d(
                 "GAME",
                 "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) ${playerInCity}"
             )
-            playerInCity.popularity -= damageCount
+            lost = powerLogic.inflictDamage(playerInCity, damageCount)
             Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity}")
 
             if (!playerInCity.isAlive()) {
                 registerDeaths()
-            } else {
+            } else if (lost > 0) {
+                // Only a player who really lost popularity may leave the Élysée (rules p.6).
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
                         inCity.value = null
@@ -358,6 +332,7 @@ class GameViewModel : ViewModel() {
                 }
             }
         }
+        return lost > 0
     }
 
     private suspend fun botRollDice(bot: Player) {
@@ -403,6 +378,8 @@ class GameViewModel : ViewModel() {
         influenceLogic.removeCard(influenceStep, card)
         currentPlayer.value!!.influenceCards.add(card)
         influenceLogic.handleImmediateCards(currentPlayerTurnIndex.value!!, players, card)
+        // "Amie des lobbies" changes card prices.
+        publishPowerShop()
 
         signalController.sendNotify()
     }
@@ -479,6 +456,7 @@ class GameViewModel : ViewModel() {
                     if (player == inCity.value) {
                         player.vote += POINT_CITY_TURN
                     }
+                    player.vote += powerLogic.startOfTurnVotes(player, player == inCity.value)
 
                     if (player.influenceCards.contains(InfluenceCard.RAISE)) {
                         player.money += 1
@@ -524,9 +502,19 @@ class GameViewModel : ViewModel() {
                     } else if (shop.canAct(player)) {
                         waitForInput()
                     }
+
+                    // 5. End of the turn
+                    if (player.isAlive()) {
+                        powerLogic.applyEndOfTurn(player, players)
+                        currentPlayer.value = player
+                    }
                 }
 
-                currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
+                val playAgain = extraTurnFor == player && player.isAlive()
+                extraTurnFor = null
+                if (!playAgain) {
+                    currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
+                }
             }
 
             // The game only ends here, at the end of a turn (rules p.7).

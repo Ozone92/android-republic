@@ -54,7 +54,7 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
                 val card = state.slots[index]
                 names[index].setText(card?.nameRes ?: R.string.power_shop_empty)
                 descriptions[index].visibility = if (card == null) View.GONE else View.VISIBLE
-                card?.let { descriptions[index].text = getString(it.descriptionRes, it.descriptionArg) }
+                card?.let { descriptions[index].text = getString(it.descriptionRes, *it.descriptionArgs.toTypedArray()) }
                 types[index].visibility = if (card == null) View.GONE else View.VISIBLE
                 card?.let {
                     val isPower = it.type == PowerCardType.POWER
@@ -63,12 +63,13 @@ class PowerShopDialogFragment : DialogFragment(R.layout.dialog_power_shop) {
                         if (isPower) R.drawable.bg_power_type_power else R.drawable.bg_power_type_action
                     )
                 }
-                buttons[index].text = if (card != null) {
-                    getString(R.string.power_shop_buy_cost, card.cost)
+                val price = state.prices[index]
+                buttons[index].text = if (price != null) {
+                    getString(R.string.power_shop_buy_cost, price)
                 } else {
                     getString(R.string.power_shop_buy)
                 }
-                buttons[index].isEnabled = canAct && card != null && money >= card.cost
+                buttons[index].isEnabled = canAct && price != null && money >= price
             }
             reroll.isEnabled = canAct && money >= POWER_SHOP_REROLL_COST &&
                 (state.deckCount > 0 || state.discardCount > 0)

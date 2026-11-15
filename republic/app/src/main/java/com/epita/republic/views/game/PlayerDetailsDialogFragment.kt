@@ -78,7 +78,7 @@ class PlayerDetailsDialogFragment : DialogFragment() {
             if (player.powerCards.isEmpty()) label(getString(R.string.player_details_empty))
             player.powerCards.forEach { card ->
                 label(getString(card.nameRes), heading = true)
-                label(getString(card.descriptionRes, card.descriptionArg))
+                label(getString(card.descriptionRes, *card.descriptionArgs.toTypedArray()))
             }
             label(getString(R.string.player_details_influence), heading = true)
             if (player.influenceCards.isEmpty()) label(getString(R.string.player_details_empty))
