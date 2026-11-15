@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epita.republic.R
 import com.epita.republic.domain.Character
+import com.epita.republic.views.home.MainActivity
 
 class CharacterFragment : Fragment() {
 
@@ -33,6 +34,10 @@ class CharacterFragment : Fragment() {
         grid.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.character_grid_columns))
 
         grid.adapter = CharacterAdapter(Character.entries) { selectedCharacter ->
+            selectedCharacter.pickVoiceRes?.let {
+                (requireActivity() as MainActivity).playVoiceLine(it)
+            }
+
             val playersCharacter = ArrayList<Character>()
             playersCharacter.add(selectedCharacter)
             for (i in 0..2) {

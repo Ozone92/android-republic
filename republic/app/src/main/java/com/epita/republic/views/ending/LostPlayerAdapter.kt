@@ -1,5 +1,6 @@
 package com.epita.republic.views.ending
 
+import com.epita.republic.views.common.playerName
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +37,7 @@ class LostPlayerAdapter(val context: Context, val players: Array<EndingPlayerInf
             holder.card.strokeColor = MaterialColors.getColor(holder.card, R.attr.colorPlayerHuman)
         }
         holder.characterImage.setImageResource(player.character.defaultImageRes)
-        holder.playerText.text = context.getString(R.string.game_player_card_name, player.playerIndex + 1)
+        holder.playerText.text = playerName(context, player.character, player.isBot)
         holder.playerLostText.text = context.getString(player.endPlayerState.text)
     }
 

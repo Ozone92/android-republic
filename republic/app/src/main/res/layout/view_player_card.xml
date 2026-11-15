@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Republic.Card.Player"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/player_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/space_s"
+        android:paddingTop="@dimen/space_s"
+        android:paddingEnd="@dimen/space_sm"
+        android:paddingBottom="@dimen/space_s">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/player_popularity_ring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:max="10"
+            app:indicatorSize="@dimen/size_player_ring"
+            app:trackColor="?attr/colorSurfaceContainerHighest"
+            app:trackCornerRadius="@dimen/size_player_ring_thickness"
+            app:trackThickness="@dimen/size_player_ring_thickness"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="7" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/player_image"
+            android:layout_width="@dimen/size_player_portrait"
+            android:layout_height="@dimen/size_player_portrait"
+            android:background="?attr/colorSurfaceContainerHighest"
+            android:focusable="true"
+            android:scaleType="matrix"
+            app:layout_constraintBottom_toBottomOf="@id/player_popularity_ring"
+            app:layout_constraintEnd_toEndOf="@id/player_popularity_ring"
+            app:layout_constraintStart_toStartOf="@id/player_popularity_ring"
+            app:layout_constraintTop_toTopOf="@id/player_popularity_ring"
+            app:shapeAppearance="@style/ShapeAppearance.Republic.Full"
+            tools:src="@drawable/macron_1_cutout" />
+
+        <TextView
+            android:id="@+id/player_popularity_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_stat_chip"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="@dimen/space_xs"
+            android:paddingVertical="@dimen/space_xxs"
+            android:textAppearance="?attr/textAppearanceStat"
+            app:layout_constraintBottom_toBottomOf="@id/player_popularity_ring"
+            app:layout_constraintEnd_toEndOf="@id/player_popularity_ring"
+            app:layout_constraintStart_toStartOf="@id/player_popularity_ring"
+            app:layout_constraintTop_toBottomOf="@id/player_popularity_ring"
+            tools:text="7/10" />
+
+        <TextView
+            android:id="@+id/player_you_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_you_badge"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="@dimen/space_xs"
+            android:paddingVertical="@dimen/space_xxs"
+            android:text="@string/game_player_you_badge"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnPrimary"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/space_xs"
+            app:layout_constraintBottom_toBottomOf="@id/player_name_text"
+            app:layout_constraintStart_toEndOf="@id/player_name_text"
+            app:layout_constraintTop_toTopOf="@id/player_name_text"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/player_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:includeFontPadding="false"
+            android:ellipsize="end"
+            android:maxWidth="@dimen/size_player_name_max"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            app:layout_constraintStart_toEndOf="@id/player_popularity_ring"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Macron" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/player_vote_progress"
+            android:layout_width="@dimen/size_vote_bar"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:importantForAccessibility="no"
+            android:max="20"
+            app:indicatorColor="?attr/colorStatVote"
+            app:trackColor="?attr/colorSurfaceContainerHighest"
+            app:trackCornerRadius="@dimen/size_vote_bar_thickness"
+            app:trackThickness="@dimen/size_vote_bar_thickness"
+            app:layout_constraintStart_toStartOf="@id/player_name_text"
+            app:layout_constraintTop_toBottomOf="@id/player_name_text"
+            tools:progress="7" />
+
+        <TextView
+            android:id="@+id/player_vote_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:includeFontPadding="false"
+            android:textAppearance="?attr/textAppearanceStat"
+            app:layout_constraintBottom_toBottomOf="@id/player_vote_progress"
+            app:layout_constraintStart_toEndOf="@id/player_vote_progress"
+            app:layout_constraintTop_toTopOf="@id/player_vote_progress"
+            tools:text="7/20" />
+
+        <TextView
+            android:id="@+id/player_money_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:background="@drawable/bg_stat_chip"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="@dimen/space_xs"
+            android:paddingVertical="@dimen/space_xxs"
+            android:textAppearance="?attr/textAppearanceStat"
+            app:layout_constraintStart_toStartOf="@id/player_name_text"
+            app:layout_constraintTop_toBottomOf="@id/player_vote_progress"
+            tools:text="3" />
+
+        <TextView
+            android:id="@+id/player_influence_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:background="@drawable/bg_stat_chip"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="@dimen/space_xs"
+            android:paddingVertical="@dimen/space_xxs"
+            android:textAppearance="?attr/textAppearanceStat"
+            app:layout_constraintStart_toEndOf="@id/player_money_text"
+            app:layout_constraintTop_toTopOf="@id/player_money_text"
+            tools:text="2/10" />
+
+        <TextView
+            android:id="@+id/player_away_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:background="@drawable/bg_elysee_label"
+            android:drawablePadding="@dimen/space_xxs"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="@dimen/space_s"
+            android:paddingVertical="@dimen/space_xxs"
+            android:text="@string/game_player_card_away"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnElysee"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/player_name_text"
+            app:layout_constraintTop_toBottomOf="@id/player_name_text"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -72,6 +72,7 @@
         <item name="colorPlayerBot">@color/palette_rouge_500</item>
         <item name="colorElysee">@color/palette_or_500</item>
         <item name="colorElyseeContainer">@color/palette_or_100</item>
+        <item name="colorOnElysee">@color/palette_or_900</item>
         <item name="colorDiceFace">@color/palette_gris_ivoire</item>
         <item name="colorDiceLocked">@color/palette_or_500</item>
         <item name="colorStatVote">@color/palette_bleu_700</item>
