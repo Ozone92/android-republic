@@ -12,7 +12,7 @@ Projet du module IPAN2 (EPITA) · Kotlin · Android 10+ (API 29) · architecture
 | Romain Vidal | [Ozone92](https://github.com/Ozone92) | Navigation, accueil, écran de jeu et boucle de partie, cartes influence, écran de fin |
 | François Duguay | [Francoisduguay](https://github.com/Francoisduguay) | Les 30 cartes pouvoir et leurs effets, achats des bots |
 | Corentin Dupaigne | [corentin-dupaigne](https://github.com/corentin-dupaigne) | Inventaire des composants, design system, corrections de la logique, aide et clarté du jeu, interface finale |
-| Jesy Crouvisier | [Jesy1711](https://github.com/Jesy1711) | |
+| Jesy Crouvisier | [Jesy1711](https://github.com/Jesy1711) | Aide a la creations des cartes et leurs focntionnalites |
 
 ## Gestion de projet
 
