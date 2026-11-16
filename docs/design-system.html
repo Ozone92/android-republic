@@ -124,6 +124,24 @@
   .log div { padding: .8mm 0; border-bottom: .2mm solid var(--g100); }
   .log div:last-child { border: 0; }
   .float { font-family: Oswald, sans-serif; font-weight: 700; font-size: 12pt; margin-right: 4mm; }
+  .pc2 { width: 36mm; background: #EEEFF4; border-radius: 3mm; padding: 2.4mm; box-shadow: 0 .3mm .8mm rgba(0,0,0,.12); font-size: 7pt; position: relative; }
+  .pc2.active { outline: .9mm solid var(--bleu); box-shadow: 0 1mm 2.5mm rgba(0,35,149,.25); }
+  .pc2.ely { background: var(--or-100); }
+  .pc2.away { opacity: .55; box-shadow: none; }
+  .pc2 .row { display: flex; gap: 1.8mm; align-items: center; }
+  .pc2 .ring { width: 10mm; height: 10mm; border-radius: 50%; flex: none; position: relative; }
+  .pc2 .ring i { position: absolute; inset: .9mm; border-radius: 50%; background: linear-gradient(135deg, #9aa6c7, #5b678c); }
+  .pc2.away .ring i { filter: grayscale(1); }
+  .pc2 .pop { position: absolute; left: 50%; bottom: -1.6mm; transform: translateX(-50%); background: #fff; border-radius: 2mm; padding: 0 1.1mm; font-size: 5.8pt; font-weight: 700; color: var(--rouge); box-shadow: 0 .2mm .5mm rgba(0,0,0,.15); }
+  .pc2 .nm { font-family: Oswald, sans-serif; font-weight: 600; font-size: 8.5pt; line-height: 1.1; }
+  .pc2 .vb { display: flex; align-items: center; gap: 1.2mm; margin-top: 1mm; }
+  .pc2 .vb .bar { width: 10mm; }
+  .pc2 .chips { display: flex; gap: 1.2mm; margin-top: 2mm; }
+  .pc2 .chip { background: #fff; border-radius: 2mm; padding: .2mm 1.4mm; font-weight: 600; }
+  .pc2 .awaychip { display: inline-block; margin-top: 2mm; background: var(--or-500); color: #2B2000; border-radius: 2mm; padding: .2mm 1.6mm; font-weight: 700; }
+  .elylabel { position: absolute; top: -2mm; left: 50%; transform: translateX(-50%); background: var(--or-500); color: #2B2000; font-size: 5.8pt; font-weight: 700; padding: .2mm 1.6mm; border-radius: 2mm; letter-spacing: .05em; }
+  .hint { background: #fff; border: .3mm solid var(--g300); border-radius: 2mm; padding: 1.4mm 2.5mm; font-size: 7.5pt; color: var(--g700); }
+  .summary { display: inline-block; background: #2F3036; color: #F1F0F7; border-radius: 4mm; padding: 1.6mm 4mm; font-size: 7.5pt; }
 
   .spacing-row { display: flex; align-items: center; gap: 3mm; margin: 1.2mm 0; font-size: 7.6pt; }
   .spacing-row .blk { background: var(--bleu-100); border: .2mm solid var(--bleu); height: 4mm; }
@@ -352,18 +370,19 @@
 
   <table style="margin-top:4mm">
     <tr><th style="width:46mm">Token</th><th style="width:30mm">Clair</th><th style="width:30mm">Sombre</th><th>Usage</th></tr>
-    <tr><td class="mono">color.player.human</td><td><span class="sw" style="background:#002395"></span>bleu.700</td><td><span class="sw" style="background:#B5C4FF"></span>bleu.200</td><td>Bordure et badge « Vous » de la carte du joueur humain</td></tr>
-    <tr><td class="mono">color.player.bot</td><td><span class="sw" style="background:#ED2939"></span>rouge.500</td><td><span class="sw" style="background:#FFB3B4"></span>rouge.200</td><td>Bordure des cartes des bots</td></tr>
-    <tr><td class="mono">color.elysee</td><td><span class="sw" style="background:#C9A227"></span>or.500</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Bordure du joueur dans l'Élysée, emplacement central</td></tr>
+    <tr><td class="mono">color.player.human</td><td><span class="sw" style="background:#002395"></span>bleu.700</td><td><span class="sw" style="background:#B5C4FF"></span>bleu.200</td><td>Anneau de popularité autour du portrait du joueur humain</td></tr>
+    <tr><td class="mono">color.player.bot</td><td><span class="sw" style="background:#ED2939"></span>rouge.500</td><td><span class="sw" style="background:#FFB3B4"></span>rouge.200</td><td>Anneau de popularité autour du portrait des bots</td></tr>
+    <tr><td class="mono">color.elysee</td><td><span class="sw" style="background:#C9A227"></span>or.500</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Étiquette « ÉLYSÉE » au-dessus de la carte centrale</td></tr>
     <tr><td class="mono">color.elysee-container</td><td><span class="sw" style="background:#F6ECC9"></span>or.100</td><td><span class="sw" style="background:#5A4600"></span>or.800</td><td>Fond de la carte du joueur dans l'Élysée</td></tr>
+    <tr><td class="mono">color.on-elysee</td><td><span class="sw" style="background:#2B2000"></span>or.900</td><td><span class="sw" style="background:#2B2000"></span>or.900</td><td>Texte et couronne posés sur l'or (étiquette ÉLYSÉE, puce « À l'Élysée »)</td></tr>
     <tr><td class="mono">color.dice.face</td><td><span class="sw" style="background:#FFFDF5"></span>gris.ivoire</td><td><span class="sw" style="background:#2A2C33"></span>gris.ardoise</td><td>Fond des dés</td></tr>
     <tr><td class="mono">color.dice.locked</td><td><span class="sw" style="background:#C9A227"></span>or.500</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Bordure et pastille cadenas d'un dé gardé</td></tr>
-    <tr><td class="mono">color.stat.vote</td><td><span class="sw" style="background:#002395"></span>bleu.700</td><td><span class="sw" style="background:#B5C4FF"></span>bleu.200</td><td>Icône et barre des votes (0–20)</td></tr>
-    <tr><td class="mono">color.stat.popularity</td><td><span class="sw" style="background:#B81D2C"></span>rouge.700</td><td><span class="sw" style="background:#FFB3B4"></span>rouge.200</td><td>Icône et barre de popularité (0–10, 12 avec carte)</td></tr>
-    <tr><td class="mono">color.stat.money</td><td><span class="sw" style="background:#8C6D0E"></span>or.700</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Icône et chip d'argent, coût des cartes</td></tr>
-    <tr><td class="mono">color.stat.influence</td><td><span class="sw" style="background:#44474F"></span>gris.700</td><td><span class="sw" style="background:#C5C6D0"></span>gris.300</td><td>Icône et barre d'influence (0–10)</td></tr>
-    <tr><td class="mono">color.feedback.gain</td><td><span class="sw" style="background:#1E7D46"></span>vert.700</td><td><span class="sw" style="background:#7FD99A"></span>vert.300</td><td>Chiffres flottants « +1 », lignes positives du journal</td></tr>
-    <tr><td class="mono">color.feedback.loss</td><td><span class="sw" style="background:#BA1A1A"></span>erreur.700</td><td><span class="sw" style="background:#FFB4AB"></span>erreur.200</td><td>Chiffres flottants « −2 », dégâts subis</td></tr>
+    <tr><td class="mono">color.stat.vote</td><td><span class="sw" style="background:#002395"></span>bleu.700</td><td><span class="sw" style="background:#B5C4FF"></span>bleu.200</td><td>Barre de progression des votes (0–20)</td></tr>
+    <tr><td class="mono">color.stat.popularity</td><td><span class="sw" style="background:#B81D2C"></span>rouge.700</td><td><span class="sw" style="background:#FFB3B4"></span>rouge.200</td><td>Icône de la pastille de popularité (0–10, plus avec carte)</td></tr>
+    <tr><td class="mono">color.stat.money</td><td><span class="sw" style="background:#8C6D0E"></span>or.700</td><td><span class="sw" style="background:#E6C55A"></span>or.300</td><td>Icône de la puce d'argent, coût des cartes</td></tr>
+    <tr><td class="mono">color.stat.influence</td><td><span class="sw" style="background:#44474F"></span>gris.700</td><td><span class="sw" style="background:#C5C6D0"></span>gris.300</td><td>Icône de la puce d'influence (0–10)</td></tr>
+    <tr><td class="mono">color.feedback.gain</td><td><span class="sw" style="background:#1E7D46"></span>vert.700</td><td><span class="sw" style="background:#7FD99A"></span>vert.300</td><td>Chiffres flottants « +1 » à côté de la stat qui monte</td></tr>
+    <tr><td class="mono">color.feedback.loss</td><td><span class="sw" style="background:#BA1A1A"></span>erreur.700</td><td><span class="sw" style="background:#FFB4AB"></span>erreur.200</td><td>Chiffres flottants « −2 » à côté de la stat qui baisse</td></tr>
   </table>
 
   <h2>Signification des couleurs</h2>
@@ -373,7 +392,7 @@
     <div class="principle" style="border-color:var(--or-500)"><b style="color:var(--or)">Or = pouvoir</b>L'Élysée, l'argent, les dés que vous gardez. L'or marque ce qui a de la valeur.</div>
   </div>
 
-  <div class="note warn"><b>Accessibilité.</b> La couleur seule ne suffit jamais : un bot a aussi le badge « BOT », un dé gardé a aussi le cadenas et le décalage vers le haut, une perte s'écrit avec le signe « − ». Le jeu reste jouable pour une personne daltonienne.</div>
+  <div class="note warn"><b>Accessibilité.</b> La couleur seule ne suffit jamais : le joueur humain a aussi le badge « VOUS », chaque candidat est nommé, un dé gardé a aussi le cadenas et le décalage vers le haut, une perte s'écrit avec le signe « − ». Le jeu reste jouable pour une personne daltonienne.</div>
   <div class="foot"><span>Design system · King of Republic</span><span>p. 5</span></div>
 </section>
 
@@ -528,61 +547,63 @@
 
   <h2>Boutons</h2>
   <div class="canvas">
-    <span class="btn filled">Valider les dés</span><span class="btn tonal">Relancer (2)</span><span class="btn outlined">Boutique</span><span class="btn text">Règles</span><span class="btn danger">Quitter l'Élysée</span><span class="btn disabled">Valider</span>
+    <span class="btn filled">Valider les dés</span><span class="btn tonal">Relancer (2)</span><span class="btn outlined">Pouvoirs · 5 €</span><span class="btn text">Fermer</span><span class="btn danger">Quitter l'Élysée</span><span class="btn disabled">Valider</span>
   </div>
   <table>
     <tr><th style="width:24mm">Variante</th><th style="width:70mm">Tokens (fond · texte · bordure)</th><th>Quand l'utiliser</th></tr>
     <tr><td>Plein</td><td class="mono">primary · on-primary · —</td><td>Action principale de l'écran, une seule à la fois</td></tr>
     <tr><td>Tonal</td><td class="mono">primary-container · on-primary-container · —</td><td>Action secondaire fréquente (Relancer)</td></tr>
-    <tr><td>Contour</td><td class="mono">— · primary · outline</td><td>Action secondaire (Boutique, Menu)</td></tr>
-    <tr><td>Texte</td><td class="mono">— · primary · —</td><td>Action discrète (Règles, Fermer)</td></tr>
+    <tr><td>Contour</td><td class="mono">— · primary · outline</td><td>Action secondaire (Pouvoirs, Comment jouer, Menu)</td></tr>
+    <tr><td>Texte</td><td class="mono">— · primary · —</td><td>Action discrète (Fermer, Précédent)</td></tr>
     <tr><td>Danger</td><td class="mono">secondary · on-secondary · —</td><td>Choix lourd de conséquences (Quitter l'Élysée)</td></tr>
     <tr><td>Désactivé</td><td class="mono">on-surface 12 % · on-surface 38 % · —</td><td>Action impossible pour l'instant</td></tr>
   </table>
   <p class="small">Hauteur <code>size.touch-target</code> (48) minimum, arrondi <code>radius.full</code>, texte <code>type.label</code> en casse de phrase.</p>
 
   <h2>Carte joueur</h2>
-  <p class="small">Un seul composant, identique pour les quatre joueurs et pour l'emplacement de l'Élysée. Il affiche l'avatar, le nom, un badge (« Vous », « Bot », « Élysée ») et les quatre stats.</p>
-  <div class="canvas" style="display:flex;gap:4mm;justify-content:space-between">
+  <p class="small">Un seul composant (<code>view_player_card.xml</code>, <code>PlayerCard.kt</code>) pour les quatre sièges et la carte centrale de l'Élysée. La popularité entoure le portrait, les votes avancent vers 20 : ce sont les deux conditions de victoire, lisibles d'un coup d'œil.</p>
+  <div class="canvas" style="display:flex;gap:3mm;justify-content:space-between;padding-top:5mm">
     <div>
-      <div class="pcard active" style="border-color:var(--bleu)">
-        <div class="hd"><div class="av"></div><div><div class="nm">Emmanuel Macron</div><span class="badge you">VOUS</span></div></div>
-        <div class="stat"><span class="ic" style="background:#002395"></span><div class="bar"><i style="width:60%;background:#002395"></i></div><span class="v">12/20</span></div>
-        <div class="stat"><span class="ic" style="background:#B81D2C"></span><div class="bar"><i style="width:70%;background:#B81D2C"></i></div><span class="v">7/10</span></div>
-        <div class="stat"><span class="ic" style="background:#44474F"></span><div class="bar"><i style="width:30%;background:#44474F"></i></div><span class="v">3/10</span></div>
-        <div class="stat"><span class="ic" style="background:#C9A227"></span><div></div><span class="v">5 €</span></div>
+      <div class="pc2 active">
+        <div class="row"><div class="ring" style="background:conic-gradient(#002395 0 70%, #C5C6D0 0)"><i></i><span class="pop">7</span></div>
+          <div><div class="nm">Macron <span class="badge you">VOUS</span></div><div class="vb"><div class="bar"><i style="width:60%;background:#002395"></i></div><b>12/20</b></div></div></div>
+        <div class="chips"><span class="chip" style="color:var(--or)">€ 5</span><span class="chip">◆ 3/10</span></div>
       </div>
-      <div class="state-label">Tour actif</div>
+      <div class="state-label">Tour actif (humain)</div>
     </div>
     <div>
-      <div class="pcard botc">
-        <div class="hd"><div class="av" style="background:linear-gradient(135deg,#d6a0a6,#8c4b55)"></div><div><div class="nm">Valérie Pécresse</div><span class="badge bot">BOT</span></div></div>
-        <div class="stat"><span class="ic" style="background:#002395"></span><div class="bar"><i style="width:35%;background:#002395"></i></div><span class="v">7/20</span></div>
-        <div class="stat"><span class="ic" style="background:#B81D2C"></span><div class="bar"><i style="width:90%;background:#B81D2C"></i></div><span class="v">9/10</span></div>
-        <div class="stat"><span class="ic" style="background:#44474F"></span><div class="bar"><i style="width:10%;background:#44474F"></i></div><span class="v">1/10</span></div>
-        <div class="stat"><span class="ic" style="background:#C9A227"></span><div></div><span class="v">2 €</span></div>
+      <div class="pc2">
+        <div class="row"><div class="ring" style="background:conic-gradient(#ED2939 0 90%, #C5C6D0 0)"><i style="background:linear-gradient(135deg,#d6a0a6,#8c4b55)"></i><span class="pop">9</span></div>
+          <div><div class="nm">Pécresse</div><div class="vb"><div class="bar"><i style="width:35%;background:#002395"></i></div><b>7/20</b></div></div></div>
+        <div class="chips"><span class="chip" style="color:var(--or)">€ 2</span><span class="chip">◆ 1/10</span></div>
       </div>
       <div class="state-label">Au repos (bot)</div>
     </div>
     <div>
-      <div class="pcard elysee">
-        <div class="hd"><div class="av" style="background:linear-gradient(135deg,#b7c49a,#5d6b3c)"></div><div><div class="nm">Jean Lassalle</div><span class="badge bot">BOT</span> <span class="badge ely">ÉLYSÉE</span></div></div>
-        <div class="stat"><span class="ic" style="background:#002395"></span><div class="bar"><i style="width:80%;background:#002395"></i></div><span class="v">16/20</span></div>
-        <div class="stat"><span class="ic" style="background:#B81D2C"></span><div class="bar"><i style="width:40%;background:#B81D2C"></i></div><span class="v">4/10</span></div>
-        <div class="stat"><span class="ic" style="background:#44474F"></span><div class="bar"><i style="width:60%;background:#44474F"></i></div><span class="v">6/10</span></div>
-        <div class="stat"><span class="ic" style="background:#C9A227"></span><div></div><span class="v">8 €</span></div>
+      <div class="pc2 ely"><span class="elylabel">ÉLYSÉE</span>
+        <div class="row"><div class="ring" style="background:conic-gradient(#ED2939 0 40%, #C5C6D0 0)"><i style="background:linear-gradient(135deg,#b7c49a,#5d6b3c)"></i><span class="pop">4</span></div>
+          <div><div class="nm">Lassalle</div><div class="vb"><div class="bar"><i style="width:80%;background:#002395"></i></div><b>16/20</b></div></div></div>
+        <div class="chips"><span class="chip" style="color:var(--or)">€ 8</span><span class="chip">◆ 6/10</span></div>
       </div>
-      <div class="state-label">Dans l'Élysée</div>
+      <div class="state-label">Carte centrale</div>
+    </div>
+    <div>
+      <div class="pc2 away">
+        <div class="row"><div class="ring" style="background:transparent"><i style="background:linear-gradient(135deg,#b7c49a,#5d6b3c)"></i></div>
+          <div><div class="nm">Lassalle</div></div></div>
+        <span class="awaychip">♛ À l'Élysée</span>
+      </div>
+      <div class="state-label">Siège vide</div>
     </div>
   </div>
   <table>
     <tr><th style="width:26mm">État</th><th>Rendu</th></tr>
-    <tr><td>Au repos</td><td>Fond <code>color.surface-container</code>, bordure <code>border.default</code> en <code>color.player.human</code> ou <code>color.player.bot</code>, <code>elevation.1</code></td></tr>
-    <tr><td>Tour actif</td><td>Bordure <code>border.emphasis</code> de la couleur du joueur, <code>elevation.3</code>, léger agrandissement (×1,05) animé en <code>motion.duration.medium</code></td></tr>
-    <tr><td>Dans l'Élysée</td><td>Fond <code>color.elysee-container</code>, bordure <code>border.emphasis</code> en <code>color.elysee</code>, badge « ÉLYSÉE », illustration alternative du candidat</td></tr>
-    <tr><td>Éliminé</td><td>Opacité 38 %, avatar en niveaux de gris, mention « Éliminé »</td></tr>
+    <tr><td>Au repos</td><td>Fond <code>color.surface-container</code>, sans bordure, <code>elevation.1</code>. Anneau en <code>color.player.human</code> ou <code>color.player.bot</code>, rempli selon popularité / popularité max.</td></tr>
+    <tr><td>Tour actif</td><td>Bordure <code>border.emphasis</code> en <code>color.primary</code>, <code>elevation.3</code>. Le bandeau de tour et l'indice nomment aussi le candidat.</td></tr>
+    <tr><td>Carte centrale</td><td>Fond <code>color.elysee-container</code>, étiquette « ÉLYSÉE » en <code>color.elysee</code> / <code>color.on-elysee</code>, illustration alternative du candidat.</td></tr>
+    <tr><td>Siège vide</td><td>Le siège du candidat parti à l'Élysée reste à sa place : portrait en niveaux de gris, opacité 55 %, stats masquées, puce couronne « À l'Élysée ».</td></tr>
   </table>
-  <p class="small muted">Stats : icône <code>size.stat-icon</code> + barre de progression de la couleur <code>color.stat.*</code> + valeur en <code>type.stat</code>. L'argent n'a pas de barre (pas de maximum).</p>
+  <p class="small muted">Votes : barre <code>size.vote-bar</code> en <code>color.stat.vote</code> + valeur « n/20 ». Popularité : anneau <code>size.player-ring</code> + pastille chiffrée. Argent et influence : puces avec icône <code>size.stat-icon</code>. Toucher le portrait ouvre la fiche détaillée (stats, cartes pouvoir et influence).</p>
   <div class="foot"><span>Design system · King of Republic</span><span>p. 9</span></div>
 </section>
 
@@ -598,42 +619,40 @@
     <div style="text-align:center"><div class="die dis">2</div><div class="state-label">Tour d'un bot</div></div>
     <div class="small" style="flex:1">
       <b>Libre :</b> fond <code>color.dice.face</code>, bordure 2 en <code>color.outline</code>.<br>
-      <b>Gardé :</b> bordure <code>border.emphasis</code> en <code>color.dice.locked</code>, pastille cadenas, décalé de 4 vers le haut, <code>elevation.3</code>. Annoncé « Gardé » aux lecteurs d'écran.<br>
-      <b>Tour d'un bot :</b> visible mais non interactif, opacité 60 % ; les dés gardés par le bot restent marqués.
+      <b>Gardé :</b> bordure <code>border.emphasis</code> en <code>color.dice.locked</code>, pastille cadenas, décalé de <code>size.dice-lift</code> (6) vers le haut, <code>elevation.3</code>. Annoncé « Gardé » aux lecteurs d'écran.<br>
+      <b>Tour d'un bot :</b> les dés restent visibles mais ne réagissent pas au toucher ; les dés gardés par le bot restent marqués et l'indice annonce « … choisit les dés à garder ».
     </div>
   </div>
   <p class="small">Taille <code>size.dice</code>, arrondi <code>radius.m</code>. Lancer animé (rotation + changement de face) en <code>motion.duration.medium</code>.</p>
 
-  <h2>Bandeau de tour</h2>
+  <h2>Bandeau de tour et indice</h2>
   <div class="canvas">
-    <div class="phase"><div><div class="t">À vous ! Gardez des dés puis validez</div><div class="s">Tour 4 · 2 relances restantes</div></div></div>
+    <div class="phase"><div><div class="t">À vous : lancez les dés</div></div></div>
+    <div style="height:2mm"></div>
+    <div class="hint">3 dés identiques ou plus = des votes : gardez-les !</div>
     <div style="height:2.5mm"></div>
-    <div class="phase bot"><div><div class="t">Tour de Valérie Pécresse (bot)</div><div class="s" style="opacity:.7">Elle lance les dés…</div></div></div>
+    <div class="phase bot"><div><div class="t">Pécresse lance les dés…</div></div></div>
   </div>
-  <p class="small">Fond <code>color.primary</code> pendant le tour du joueur, <code>color.surface-container</code> pendant celui d'un bot. Texte <code>type.phase</code>, rédigé pour un humain et jamais un nom technique de phase.</p>
+  <p class="small">Le bandeau dit <i>qui</i> joue et à quelle étape (<code>turn_*</code>), jamais un nom technique de phase. Au-dessus des dés, une phrase dit <i>quoi faire</i> maintenant (<code>hint_*</code>), choisie par priorité : tour d'un bot, dé à doubler, plus de relance, série en cours, Élysée, garder des dés, relancer ou valider, boutique.</p>
 
-  <h2>Cartes d'influence et de pouvoir <span class="muted small" style="font-family:Roboto;font-weight:400">— cartes de pouvoir données à titre d'exemple</span></h2>
-  <div class="canvas" style="display:flex;gap:5mm">
-    <div class="icard"><span class="badge" style="background:var(--g100);color:var(--g700)">PALIER 2 · INFLUENCE</span><div class="ti">Corruption des médias</div><div class="de">Tous les autres candidats perdent 4 votes.</div></div>
-    <div class="icard"><span class="cost">5 €</span> <span class="badge" style="background:var(--bleu-100);color:var(--bleu-900)">PERMANENTE</span><div class="ti">Meeting géant</div><div class="de">+1 vote chaque fois que vous entrez dans l'Élysée.</div></div>
-    <div class="icard" style="opacity:.55"><span class="cost">8 €</span> <span class="badge" style="background:var(--rouge-100);color:#410007">IMMÉDIATE</span><div class="ti">Scandale</div><div class="de">Trop cher : bouton « Acheter » désactivé.</div></div>
+  <h2>Cartes Pouvoir (boutique)</h2>
+  <div class="canvas" style="display:flex;gap:4mm">
+    <div class="icard"><span class="badge" style="background:#B81D2C;color:#fff">ACTION</span><div class="ti">Fuite de documents</div><div class="de">Les autres perdent 3 votes.</div><div style="margin-top:2mm"><span class="cost">Acheter (5 €)</span></div></div>
+    <div class="icard"><span class="badge" style="background:#1E7D46;color:#fff">POUVOIR</span><div class="ti">Mécène</div><div class="de">+1 € quand vos dés donnent de l'argent.</div><div style="margin-top:2mm"><span class="cost">Acheter (4 €)</span></div></div>
+    <div class="icard" style="opacity:.55"><span class="badge" style="background:#B81D2C;color:#fff">ACTION</span><div class="ti">Dissolution</div><div class="de">Rejouez un tour juste après celui-ci.</div><div style="margin-top:2mm"><span class="cost">Acheter (7 €)</span></div></div>
   </div>
-  <p class="small">Fond <code>color.surface-container</code>, arrondi <code>radius.m</code>, <code>elevation.1</code>. Coût dans une pastille <code>color.stat.money</code>. La boutique s'ouvre dans un panneau qui monte du bas de l'écran (<code>radius.xl</code>), uniquement pendant la phase d'achat.</p>
+  <p class="small">Fenêtre de dialogue (<code>PowerShopDialogFragment</code>) ouverte par le bouton « Pouvoirs · n € » sous les dés, actif pendant l'étape d'achat. Trois cartes, pastille de type rouge (Action, effet immédiat) ou verte (Pouvoir, permanent), prix réel du joueur (réductions comprises), bouton désactivé si trop cher, « Renouveler (2 €) ». Les cartes Influence s'affichent dans un panneau à la place des dés.</p>
 
   <div class="grid2">
     <div>
-      <h2>Journal des événements</h2>
-      <div class="log">
-        <div><b>Pécresse</b> attaque l'Élysée : <span style="color:var(--rouge);font-weight:700">−2</span> popularité pour Lassalle</div>
-        <div><b>Lassalle</b> reste dans l'Élysée</div>
-        <div><b>Vous</b> gagnez <span style="color:var(--vert);font-weight:700">+3</span> votes (triple 3)</div>
-      </div>
-      <p class="small muted" style="margin-top:1.5mm">Les 3 dernières actions, la plus récente en haut. Gains en <code>color.feedback.gain</code>, pertes en <code>color.feedback.loss</code>.</p>
+      <h2>Résumé du lancer</h2>
+      <div class="canvas"><span class="summary">Pécresse : +3 votes · +1 € · 2 dégâts à Lassalle</span></div>
+      <p class="small muted" style="margin-top:1.5mm">Après chaque lancer, une bulle <code>color.inverse-surface</code> résume le tour en une ligne, fondu de 200 ms, visible 3,5 s. Elle remplace le journal d'événements prévu au départ.</p>
     </div>
     <div>
       <h2>Retours visuels</h2>
-      <div class="canvas"><span class="float" style="color:var(--vert)">+2 ★</span><span class="float" style="color:#BA1A1A">−3 ♥</span><span class="float" style="color:var(--or)">+1 €</span></div>
-      <p class="small muted" style="margin-top:1.5mm">Chiffre flottant au-dessus de la carte concernée : montée de 24 + fondu en <code>motion.duration.long</code>, toujours avec le signe.</p>
+      <div class="canvas"><span class="float" style="color:var(--vert)">+2</span><span class="float" style="color:#BA1A1A">−3</span><span class="float" style="color:var(--vert)">+1</span></div>
+      <p class="small muted" style="margin-top:1.5mm">Chiffre flottant à droite de la stat qui change, sur chaque carte : visible 700 ms, puis montée de <code>space.l</code> (24) et fondu en 900 ms, toujours avec le signe.</p>
     </div>
   </div>
   <div class="foot"><span>Design system · King of Republic</span><span>p. 10</span></div>
