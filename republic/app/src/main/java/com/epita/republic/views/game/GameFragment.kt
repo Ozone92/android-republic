@@ -108,6 +108,16 @@ class GameFragment : Fragment() {
         childFragmentManager.setFragmentResultListener(QuitGameDialogFragment.REQUEST_KEY, viewLifecycleOwner) { _, _ ->
             findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            gameViewModel.humanEliminated.collect { EliminatedDialogFragment.show(childFragmentManager) }
+        }
+        childFragmentManager.setFragmentResultListener(EliminatedDialogFragment.REQUEST_KEY, viewLifecycleOwner) { _, result ->
+            if (result.getBoolean(EliminatedDialogFragment.KEY_MENU)) {
+                findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
+            } else {
+                gameViewModel.watchEndFast()
+            }
+        }
 
         playerCards = Array(4) { index ->
             PlayerCard(
@@ -344,6 +354,10 @@ class GameFragment : Fragment() {
         if (summary.damagedPlayerIndexes.isNotEmpty()) {
             val targets = summary.damagedPlayerIndexes.joinToString(", ") { nameOf(it, asTarget = true) }
             parts += resources.getQuantityString(R.plurals.summary_damage, summary.damage, summary.damage, targets)
+        }
+        summary.eliminatedPlayerIndexes.forEach { index ->
+            parts += if (index == 0) getString(R.string.summary_eliminated_you)
+            else getString(R.string.summary_eliminated, nameOf(index))
         }
         val effects = if (parts.isEmpty()) getString(R.string.summary_nothing) else parts.joinToString(", ")
         return getString(R.string.summary_line, nameOf(summary.playerIndex), effects)

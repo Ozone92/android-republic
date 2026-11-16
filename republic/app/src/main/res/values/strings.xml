@@ -161,6 +161,13 @@
     <string name="game_quit_message">La partie en cours sera perdue.</string>
     <string name="game_quit_confirm">Abandonner</string>
     <string name="game_quit_cancel">Continuer</string>
+    <string name="game_player_card_eliminated">Hors course</string>
+    <string name="summary_eliminated">%1$s quitte la course</string>
+    <string name="summary_eliminated_you">vous quittez la course</string>
+    <string name="game_eliminated_title">Vous êtes hors course</string>
+    <string name="game_eliminated_message">Votre popularité est tombée à 0. Les autres candidats finissent la partie.</string>
+    <string name="game_eliminated_watch">Voir la fin</string>
+    <string name="game_eliminated_menu">Menu</string>
     <string name="dice_legend_numbers">1, 2, 3 : votes</string>
     <string name="dice_legend_numbers_effect">3 dés identiques ou plus : autant de votes que le chiffre, +1 par dé en plus. Trois 1 : +2 influence, trois 2 : +1 influence.</string>
     <string name="dice_legend_money_effect">+1 € par dé, pour acheter des cartes pouvoir.</string>

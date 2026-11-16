@@ -42,6 +42,7 @@ const val POINT_CITY_ENTER = 1
 const val BOT_SLEEP_ACTION = 3L
 const val BOT_REROLL_DELAY_MS = 1000L
 const val BOT_SHOP_DELAY_MS = 1000L
+const val FAST_FORWARD_FACTOR = 6
 
 data class PowerShopState(
     val slots: List<PowerCard?>,
@@ -58,7 +59,8 @@ data class TurnSummary(
     val moneyGain: Int,
     val influenceGain: Int,
     val damagedPlayerIndexes: List<Int>,
-    val damage: Int
+    val damage: Int,
+    val eliminatedPlayerIndexes: List<Int>
 )
 
 class GameViewModel : ViewModel() {
@@ -66,6 +68,9 @@ class GameViewModel : ViewModel() {
     val sounds = soundEvents.receiveAsFlow()
     private val turnSummaryEvents = Channel<TurnSummary>(Channel.BUFFERED)
     val turnSummaries = turnSummaryEvents.receiveAsFlow()
+    private val humanEliminatedEvents = Channel<Unit>(Channel.CONFLATED)
+    val humanEliminated = humanEliminatedEvents.receiveAsFlow()
+    private var fastForward = false
 
     private val gameLogic = GameLogic()
     private val influenceLogic = InfluenceLogic()
@@ -156,6 +161,9 @@ class GameViewModel : ViewModel() {
                 inCity.value = null
             }
             powerLogic.discardEliminatedPlayer(player, shop)
+            if (!player.isBot && !gameFinish()) {
+                humanEliminatedEvents.trySend(Unit)
+            }
         }
         if (eliminated == 0) {
             return
@@ -347,7 +355,7 @@ class GameViewModel : ViewModel() {
 
     private suspend fun botRollDice(bot: Player) {
         while (rerollLeft.value!! > 0) {
-            delay(BOT_REROLL_DELAY_MS)
+            botDelay(BOT_REROLL_DELAY_MS)
             val canHeal = bot != inCity.value && bot.popularity < bot.maxPopularity
             val toLock = gameLogic.chooseBotLockedDice(dices.value!!, canHeal)
             lockedDiceIndexes.clear()
@@ -364,7 +372,7 @@ class GameViewModel : ViewModel() {
             if (action == BotShopAction.Stop) {
                 break
             }
-            delay(BOT_SHOP_DELAY_MS)
+            botDelay(BOT_SHOP_DELAY_MS)
             val acted = when (action) {
                 is BotShopAction.Buy -> purchasePowerCard(bot, action.slotIndex)
                 BotShopAction.Reroll -> rerollPowerShop(bot)
@@ -411,11 +419,19 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun watchEndFast() {
+        fastForward = true
+    }
+
+    private suspend fun botDelay(durationMs: Long) {
+        delay(if (fastForward) durationMs / FAST_FORWARD_FACTOR else durationMs)
+    }
+
     suspend fun waitForInput() {
         Log.d("GAME", "Wait for BOT? ${currentPlayer.value!!.isBot}")
         if (currentPlayer.value!!.isBot) {
             Log.d("GAME", "BOT Waiting...")
-            delay(BOT_SLEEP_ACTION.seconds)
+            botDelay(BOT_SLEEP_ACTION.seconds.inWholeMilliseconds)
         } else {
             signalController.await()
         }
@@ -433,7 +449,10 @@ class GameViewModel : ViewModel() {
             moneyGain = player.money - own[2],
             influenceGain = player.influence - own[3],
             damagedPlayerIndexes = damaged.map { it.playerIndex },
-            damage = damaged.maxOfOrNull { before[it.playerIndex][1] - it.popularity } ?: 0
+            damage = damaged.maxOfOrNull { before[it.playerIndex][1] - it.popularity } ?: 0,
+            eliminatedPlayerIndexes = players
+                .filter { before[it.playerIndex][1] > 0 && !it.isAlive() }
+                .map { it.playerIndex }
         )
     }
 
