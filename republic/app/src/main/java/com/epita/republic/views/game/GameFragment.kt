@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
+import androidx.activity.addCallback
 import com.epita.republic.audio.GameSoundPlayer
 import kotlinx.coroutines.launch
 import android.content.res.ColorStateList
@@ -98,6 +99,15 @@ class GameFragment : Fragment() {
             HowToPlayDialogFragment.show(childFragmentManager)
         }
         HowToPlayDialogFragment.showOnce(requireContext(), childFragmentManager)
+        view.findViewById<View>(R.id.game_quit_btn).setOnClickListener {
+            QuitGameDialogFragment.show(childFragmentManager)
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            QuitGameDialogFragment.show(childFragmentManager)
+        }
+        childFragmentManager.setFragmentResultListener(QuitGameDialogFragment.REQUEST_KEY, viewLifecycleOwner) { _, _ ->
+            findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
+        }
 
         playerCards = Array(4) { index ->
             PlayerCard(

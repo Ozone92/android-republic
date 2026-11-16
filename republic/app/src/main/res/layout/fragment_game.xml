@@ -367,6 +367,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/game_quit_btn"
+        android:layout_width="@dimen/size_touch_target"
+        android:layout_height="@dimen/size_touch_target"
+        android:layout_marginStart="@dimen/space_s"
+        android:layout_marginTop="@dimen/space_s"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/game_quit_open"
+        android:padding="@dimen/space_sm"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_exit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/game_turn_summary"
         android:layout_width="wrap_content"

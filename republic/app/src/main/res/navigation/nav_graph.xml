@@ -38,6 +38,11 @@
         <action
             android:id="@+id/action_gameFragment_to_endingFragment"
             app:destination="@id/endingFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="player1"
             app:argType="com.epita.republic.domain.Character" />

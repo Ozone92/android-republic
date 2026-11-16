@@ -156,6 +156,11 @@
     <string name="dice_legend_open">Voir les faces des dés</string>
     <string name="dice_legend_title">Faces des dés</string>
     <string name="dice_legend_close">Fermer</string>
+    <string name="game_quit_open">Quitter la partie</string>
+    <string name="game_quit_title">Abandonner la partie ?</string>
+    <string name="game_quit_message">La partie en cours sera perdue.</string>
+    <string name="game_quit_confirm">Abandonner</string>
+    <string name="game_quit_cancel">Continuer</string>
     <string name="dice_legend_numbers">1, 2, 3 : votes</string>
     <string name="dice_legend_numbers_effect">3 dés identiques ou plus : autant de votes que le chiffre, +1 par dé en plus. Trois 1 : +2 influence, trois 2 : +1 influence.</string>
     <string name="dice_legend_money_effect">+1 € par dé, pour acheter des cartes pouvoir.</string>
