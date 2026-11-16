@@ -8,16 +8,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.epita.republic.domain.BotShopAction
 import com.epita.republic.domain.DiceFace
 import com.epita.republic.domain.GameLogic
 import com.epita.republic.domain.InfluenceLogic
 import com.epita.republic.domain.InfluenceStep
+import com.epita.republic.domain.PowerLogic
+import com.epita.republic.domain.PowerShop
 import com.epita.republic.domain.SignalController
 import com.epita.republic.repository.InfluenceCard
+import com.epita.republic.repository.POWER_CARDS
 import com.epita.republic.repository.Player
 import com.epita.republic.repository.PowerCard
+import com.epita.republic.repository.PowerEffect
 import com.epita.republic.R
-import kotlin.random.Random
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -37,10 +41,11 @@ const val POINT_CITY_TURN = 2
 const val POINT_CITY_ENTER = 1
 const val BOT_SLEEP_ACTION = 3L
 const val BOT_REROLL_DELAY_MS = 1000L
-const val POWER_SHOP_REROLL_COST = 2
+const val BOT_SHOP_DELAY_MS = 1000L
 
 data class PowerShopState(
     val slots: List<PowerCard?>,
+    val prices: List<Int?>,
     val deckCount: Int,
     val discardCount: Int,
     val ownedCount: Int
@@ -64,6 +69,7 @@ class GameViewModel : ViewModel() {
 
     private val gameLogic = GameLogic()
     private val influenceLogic = InfluenceLogic()
+    private val powerLogic = PowerLogic()
     val signalController = SignalController()
     val players: Array<Player> =
         Array(4) { i -> return@Array Player(playerIndex = i, isBot = i > 0) }
@@ -78,53 +84,37 @@ class GameViewModel : ViewModel() {
     val deadPlayers = mutableSetOf<Player>()
     val availableInfluenceCards: MutableLiveData<Array<InfluenceCard>> = MutableLiveData(arrayOf())
 
-    private val powerDeck = mutableListOf(
-        PowerCard("power_1", R.string.power_placeholder_1, cost = 0),
-        PowerCard("power_2", R.string.power_placeholder_2, cost = 0),
-        PowerCard("power_3", R.string.power_placeholder_3, cost = 0),
-        PowerCard("power_4", R.string.power_placeholder_4, cost = 0),
-        PowerCard("power_5", R.string.power_placeholder_5, cost = 0),
-        PowerCard("power_6", R.string.power_placeholder_6, cost = 0),
-        PowerCard("power_7", R.string.power_placeholder_7, cost = 0)
-    )
-    private val powerDiscard = mutableListOf<PowerCard>()
-    private val powerShopSlots = MutableList<PowerCard?>(3) { null }
+    private val shop = PowerShop(POWER_CARDS, pricing = powerLogic::priceFor)
+    private var extraTurnFor: Player? = null
     private val _powerShop = MutableLiveData<PowerShopState>()
     val powerShop: LiveData<PowerShopState> = _powerShop
 
-    private fun drawPowerCard(): PowerCard? {
-        if (powerDeck.isEmpty()) {
-            powerDeck.addAll(powerDiscard)
-            powerDiscard.clear()
-        }
-        if (powerDeck.isEmpty()) return null
-        return powerDeck.removeAt(Random.nextInt(powerDeck.size))
-    }
-
     fun canUsePowerShop(): Boolean {
         val player = currentPlayer.value ?: return false
-        return !player.isBot && player.isAlive() &&
-            currentPhase.value != GamePhase.GAME_FINISH
+        return !player.isBot && player.isAlive() && currentPhase.value == GamePhase.SHOP
     }
 
     private fun publishPowerShop() {
+        val human = players[0]
         _powerShop.value = PowerShopState(
-            powerShopSlots.toList(), powerDeck.size,
-            powerDiscard.size, players[0].powerCards.size
+            shop.visibleCards, shop.visibleCards.map { card -> card?.let { shop.priceFor(human, it) } },
+            shop.deckSize, shop.discardSize, human.powerCards.size
         )
     }
 
     fun rerollPowerShop() {
         if (!canUsePowerShop()) return
         val player = currentPlayer.value ?: return
-        if (player.money < POWER_SHOP_REROLL_COST) return
-        if (powerShopSlots.all { it == null } && powerDeck.isEmpty() && powerDiscard.isEmpty()) return
-        player.money -= POWER_SHOP_REROLL_COST
-        powerDiscard.addAll(powerShopSlots.filterNotNull())
-        powerShopSlots.indices.forEach { powerShopSlots[it] = null }
-        powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
+        rerollPowerShop(player)
+    }
+
+    private fun rerollPowerShop(player: Player): Boolean {
+        if (!shop.reroll(player)) {
+            return false
+        }
         publishPowerShop()
         currentPlayer.value = player
+        return true
     }
 
     fun buyPowerCard(slotIndex: Int) {
@@ -133,16 +123,45 @@ class GameViewModel : ViewModel() {
         purchasePowerCard(player, slotIndex)
     }
 
-    private fun purchasePowerCard(player: Player, slotIndex: Int) {
-        if (slotIndex !in powerShopSlots.indices) return
-        val card = powerShopSlots[slotIndex] ?: return
-        if (player.money < card.cost) return
-        player.money -= card.cost
-        player.powerCards.add(card)
+    private fun purchasePowerCard(player: Player, slotIndex: Int): Boolean {
+        val card = shop.buy(player, slotIndex) ?: return false
         soundEvents.trySend(GameSound.BUY_CARD)
-        powerShopSlots[slotIndex] = drawPowerCard()
+        val popularityBefore = players.map { it.popularity }
+        powerLogic.applyOnBuy(card, player, players)
+        when (card.effect) {
+            is PowerEffect.TakeCity -> inCity.value = player
+            is PowerEffect.ExtraTurn -> extraTurnFor = player
+            else -> Unit
+        }
+        if (powerLogic.isPower(card)) {
+            player.powerCards.add(card)
+        }
+        if (players.any { it.popularity < popularityBefore[it.playerIndex] }) {
+            soundEvents.trySend(GameSound.DAMAGE)
+        }
+        registerDeaths()
         publishPowerShop()
         currentPlayer.value = player
+        return true
+    }
+
+    private fun registerDeaths() {
+        var eliminated = 0
+        for (player in players) {
+            if (player.isAlive() || !deadPlayers.add(player)) {
+                continue
+            }
+            eliminated++
+            if (inCity.value == player) {
+                inCity.value = null
+            }
+            powerLogic.discardEliminatedPlayer(player, shop)
+        }
+        if (eliminated == 0) {
+            return
+        }
+        players.filter { it.isAlive() }.forEach { it.vote += powerLogic.votesForEliminations(it, eliminated) }
+        publishPowerShop()
     }
 
     fun diceButtonClick(index: Int) {
@@ -161,15 +180,7 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    private fun gameFinish(): Boolean {
-        if (currentPlayer.value!!.hasWin()) {
-            return true
-        }
-
-        val playerAlive = players.count { p -> p.isAlive() }
-
-        return playerAlive <= 1
-    }
+    private fun gameFinish(): Boolean = gameLogic.isGameOver(players)
 
     fun rollDice() {
         val numberOfReroll = 6 - lockedDiceIndexes.size
@@ -219,19 +230,19 @@ class GameViewModel : ViewModel() {
             "Dice Result ${oneCount} ONE | $twoCount TWO | ${threeCount} THREE | ${healthCount} HEAL | ${damageCount} DAMAGE | ${moneyCount} MONEY"
         )
         if (oneCount >= 3) {
-            scoreGain = 1 + oneCount - 3
-            influenceGain = 2
+            scoreGain += 1 + oneCount - 3
+            influenceGain += 2
 
             if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.FRIEND)) {
                 scoreGain += 1
             }
         }
         if (twoCount >= 3) {
-            scoreGain = 2 + twoCount - 3
-            influenceGain = 1
+            scoreGain += 2 + twoCount - 3
+            influenceGain += 1
         }
         if (threeCount >= 3) {
-            scoreGain = 3 + threeCount - 3
+            scoreGain += 3 + threeCount - 3
         }
 
         if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.PRIMARY)) {
@@ -241,6 +252,18 @@ class GameViewModel : ViewModel() {
 
         if (currentPlayer.value!!.influenceCards.contains(InfluenceCard.FAR)) {
             damageCount *= 2
+        }
+
+        val rollingPlayer = currentPlayer.value!!
+        scoreGain += powerLogic.diceVotes(rollingPlayer, rolledDices)
+        if (healthCount > 0) {
+            healthCount += powerLogic.bonusHeal(rollingPlayer)
+        }
+        if (moneyCount > 0) {
+            moneyCount += powerLogic.bonusMoney(rollingPlayer)
+        }
+        if (damageCount > 0) {
+            damageCount += powerLogic.bonusDamage(rollingPlayer)
         }
 
         Log.d("GAME", "Score Gain: ${scoreGain} | Influence Gain: ${influenceGain}")
@@ -255,58 +278,60 @@ class GameViewModel : ViewModel() {
         currentPlayer.value!!.vote += scoreGain
         currentPlayer.value!!.money += moneyCount
         currentPlayer.value = currentPlayer.value
-        if (damageCount > 0) {
-            onDamage(damageCount)
-        }
+        val dealtDamage = damageCount > 0 && onDamage(damageCount)
+        rollingPlayer.vote += powerLogic.peacefulVotes(rollingPlayer, dealtDamage)
+        currentPlayer.value = rollingPlayer
 
         Log.d("GAME", "End handleDiceResult")
     }
 
-    suspend fun onDamage(damageCount: Int) {
-        if (currentPlayer.value == inCity.value) {
+    suspend fun onDamage(damageCount: Int): Boolean {
+        return if (currentPlayer.value == inCity.value) {
             damageFromInside(damageCount)
         } else {
             damageFromOutside(damageCount)
         }
     }
 
-    fun damageFromInside(damageCount: Int) {
+    fun damageFromInside(damageCount: Int): Boolean {
         if (damageCount > 0 && players.any {
                 it.playerIndex != currentPlayer.value!!.playerIndex && it.isAlive()
             }) {
             soundEvents.trySend(GameSound.DAMAGE)
         }
         // Damage to everyone outside == all player except myself
+        var dealt = false
         for (player in players) {
             if (player.playerIndex != currentPlayer.value!!.playerIndex) {
                 Log.d(
                     "GAME",
                     "Inflict $damageCount damage to player ${player.playerIndex} (outside city) ${player}"
                 )
-                player.popularity -= damageCount
-                Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
-                if (!player.isAlive()) {
-                    deadPlayers.add(player)
+                if (powerLogic.inflictDamage(player, damageCount) > 0) {
+                    dealt = true
                 }
+                Log.d("GAME", "Player ${player.playerIndex} health left: ${player}")
             }
         }
+        registerDeaths()
+        return dealt
     }
 
-    suspend fun damageFromOutside(damageCount: Int) {
+    suspend fun damageFromOutside(damageCount: Int): Boolean {
         val playerInCity = inCity.value
+        var lost = 0
         if (playerInCity != null) {
             if (damageCount > 0 && playerInCity.isAlive()) soundEvents.trySend(GameSound.DAMAGE)
             Log.d(
                 "GAME",
                 "Inflict $damageCount damage to player ${playerInCity.playerIndex} (in city) ${playerInCity}"
             )
-            playerInCity.popularity -= damageCount
+            lost = powerLogic.inflictDamage(playerInCity, damageCount)
             Log.d("GAME", "Player ${playerInCity.playerIndex} health left: ${playerInCity}")
 
             if (!playerInCity.isAlive()) {
-                inCity.value = null
-                deadPlayers.add(playerInCity)
-            } else {
+                registerDeaths()
+            } else if (lost > 0) {
                 if (playerInCity.isBot) {
                     if (playerInCity.isBotGoOut()) {
                         inCity.value = null
@@ -317,6 +342,7 @@ class GameViewModel : ViewModel() {
                 }
             }
         }
+        return lost > 0
     }
 
     private suspend fun botRollDice(bot: Player) {
@@ -332,12 +358,22 @@ class GameViewModel : ViewModel() {
         dices.value = dices.value
     }
 
-    private fun botBuyPowerCard(bot: Player) {
-        val slotIndex = powerShopSlots.indices
-            .filter { index -> powerShopSlots[index]?.let { it.cost <= bot.money } == true }
-            .maxByOrNull { index -> powerShopSlots[index]!!.cost }
-            ?: return
-        purchasePowerCard(bot, slotIndex)
+    private suspend fun botShop(bot: Player) {
+        while (true) {
+            val action = powerLogic.chooseBotShopAction(bot, shop)
+            if (action == BotShopAction.Stop) {
+                break
+            }
+            delay(BOT_SHOP_DELAY_MS)
+            val acted = when (action) {
+                is BotShopAction.Buy -> purchasePowerCard(bot, action.slotIndex)
+                BotShopAction.Reroll -> rerollPowerShop(bot)
+                BotShopAction.Stop -> false
+            }
+            if (!acted) {
+                break
+            }
+        }
     }
 
     suspend fun influencePhase(step: InfluenceStep) {
@@ -354,6 +390,7 @@ class GameViewModel : ViewModel() {
         influenceLogic.removeCard(influenceStep, card)
         currentPlayer.value!!.influenceCards.add(card)
         influenceLogic.handleImmediateCards(currentPlayerTurnIndex.value!!, players, card)
+        publishPowerShop()
 
         signalController.sendNotify()
     }
@@ -368,7 +405,7 @@ class GameViewModel : ViewModel() {
         currentPlayer.value!!.vote += POINT_CITY_ENTER
     }
 
-    fun endTurn() {
+    private fun enterCityIfEmpty() {
         if (inCity.value == null) {
             enterCity()
         }
@@ -418,7 +455,6 @@ class GameViewModel : ViewModel() {
 
     // GAME LOOP
     init {
-        powerShopSlots.indices.forEach { powerShopSlots[it] = drawPowerCard() }
         publishPowerShop()
         viewModelScope.launch {
             while (!gameFinish()) {
@@ -430,6 +466,7 @@ class GameViewModel : ViewModel() {
                     if (player == inCity.value) {
                         player.vote += POINT_CITY_TURN
                     }
+                    player.vote += powerLogic.startOfTurnVotes(player, player == inCity.value)
 
                     if (player.influenceCards.contains(InfluenceCard.RAISE)) {
                         player.money += 1
@@ -438,11 +475,9 @@ class GameViewModel : ViewModel() {
                         player.popularity += 1
                     }
 
-                    if (player.influenceCards.contains(InfluenceCard.UNDECIDED)) {
-                        rerollLeft.value = 4
-                    } else {
-                        rerollLeft.value = 3
-                    }
+                    val baseRerolls =
+                        if (player.influenceCards.contains(InfluenceCard.UNDECIDED)) 4 else 3
+                    rerollLeft.value = baseRerolls + powerLogic.extraRerolls(player)
 
                     lockedDiceIndexes.clear()
                     rollDice()
@@ -466,19 +501,29 @@ class GameViewModel : ViewModel() {
                         influencePhase(newInfluenceStep)
                     }
 
+                    enterCityIfEmpty()
+
                     currentPhase.value = GamePhase.SHOP
                     if (player.isBot) {
-                        botBuyPowerCard(player)
+                        botShop(player)
+                    } else if (shop.canAct(player)) {
+                        waitForInput()
                     }
-                    // waitForInput() TODO Add shop view
 
-                    endTurn()
+                    if (player.isAlive()) {
+                        powerLogic.applyEndOfTurn(player, players)
+                        currentPlayer.value = player
+                    }
                 }
 
-                currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
+                val playAgain = extraTurnFor == player && player.isAlive()
+                extraTurnFor = null
+                if (!playAgain) {
+                    currentPlayerTurnIndex.value = (currentPlayerTurnIndex.value!! + 1) % players.size
+                }
             }
 
-            currentPhase.value = (GamePhase.GAME_FINISH)
+            currentPhase.value = GamePhase.GAME_FINISH
         }
     }
 }

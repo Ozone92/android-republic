@@ -23,6 +23,7 @@
     <string name="game_player_card_away">À l\'Élysée</string>
     <string name="game_reroll_text">RELANCER (%d)</string>
     <string name="game_validate_dice">VALIDER</string>
+    <string name="game_end_turn">FIN DU TOUR</string>
     <string name="game_stay_leave_question">Vous avez été attaqué et perdez de la popularité. Restez-vous à l\'Élysée ?</string>
     <string name="game_stay_btn_text">RESTER</string>
     <string name="game_leave_btn_text">PARTIR</string>
@@ -74,21 +75,74 @@
     <string name="power_shop_buy">Acheter</string>
     <string name="power_shop_buy_cost">Acheter (%1$d €)</string>
 
-    <string name="power_shop_allowed">Your turn: purchases available</string>
-    <string name="power_shop_blocked">Opponent’s turn: purchases unavailable</string>
+    <string name="power_shop_allowed">Étape d\'achat : achats possibles</string>
+    <string name="power_shop_blocked">Achats possibles à votre tour, après les dés</string>
 
-    <string name="power_placeholder_1">Power 1</string>
-    <string name="power_placeholder_2">Power 2</string>
-    <string name="power_placeholder_3">Power 3</string>
-    <string name="power_placeholder_4">Power 4</string>
-    <string name="power_placeholder_5">Power 5</string>
-    <string name="power_placeholder_6">Power 6</string>
-    <string name="power_placeholder_7">Power 7</string>
 
+    <string name="power_name_soins_urgence">Soins d\'urgence</string>
+    <string name="power_name_don_campagne">Don de campagne</string>
+    <string name="power_name_meeting">Meeting</string>
+    <string name="power_name_congres">Congrès du parti</string>
+    <string name="power_name_scandale">Scandale</string>
+    <string name="power_name_affaire_etat">Affaire d\'État</string>
+    <string name="power_name_debat_televise">Débat télévisé</string>
+    <string name="power_name_reforme_risquee">Réforme risquée</string>
+    <string name="power_name_fuite_documents">Fuite de documents</string>
+    <string name="power_name_greve_generale">Grève générale</string>
+    <string name="power_name_coups_bas">Coups bas</string>
+    <string name="power_name_coup_de_force">Coup de force</string>
+    <string name="power_name_dissolution">Dissolution</string>
+    <string name="power_name_denigrement">Dénigrement</string>
+    <string name="power_name_second_souffle">Second souffle</string>
+    <string name="power_name_mecene">Mécène</string>
+    <string name="power_name_image_publique">Image publique</string>
+    <string name="power_name_peau_dure">Peau dure</string>
+    <string name="power_name_militants">Militants</string>
+    <string name="power_name_tresorier">Trésorier</string>
+    <string name="power_name_service_presse">Service de presse</string>
+    <string name="power_name_austerite">Austérité</string>
+    <string name="power_name_president_sortant">Président sortant</string>
+    <string name="power_name_outsider">Outsider</string>
+    <string name="power_name_charognard">Charognard</string>
+    <string name="power_name_victimisation">Victimisation</string>
+    <string name="power_name_mains_propres">Mains propres</string>
+    <string name="power_name_populisme">Populisme</string>
+    <string name="power_name_rassembleur">Rassembleur</string>
+    <string name="power_name_grand_public">Grand public</string>
+
+    <string name="power_description_heal">Récupérez %1$d de popularité.</string>
+    <string name="power_description_gain_money">Gagnez %1$d €.</string>
+    <string name="power_description_gain_vote">Votes +%1$d.</string>
+    <string name="power_description_damage_others">Les autres perdent %1$d de popularité.</string>
+    <string name="power_description_votes_for_popularity">Votes +%1$d, mais perdez %2$d de popularité.</string>
+    <string name="power_description_others_lose_votes">Les autres perdent %1$d votes.</string>
+    <string name="power_description_damage_everyone">Chacun perd %1$d de popularité, vous aussi.</string>
+    <string name="power_description_votes_and_damage_others">Votes +%1$d, %2$d dégâts aux autres.</string>
+    <string name="power_description_take_city">Votes +%1$d et prenez l\'Élysée.</string>
+    <string name="power_description_extra_turn">Rejouez un tour juste après celui-ci.</string>
+    <string name="power_description_bonus_damage">+%1$d dégât quand vous en infligez.</string>
+    <string name="power_description_bonus_heal">+%1$d popularité quand vos dés soignent.</string>
+    <string name="power_description_bonus_money">+%1$d € quand vos dés donnent de l\'argent.</string>
+    <string name="power_description_extra_reroll">+%1$d relance à chaque tour.</string>
+    <string name="power_description_ignore_small_damage">Ignorez toute perte de 1 popularité.</string>
+    <string name="power_description_money_when_broke">Fin de tour sans argent : +%1$d €.</string>
+    <string name="power_description_votes_per_money">Fin de tour : +1 vote par %1$d € détenus.</string>
+    <string name="power_description_votes_on_buy">Votes +%1$d à chaque carte achetée.</string>
+    <string name="power_description_card_discount">Les cartes vous coûtent %1$d € de moins.</string>
+    <string name="power_description_city_start_votes">Début de tour à l\'Élysée : votes +%1$d.</string>
+    <string name="power_description_underdog_votes">Fin de tour : votes +%1$d si vous êtes dernier.</string>
+    <string name="power_description_votes_on_elimination">Votes +%1$d à chaque candidat éliminé.</string>
+    <string name="power_description_money_when_hurt">+%1$d € si vous perdez 2+ de popularité.</string>
+    <string name="power_description_peaceful_votes">Tour sans dégât infligé : votes +%1$d.</string>
+    <string name="power_description_triple_one_bonus">Trois 1 ou plus : votes +%1$d de plus.</string>
+    <string name="power_description_all_faces_votes">Obtenez les 6 faces : votes +%1$d.</string>
+    <string name="power_description_max_popularity">Popularité max +%1$d, et récupérez %1$d.</string>
+
+    <string name="power_type_power">POUVOIR</string>
+    <string name="power_type_action">ACTION</string>
     <string name="power_shop_reroll">Renouveler (%1$d €)</string>
     <string name="power_shop_empty">Aucune carte disponible</string>
     <string name="power_shop_counts">Pioche : %1$d · Défausse : %2$d · Votre argent : %3$d €</string>
-    <string name="power_placeholder_description">Power description coming soon</string>
 
     <string name="power_shop_placeholder_message">Carte %1$d : achat pas encore disponible</string>
     <string name="dice_face_one">Un vote</string>
@@ -143,6 +197,7 @@
     <string name="help_shop_title">La boutique</string>
     <string name="help_shop_body">Votre argent sert à acheter des cartes pouvoir avec le bouton Pouvoirs, pendant votre tour. Trois cartes sont proposées ; si aucune ne vous plaît, renouvelez l\'offre pour 2 €.</string>
     <string name="hint_keep_dice">Touchez les dés à garder, puis Relancer</string>
+    <string name="hint_shop">Achetez des cartes (Pouvoirs), puis Fin du tour</string>
     <string name="hint_reroll_or_confirm">Relancez les dés libres, ou Validez si le résultat vous convient</string>
     <string name="hint_triple">3 dés identiques ou plus = des votes : gardez-les !</string>
     <string name="hint_elysee">Vous êtes à l\'Élysée : vos dégâts touchent tous les autres</string>

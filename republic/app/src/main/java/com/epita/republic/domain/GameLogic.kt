@@ -1,5 +1,6 @@
 package com.epita.republic.domain
 
+import com.epita.republic.repository.Player
 import kotlin.random.Random
 
 class GameLogic {
@@ -16,6 +17,9 @@ class GameLogic {
 
         return null
     }
+
+    fun isGameOver(players: Array<Player>): Boolean =
+        players.any { it.hasWin() } || players.count { it.isAlive() } <= 1
 
     fun chooseBotLockedDice(dices: Array<DiceFace>, canHeal: Boolean): Set<Int> {
         val numberFaces = listOf(DiceFace.ONE, DiceFace.TWO, DiceFace.THREE)
