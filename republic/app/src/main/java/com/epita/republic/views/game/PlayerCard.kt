@@ -2,6 +2,7 @@ package com.epita.republic.views.game
 
 import com.epita.republic.views.common.playerName
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
@@ -60,11 +61,7 @@ class PlayerCard(
             label.compoundDrawablePadding = iconPadding
             label.gravity = Gravity.CENTER_VERTICAL
         }
-        AppCompatResources.getDrawable(context, R.drawable.ic_crown)?.mutate()?.let { crown ->
-            crown.setBounds(0, 0, iconSize, iconSize)
-            crown.setTint(MaterialColors.getColor(cardView, R.attr.colorOnElysee))
-            awayTextView.setCompoundDrawablesRelative(crown, null, null, null)
-        }
+        showAwayChip()
         if (isMiddle) {
             content.setPaddingRelative(
                 content.paddingStart,
@@ -83,12 +80,42 @@ class PlayerCard(
         cardView.visibility = visibility
     }
 
-    fun setAway(away: Boolean) {
-        val statsVisibility = if (away) View.INVISIBLE else View.VISIBLE
+    private fun statusChip(icon: Int, text: Int, background: Int, content: Int) {
+        val iconSize = context.resources.getDimensionPixelSize(R.dimen.size_stat_icon)
+        val color = MaterialColors.getColor(cardView, content)
+        AppCompatResources.getDrawable(context, icon)?.mutate()?.let {
+            it.setBounds(0, 0, iconSize, iconSize)
+            it.setTint(color)
+            awayTextView.setCompoundDrawablesRelative(it, null, null, null)
+        }
+        awayTextView.setText(text)
+        awayTextView.setTextColor(color)
+        awayTextView.backgroundTintList =
+            ColorStateList.valueOf(MaterialColors.getColor(cardView, background))
+    }
+
+    private fun showAwayChip() {
+        statusChip(R.drawable.ic_crown, R.string.game_player_card_away, R.attr.colorElysee, R.attr.colorOnElysee)
+    }
+
+    private fun setStatsVisible(visible: Boolean) {
+        val statsVisibility = if (visible) View.VISIBLE else View.INVISIBLE
         listOf(
             popularityRing, popularityTextView, voteProgress,
             voteTextView, moneyTextView, influenceTextView
         ).forEach { it.visibility = statsVisibility }
+    }
+
+    private fun dim() {
+        imageView.colorFilter = grayscale
+        cardView.alpha = AWAY_ALPHA
+        cardView.cardElevation = 0f
+        cardView.strokeWidth = 0
+    }
+
+    fun setAway(away: Boolean) {
+        setStatsVisible(!away)
+        if (away) showAwayChip()
         awayTextView.visibility = if (away) View.VISIBLE else View.GONE
         youBadge.visibility = if (!away && player?.isBot == false) View.VISIBLE else View.GONE
         nameTextView.text = playerCharacter?.let { context.getString(it.displayName) } ?: ""
@@ -146,6 +173,18 @@ class PlayerCard(
         influenceTextView.contentDescription = context.getString(R.string.game_player_card_influence, current.influence)
 
         showStatChanges(current)
+
+        if (!current.isAlive()) {
+            setStatsVisible(false)
+            statusChip(
+                R.drawable.ic_eliminated,
+                R.string.game_player_card_eliminated,
+                com.google.android.material.R.attr.colorErrorContainer,
+                com.google.android.material.R.attr.colorOnErrorContainer
+            )
+            awayTextView.visibility = View.VISIBLE
+            dim()
+        }
     }
 
     private fun showPortrait(imageRes: Int) {
